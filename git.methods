@@ -58,7 +58,7 @@ def commit(files, message, branch) {
 
 def execute(command) {
 	def process = command.execute();
-	process.waitFor()
+	process.waitForOrKill(10000)
 	return process
 }
 
