@@ -1,0 +1,48 @@
+def buildNumber() {
+	def mainBranch = execute("git rev-parse --abbrev-ref HEAD").text.trim()
+	def versionBranch = "versioning"
+	def patchFile = new File("patch")
+	
+	def buildnumber = "0"
+	
+	commit(".", "Commit forced, because of new build", mainBranch)
+	
+	def existBranch = execute("git rev-parse --verify ${versionBranch}").text.trim();
+	
+	if(!exist?.trim()) {
+		execute("git checkout --orphan ${versionBranch}");
+		execute("git rm --cache -r -f *");
+		patchFile.write "1"
+		commit("patch", "Created versioning branch with build number 1", versionBranch)	
+		buildnumber = "1"
+	} else {
+		execute("git checkout ${versionBranch}");
+		execute("git pull origin ${versionBranch}");
+		execute("git rm --cache -r -f *");
+		def count = evaluate("${patch.text}+1")
+    		patch.write "" + count
+		commit("patch", "Updated build number to ${count}", versionBranch)
+		buildnumber = "" + count
+	}
+	
+	execute("git checkout ${mainBranch} -f")
+	
+	return buildnumber
+}
+
+def commit(files, message, branch) {
+	execute("git add ${files}")
+	execute("git commit -m \"${message}\"")
+	execute("git push -u origin ${branch}")
+}
+
+def execute(command) {
+	def process = command.execute();
+	proc.consumeProcessOutput(System.out, System.err)
+	process.waitFor()
+	return process
+}
+
+ext {
+	buildNumber = this.&buildNumber
+}
