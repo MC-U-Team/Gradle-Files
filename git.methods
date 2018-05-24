@@ -8,21 +8,23 @@ def buildNumber() {
 	commit(".", "Commit forced, because of new build", mainBranch)
 	
 	def existBranch = execute("git rev-parse --verify ${versionBranch}").text.trim();
-	
-	if(!existBranch?.trim()) {
+		
+	if(existBranch != null && existBranch.length() > 0) {
+		println "Branch ${versionBranch} exists. Therefore patch number will incremented and then committed."
+		execute("git checkout ${versionBranch} -f");
+		execute("git pull origin ${versionBranch}");
+		execute("git rm --cache -r -f *");
+		def count = evaluate("${patchFile.text}+1")
+    	patchFile.write "" + count
+		commit("patch", "Updated build number to ${count}", versionBranch)
+		buildnumber = "" + count
+	} else {		
+		println "Branch ${versionBranch} does not exists. Patch file will be created and patch number will start at 1."
 		execute("git checkout --orphan ${versionBranch}");
 		execute("git rm --cache -r -f *");
 		patchFile.write "1"
 		commit("patch", "Created versioning branch with build number 1", versionBranch)	
 		buildnumber = "1"
-	} else {
-		execute("git checkout ${versionBranch}");
-		execute("git pull origin ${versionBranch}");
-		execute("git rm --cache -r -f *");
-		def count = evaluate("${patch.text}+1")
-    		patch.write "" + count
-		commit("patch", "Updated build number to ${count}", versionBranch)
-		buildnumber = "" + count
 	}
 	
 	execute("git checkout ${mainBranch} -f")
@@ -37,15 +39,8 @@ def commit(files, message, branch) {
 }
 
 def execute(command) {
-	
-	def std_out = new StringBuilder()
-	def std_err = new StringBuilder()
-
 	def process = command.execute();
-	process.consumeProcessOutput(std_out, std_err)
 	process.waitFor()
-	println std_out
-	println std_err
 	return process
 }
 
