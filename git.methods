@@ -38,7 +38,7 @@ def commit(files, message, branch) {
 
 def execute(command) {
 	def process = command.execute();
-	proc.consumeProcessOutput(System.out, System.err)
+	process.consumeProcessOutput(System.out, System.err)
 	process.waitFor()
 	return process
 }
