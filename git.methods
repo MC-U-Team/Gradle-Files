@@ -1,4 +1,4 @@
-def buildNumber() {
+def getBuildNumber() {
 	def mainBranch = execute("git rev-parse --abbrev-ref HEAD").text.trim()
 	def versionBranch = "versioning"
 	def patchFile = new File("patch")
@@ -10,16 +10,10 @@ def buildNumber() {
 	def existBranch = execute("git rev-parse --verify ${versionBranch}").text.trim();
 		
 	if(existBranch != null && existBranch.length() > 0) {
-		println "Branch ${versionBranch} exists. Therefore patch number will incremented and then committed."
 		execute("git checkout ${versionBranch} -f");
 		execute("git pull origin ${versionBranch}");
-		execute("git rm --cache -r -f *");
-		def count = evaluate("${patchFile.text}+1")
-    	patchFile.write "" + count
-		commit("patch", "Updated build number to ${count}", versionBranch)
-		buildnumber = "" + count
+		buildnumber = evaluate("${patchFile.text}+1")
 	} else {		
-		println "Branch ${versionBranch} does not exists. Patch file will be created and patch number will start at 1."
 		execute("git checkout --orphan ${versionBranch}");
 		execute("git rm --cache -r -f *");
 		patchFile.write "1"
@@ -30,6 +24,28 @@ def buildNumber() {
 	execute("git checkout ${mainBranch} -f")
 	
 	return buildnumber
+}
+
+def setBuildNumber(buildnumber) {
+	def mainBranch = execute("git rev-parse --abbrev-ref HEAD").text.trim()
+	def versionBranch = "versioning"
+	def patchFile = new File("patch")
+		
+	commit(".", "Commit forced, because of new build", mainBranch)
+	
+	def existBranch = execute("git rev-parse --verify ${versionBranch}").text.trim();
+		
+	if(existBranch != null && existBranch.length() > 0) {
+		execute("git checkout ${versionBranch} -f");
+		execute("git pull origin ${versionBranch}");
+		execute("git rm --cache -r -f *");
+    		patchFile.write buildnumber
+		commit("patch", "Updated build number to ${buildnumber}", versionBranch)
+	} else {		
+		println "Please use getBuildNumber before to create branch!"
+	}
+	
+	execute("git checkout ${mainBranch} -f")
 }
 
 def commit(files, message, branch) {
@@ -45,5 +61,6 @@ def execute(command) {
 }
 
 ext {
-	buildNumber = this.&buildNumber
+	setBuildNumber = this.&setBuildNumber
+	getBuildNumber = this.&getBuildNumber
 }
