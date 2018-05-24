@@ -9,7 +9,7 @@ def buildNumber() {
 	
 	def existBranch = execute("git rev-parse --verify ${versionBranch}").text.trim();
 	
-	if(!exist?.trim()) {
+	if(!existBranch?.trim()) {
 		execute("git checkout --orphan ${versionBranch}");
 		execute("git rm --cache -r -f *");
 		patchFile.write "1"
