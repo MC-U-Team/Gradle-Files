@@ -61,8 +61,3 @@ def execute(command) {
 	process.waitFor()
 	return process
 }
-
-ext {
-	setBuildNumber = this.&setBuildNumber
-	getBuildNumber = this.&getBuildNumber
-}
