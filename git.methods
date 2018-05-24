@@ -37,9 +37,15 @@ def commit(files, message, branch) {
 }
 
 def execute(command) {
+	
+	def std_out = new StringBuilder()
+	def std_err = new StringBuilder()
+
 	def process = command.execute();
-	process.consumeProcessOutput(System.out, System.err)
+	process.consumeProcessOutput(std_out, std_err)
 	process.waitFor()
+	println std_out
+	println std_err
 	return process
 }
 
