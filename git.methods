@@ -1,4 +1,4 @@
-def getBuildNumber() {
+task getBuildNumber() {
 	def mainBranch = execute("git rev-parse --abbrev-ref HEAD").text.trim()
 	def versionBranch = "versioning"
 	def patchFile = new File("patch")
@@ -23,13 +23,15 @@ def getBuildNumber() {
 	
 	execute("git checkout ${mainBranch} -f")
 	
-	return buildnumber
+	config.buildnumber = buildnumber
 }
 
-def setBuildNumber(buildnumber) {
+task setBuildNumber() {
 	def mainBranch = execute("git rev-parse --abbrev-ref HEAD").text.trim()
 	def versionBranch = "versioning"
 	def patchFile = new File("patch")
+	
+	def buildnumber = config.buildnumber
 		
 	commit(".", "Commit forced, because of new build", mainBranch)
 	
