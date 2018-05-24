@@ -1,4 +1,4 @@
-def getBuildNumber {
+def getBuildNumber() {
 	def mainBranch = execute("git rev-parse --abbrev-ref HEAD").text.trim()
 	def versionBranch = "versioning"
 	def patchFile = new File("patch")
