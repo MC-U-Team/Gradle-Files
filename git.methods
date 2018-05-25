@@ -6,6 +6,7 @@ def getBuildNumber() {
 	def buildnumber = "0"
 	
 	commit(".", "Commit forced, because of new build", mainBranch)
+	execute("git pull")
 	
 	def existBranch = execute("git rev-parse --verify ${versionBranch}").trim();
 		
