@@ -1,5 +1,5 @@
 def getBuildNumber() {
-	def mainBranch = execute("git rev-parse --abbrev-ref HEAD").text.trim()
+	def mainBranch = execute("git rev-parse --abbrev-ref HEAD").trim()
 	def versionBranch = "versioning"
 	def patchFile = new File("patch")
 	
@@ -7,7 +7,7 @@ def getBuildNumber() {
 	
 	commit(".", "Commit forced, because of new build", mainBranch)
 	
-	def existBranch = execute("git rev-parse --verify ${versionBranch}").text.trim();
+	def existBranch = execute("git rev-parse --verify ${versionBranch}").trim();
 		
 	if(existBranch != null && existBranch.length() > 0) {
 		execute("git checkout ${versionBranch} -f");
@@ -58,8 +58,14 @@ def commit(files, message, branch) {
 
 def execute(command) {
 	def process = command.execute();
-	process.waitForOrKill(10000)
-	return process
+	def output = new StringWriter(), error = new StringWriter()
+	process.waitForProcessOutput(output, error)
+	println "---------------------------"
+	println "Using command: ${command}"
+	println "Output: ${output}"
+	println "Error: ${error}"
+	println "---------------------------"
+	return output.toString()
 }
 
 ext {
