@@ -16,7 +16,6 @@ def getBuildNumber() {
 		Integer count = patchFile.text as Integer
 		count += 1
 		buildnumber = "" + count
-		println buildnumber
 	} else {		
 		execute("git checkout --orphan ${versionBranch}");
 		execute("git rm --cache -r -f *");
