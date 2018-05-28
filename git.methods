@@ -13,6 +13,8 @@ def getBuildNumber() {
 	if(existBranch != null && existBranch.length() > 0) {
 		execute("git checkout ${versionBranch} -f");
 		execute("git pull origin ${versionBranch}");
+		println patchFile.text
+		println patchFile.read
 		buildnumber = evaluate("${patchFile.text}+1")
 	} else {		
 		execute("git checkout --orphan ${versionBranch}");
