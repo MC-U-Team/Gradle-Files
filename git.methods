@@ -14,8 +14,8 @@ def getBuildNumber() {
 		execute("git checkout ${versionBranch} -f");
 		execute("git pull origin ${versionBranch}");
 		println patchFile.text
-		println patchFile.read
 		buildnumber = evaluate("${patchFile.text}+1")
+		println buildnumber
 	} else {		
 		execute("git checkout --orphan ${versionBranch}");
 		execute("git rm --cache -r -f *");
