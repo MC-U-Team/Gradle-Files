@@ -19,8 +19,8 @@ def getBuildNumber() {
 	} else {		
 		execute("git checkout --orphan ${versionBranch}");
 		execute("git rm --cache -r -f *");
-		patchFile.write "1"
-		commit("patch", "Created versioning branch with build number 1", versionBranch)	
+		patchFile.write "0"
+		commit("patch", "Created versioning branch with start build number", versionBranch)	
 		buildnumber = "1"
 	}
 	
