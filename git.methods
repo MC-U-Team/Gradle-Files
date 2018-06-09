@@ -1,56 +1,66 @@
 def getBuildNumber() {
-	def mainBranch = execute("git rev-parse --abbrev-ref HEAD").trim()
-	def versionBranch = "versioning"
-	def patchFile = new File("patch")
 	
 	def buildnumber = "0"
-	
-	commit(".", "Commit forced, because of new build", mainBranch)
-	execute("git pull")
-	
-	def existBranch = execute("git rev-parse --verify ${versionBranch}").trim();
-		
-	if(existBranch != null && existBranch.length() > 0) {
-		execute("git checkout ${versionBranch} -f");
-		execute("git pull origin ${versionBranch}");
-		Integer count = patchFile.text as Integer
-		count += 1
-		buildnumber = "" + count
-	} else {		
-		execute("git checkout --orphan ${versionBranch}");
-		execute("git rm --cache -r -f *");
-		patchFile.write "0"
-		commit("patch", "Created versioning branch with start build number", versionBranch)	
-		buildnumber = "1"
+
+	if (!project.hasProperty("nobuild")) {
+		def mainBranch = execute("git rev-parse --abbrev-ref HEAD").trim()
+		def versionBranch = "versioning"
+		def patchFile = new File("patch")
+
+		commit(".", "Commit forced, because of new build", mainBranch)
+		execute("git pull")
+
+		def existBranch = execute("git rev-parse --verify ${versionBranch}").trim();
+
+		if(existBranch != null && existBranch.length() > 0) {
+			execute("git checkout ${versionBranch} -f");
+			execute("git pull origin ${versionBranch}");
+			Integer count = patchFile.text as Integer
+			count += 1
+			buildnumber = "" + count
+		} else {		
+			execute("git checkout --orphan ${versionBranch}");
+			execute("git rm --cache -r -f *");
+			patchFile.write "0"
+			commit("patch", "Created versioning branch with start build number", versionBranch)	
+			buildnumber = "1"
+		}
+
+		execute("git checkout ${mainBranch} -f")
+	} else {
+		buildnumber = "NOBUILD"
 	}
-	
-	execute("git checkout ${mainBranch} -f")
 	
 	config.buildnumber = buildnumber
 }
 
 task setBuildNumber << {
-	def mainBranch = execute("git rev-parse --abbrev-ref HEAD").trim()
-	def versionBranch = "versioning"
-	def patchFile = new File("patch")
 	
-	def buildnumber = config.buildnumber
-		
-	commit(".", "Commit forced, because of new build", mainBranch)
+	if (!project.hasProperty("nobuild")) {
+
+		def mainBranch = execute("git rev-parse --abbrev-ref HEAD").trim()
+		def versionBranch = "versioning"
+		def patchFile = new File("patch")
+
+		def buildnumber = config.buildnumber
+
+		commit(".", "Commit forced, because of new build", mainBranch)
+
+		def existBranch = execute("git rev-parse --verify ${versionBranch}").trim();
+
+		if(existBranch != null && existBranch.length() > 0) {
+			execute("git checkout ${versionBranch} -f");
+			execute("git pull origin ${versionBranch}");
+			execute("git rm --cache -r -f *");
+			patchFile.write "" + buildnumber
+			commit("patch", "Updated build number to ${buildnumber}", versionBranch)
+		} else {		
+			println "Please use getBuildNumber before to create branch!"
+		}
+
+		execute("git checkout ${mainBranch} -f")
 	
-	def existBranch = execute("git rev-parse --verify ${versionBranch}").trim();
-		
-	if(existBranch != null && existBranch.length() > 0) {
-		execute("git checkout ${versionBranch} -f");
-		execute("git pull origin ${versionBranch}");
-		execute("git rm --cache -r -f *");
-    		patchFile.write "" + buildnumber
-		commit("patch", "Updated build number to ${buildnumber}", versionBranch)
-	} else {		
-		println "Please use getBuildNumber before to create branch!"
 	}
-	
-	execute("git checkout ${mainBranch} -f")
 }
 
 def commit(files, message, branch) {
