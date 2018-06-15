@@ -2,7 +2,7 @@ def getBuildNumber() {
 	
 	def buildnumber = "0"
 
-	if (project.hasProperty("build")) {
+	if (project.hasProperty("createBuild")) {
 		def mainBranch = execute("git rev-parse --abbrev-ref HEAD").trim()
 		def versionBranch = "versioning"
 		def patchFile = new File("patch")
@@ -28,7 +28,7 @@ def getBuildNumber() {
 
 		execute("git checkout ${mainBranch} -f")
 	} else {
-		buildnumber = "NOBUILD"
+		buildnumber = "DEV"
 	}
 	
 	config.buildnumber = buildnumber
