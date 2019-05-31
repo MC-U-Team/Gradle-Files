@@ -1,2 +1,2 @@
-# Blank-Forge-Project
-This is a blank project for minecraft modding
+# Blank-Forge-Project (Host Gradle files)
+This project is only used to host some gradle files
