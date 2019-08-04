@@ -51,3 +51,18 @@ def findVersions(version) {
 	config.forge.mapping = mapping."$version";
 	config.forge.mapping_channel = mapping_channel."$version";
 }
+
+def info() {
+	println "Using the following settings:"
+	if(config.get("forge").get("mcversion") != null) {
+		println "Minecraft version: ${config.forge.mcversion}"
+		println "Minecraft version found. Fetched newest versions automatically"
+	}
+	println "Forge version: ${config.forge.version}"
+	println "Forge mapping: ${config.forge.mapping}"
+}
+
+ext {
+	setup = this.&setup
+	info = this.&info
+}
