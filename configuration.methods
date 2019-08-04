@@ -47,7 +47,7 @@ def findVersions(version) {
 					]
 	
 	config.forge.major_version = major_forge_version."$version";
-	config.forge.version = "$version" << "." << major_forge_version."$version" << "." << forge_minor_version."$version";
+	config.forge.version = "$version" << "-" << major_forge_version."$version" << "." << forge_minor_version."$version";
 	config.forge.mapping = mapping."$version";
 	config.forge.mapping_channel = mapping_channel."$version";
 	config.uteamcore.version = uteamcore_version."$version";
