@@ -1,3 +1,7 @@
+def setup() {
+	loadConfig()
+	checkVersionAndSetup()
+}
 
 def loadConfig() {
 	ext.buildProps = file "build.properties"
@@ -7,4 +11,43 @@ def loadConfig() {
 		prop.load(it)
 		ext.config = new ConfigSlurper().parse prop
 	}
+}
+
+def checkVersionAndSetup() {
+	if(config.get("forge").get("mcversion") != null) {
+		findVersions(config.forge.mcversion)
+	}
+}
+
+def findVersions(version) {
+	def major_forge_version = 	[
+						"1.14.2": "26",
+						"1.14.3": "27",
+						"1.14.4": "28"
+					]
+	def forge_minor_version = 		[
+						"1.14.2": "0.63",
+						"1.14.3": "0.60",
+						"1.14.4": "0.27"
+					]
+	def mapping = 			[
+						"1.14.2":"53-1.14.2",
+						"1.14.3":"20190731-1.14.3",
+						"1.14.4":"20190731-1.14.3"
+					]
+	def mapping_channel = 		[
+						"1.14.2":"stable",
+						"1.14.3":"snapshot",
+						"1.14.4":"snapshot"
+					]	
+	def uteamcore_version = 	[	
+						"1.14.2":"2.7.0.127",
+						"1.14.3":"2.7.0.128",
+						"1.14.4":"2.7.0.129"
+					]
+	
+	config.forge.major_version = major_forge_version."$version";
+	config.forge.version = "$version" + major_forge_version."$version" + forge_minor_version."$version";
+	config.forge.mapping = mapping."$version";
+	config.forge.mapping_channel = mapping_channel."$version";
 }
