@@ -34,7 +34,8 @@ def getBuildNumber() {
 	config.buildnumber = buildnumber
 }
 
-task setBuildNumber << {
+task setBuildNumber {
+	doLast {
 		def mainBranch = execute("git rev-parse --abbrev-ref HEAD").trim()
 		def versionBranch = "versioning"
 		def patchFile = new File("patch")
@@ -56,6 +57,7 @@ task setBuildNumber << {
 		}
 
 		execute("git checkout ${mainBranch} -f")
+	}
 }
 
 def commit(files, message, branch) {
