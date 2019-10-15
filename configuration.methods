@@ -43,7 +43,7 @@ def findVersions(version) {
 	def uteamcore_version = 	[	
 						"1.14.2":"2.7.0.127",
 						"1.14.3":"2.7.0.128",
-						"1.14.4":"2.7.3.132"
+						"1.14.4":"2.7.4.134"
 					]
 	
 	config.forge.major_version = major_forge_version."$version";
