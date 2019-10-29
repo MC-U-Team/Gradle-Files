@@ -28,7 +28,7 @@ def findVersions(version) {
 	def forge_minor_version = 		[
 						"1.14.2": "0.63",
 						"1.14.3": "0.60",
-						"1.14.4": "1.47"
+						"1.14.4": "1.74"
 					]
 	def mapping = 			[
 						"1.14.2":"53-1.14.2",
