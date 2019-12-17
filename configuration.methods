@@ -48,7 +48,7 @@ def findVersions(version) {
 						"1.14.2":"2.7.0.127",
 						"1.14.3":"2.7.0.128",
 						"1.14.4":"2.7.8.138",
-						"1.15.1":"x.x.x.x"
+						"1.15.1":"2.9.0.141-SNAPSHOT"
 					]
 	
 	config.forge.major_version = major_forge_version."$version";
