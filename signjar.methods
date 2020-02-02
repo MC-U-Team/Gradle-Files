@@ -1,3 +1,5 @@
+import net.minecraftforge.gradle.common.task.SignJar
+
 def createSignJarTask(taskName, depends, file) {
 	tasks.create(name: taskName, type: SignJar) {
 		afterEvaluate {
