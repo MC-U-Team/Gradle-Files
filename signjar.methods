@@ -31,7 +31,7 @@ def createSignJarTask(taskName, depends, file) {
 }
 
 def signJar(task) {
-	def taskName = "sign{task.name}"
+	def taskName = "sign${task.name}"
 	createSignJarTask(taskName, task, task.archivePath)
 	build.dependsOn taskName
 }
