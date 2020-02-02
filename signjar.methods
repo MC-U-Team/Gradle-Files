@@ -22,3 +22,8 @@ signJar(task) {
 	createSignJarTask(taskName, task, task.archivePath)
 	build.dependsOn taskName
 }
+
+ext {
+	createSignJarTask = this.&createSignJarTask
+	signJar = this.&signJar
+}
