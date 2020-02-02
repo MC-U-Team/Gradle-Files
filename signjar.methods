@@ -1,20 +1,20 @@
 def createSignJarTask(taskName, depends, file) {
-		tasks.create(name: taskName, type: SignJar) {
-				afterEvaluate {
-					dependsOn depends
-				}
-				if (project.hasProperty("keystore")) {
-					println "Signing jar " + file.getName()
-					keyStore = project.findProperty("keystore")
-					alias = project.findProperty("keystore.alias")
-					storePass = project.findProperty("keystore.password")
-					keyPass = project.findProperty("keystore.password")
-					inputFile = file
-					outputFile = file
-				} else {
-				   println "Could not sign " + file.getName() + ". No keystore property could be found"
-				}
-		}  
+	tasks.create(name: taskName, type: SignJar) {
+		afterEvaluate {
+			dependsOn depends
+		}
+		if (project.hasProperty("keystore")) {
+			println "Signing jar " + file.getName()
+			keyStore = project.findProperty("keystore")
+			alias = project.findProperty("keystore.alias")
+			storePass = project.findProperty("keystore.password")
+			keyPass = project.findProperty("keystore.password")
+			inputFile = file
+			outputFile = file
+		} else {
+			println "Could not sign " + file.getName() + ". No keystore property could be found"
+		}
+	}  
 }
 
 signJar(task) {
