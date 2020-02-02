@@ -74,7 +74,7 @@ def execute(command) {
 	project.logger.debug "Using command: ${command}"
 	project.logger.debug "Output: ${output}"
 	project.logger.debug "Error: ${error}"
-	println "---------------------------"
+	project.logger.debug "---------------------------"
 	return output.toString()
 }
 
