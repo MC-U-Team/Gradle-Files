@@ -70,10 +70,10 @@ def execute(command) {
 	def process = command.execute();
 	def output = new StringWriter(), error = new StringWriter()
 	process.waitForProcessOutput(output, error)
-	println "---------------------------"
-	println "Using command: ${command}"
-	println "Output: ${output}"
-	println "Error: ${error}"
+	project.logger.debug "---------------------------"
+	project.logger.debug "Using command: ${command}"
+	project.logger.debug "Output: ${output}"
+	project.logger.debug "Error: ${error}"
 	println "---------------------------"
 	return output.toString()
 }
