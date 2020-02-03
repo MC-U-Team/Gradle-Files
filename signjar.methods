@@ -47,7 +47,7 @@ def signAllJars() {
 	}
 }
 
-config.fingerprint = project.findProperty("keystore.fingerprint")
+ext.config.fingerprint = project.findProperty("keystore.fingerprint")
 
 ext {
 	createSignJarTask = this.&createSignJarTask
