@@ -18,13 +18,16 @@ def createSignJarTask(taskName, depends, file) {
 			dependsOn depends
 		}
 		if (project.hasProperty("keystore")) {
-			println "Signing jar " + file.getName()
+			doLast {
+				println "Signing jar " + file.getName()
+			}
 			keyStore = project.findProperty("keystore")
 			alias = project.findProperty("keystore.alias")
 			storePass = project.findProperty("keystore.password")
 			keyPass = project.findProperty("keystore.password")
 			inputFile = file
 			outputFile = file
+			getExcludes().stream().forEach(System.out::println);
 		} else {
 			println "Could not sign " + file.getName() + ". No keystore property could be found"
 		}
