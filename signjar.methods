@@ -27,7 +27,6 @@ def createSignJarTask(taskName, depends, file) {
 			keyPass = project.findProperty("keystore.password")
 			inputFile = file
 			outputFile = file
-			getExcludes().forEach(e -> println(e));
 		} else {
 			println "Could not sign " + file.getName() + ". No keystore property could be found"
 		}
