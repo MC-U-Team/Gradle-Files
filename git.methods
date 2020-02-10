@@ -23,7 +23,7 @@ def getBuildNumber() {
 			buildnumber = "" + count
 		} else {	
 			execute("git checkout ${versionBranch}");
-			def existBranch = execute("git rev-parse --verify ${versionBranch}").trim()
+			existBranch = execute("git rev-parse --verify ${versionBranch}").trim()
 			
 			if(existBranch == null || existBranch.length() == 0) {
 				execute("git checkout --orphan ${versionBranch}");
