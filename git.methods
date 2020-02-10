@@ -29,7 +29,7 @@ def getBuildNumber() {
 				println "Branch now exists. Read ${patchFile} file"
 				buildnumber = findBuildNumber(versionBranch, patchFile)
 			} else {
-				println "Branch does not exist. Now create a new branch and start with buildnumber 0"
+				println "Branch does not exist. Now create a new branch and start with buildnumber 1"
 				execute("git checkout --orphan ${versionBranch}");
 				execute("git rm --cache -r -f *");
 				patchFile.write "0"
