@@ -21,12 +21,17 @@ def getBuildNumber() {
 			Integer count = patchFile.text as Integer
 			count += 1
 			buildnumber = "" + count
-		} else {		
-			execute("git checkout --orphan ${versionBranch}");
-			execute("git rm --cache -r -f *");
-			patchFile.write "0"
-			commit("patch", "Created versioning branch with start build number", versionBranch)	
-			buildnumber = "1"
+		} else {	
+			execute("git checkout ${versionBranch}");
+			def existBranch = execute("git rev-parse --verify ${versionBranch}").trim()
+			
+			if(existBranch == null || existBranch.length() == 0) {
+				execute("git checkout --orphan ${versionBranch}");
+				execute("git rm --cache -r -f *");
+				patchFile.write "0"
+				commit("patch", "Created versioning branch with start build number", versionBranch)	
+				buildnumber = "1"
+			}
 		}
 
 		execute("git checkout ${mainBranch} -f")
