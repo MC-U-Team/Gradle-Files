@@ -60,6 +60,12 @@ def findBuildNumber(versionBranch, patchFile) {
 	return count as String
 }
 
+def validateBuild() {
+	if (!project.hasProperty("createBuild")) {
+		throw new GradleException("Can only publish if the property createBuild is set")
+	}
+}
+
 task setBuildNumber {
 	doLast {
 		println "Updating buildnumber"
@@ -110,4 +116,5 @@ def execute(command) {
 
 ext {
 	getBuildNumber = this.&getBuildNumber
+	validateBuild = this.&validateBuild
 }
