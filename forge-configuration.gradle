@@ -1,24 +1,3 @@
-def setup() {
-	loadConfig()
-	checkVersionAndSetup()
-}
-
-def loadConfig() {
-	ext.buildProps = file "build.properties"
-
-	buildProps.withReader {
-		def prop = new Properties()
-		prop.load(it)
-		ext.config = new ConfigSlurper().parse prop
-	}
-}
-
-def checkVersionAndSetup() {
-	if(config.get("forge").get("mcversion") != null) {
-		findVersions(config.forge.mcversion)
-	}
-}
-
 def findVersions(version) {
 	def major_forge_version = 	[
 						"1.15.2": "31"
@@ -32,28 +11,24 @@ def findVersions(version) {
 	def mapping_channel = 		[
 						"1.15.2":"snapshot"
 					]	
-	def uteamcore_version = 	[	
-						"1.15.2":"2.10.4.153"
-					]
 						
 	config.forge.major_version = major_forge_version."$version";
 	config.forge.version = "$version" << "-" << major_forge_version."$version" << "." << forge_minor_version."$version";
 	config.forge.mapping = mapping."$version";
 	config.forge.mapping_channel = mapping_channel."$version";
-	config.uteamcore.version = uteamcore_version."$version";
 }
 
-def info() {
-	println "Using the following settings:"
+def setupForge() {
 	if(config.get("forge").get("mcversion") != null) {
-		println "Minecraft version: ${config.forge.mcversion}"
-		println "Minecraft version found. Fetched newest versions automatically"
+		findVersions(config.forge.mcversion)
 	}
-	println "Forge version: ${config.forge.version}"
-	println "Forge mapping: ${config.forge.mapping}"
+}
+
+def getForgeDependency() {
+	return "net.minecraftforge:forge:$config.forge.version"
 }
 
 ext {
-	setup = this.&setup
-	info = this.&info
+	setupForge = this.&setupForge
+	getForgeDependency = this.&getForgeDependency
 }

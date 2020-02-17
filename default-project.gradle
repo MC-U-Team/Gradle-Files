@@ -1,5 +1,31 @@
-apply from: "https://gradle-files.u-team.info/rename-run-configuration.gradle"
-apply from: "https://gradle-files.u-team.info/forge-configuration.gradle"
-apply from: "https://gradle-files.u-team.info/mod-configuration.gradle"
-apply from: "https://gradle-files.u-team.info/build-number.gradle"
-apply from: "https://gradle-files.u-team.info/signjar.gradle"
+apply from: "load-config.gradle"
+apply from: "rename-run-configuration.gradle"
+apply from: "forge-configuration.gradle"
+apply from: "mod-configuration.gradle"
+apply from: "info.gradle"
+apply from: "build-number.gradle"
+apply from: "project-methods.gradle"
+apply from: "changelog.gradle"
+apply from: "sign-jar.gradle"
+
+repositories {
+    maven { url = "https://repo.u-team.info" }
+    maven { url = "https://dvs1.progwml6.com/files/maven" }
+    maven { url = "https://maven.blamejared.com" }
+}
+
+loadConfig()
+
+setupForge()
+setupMods()
+
+println ""
+printInfo()
+println ""
+
+getBuildNumber()
+println ""
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}

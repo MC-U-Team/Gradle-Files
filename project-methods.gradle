@@ -1,0 +1,33 @@
+def generateArchivesBaseName() {
+	return "${config.mod.filename}-${config.forge.mcversion}"
+}
+
+def generateVersion() {
+	return "${config.mod.version}.${config.buildnumber}" + getAppendix()
+}
+
+def getAppendix() {
+	if("${config.mod.snapshot}".toBoolean()) {
+		return "-SNAPSHOT"
+	} else {
+		return ""
+	}
+}
+
+def getValue(name) {
+	def envVariable = System.getenv(name)
+	if(envVariable != null) {
+		return envVariable
+	} else {
+		if (project.hasProperty(name)) {
+			return project.getProperty(name)
+		}
+	}
+	return null;
+}
+
+ext {
+	generateArchivesBaseName = this.&generateArchivesBaseName
+	generateVersion = this.&generateVersion
+	getValue = this.&getValue
+}

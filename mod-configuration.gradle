@@ -1,12 +1,17 @@
 def findVersions(version) {
+	def uteamcore_version = 	[	
+						"1.15.2":"2.10.4.153"
+					]
+
 	def jei_version = 	[	
 						"1.15.2":"6.0.0.2"
 					]
 					
 	def patchouli_version = 	[	
-						"1.15.2":"1.2-27"
+						"1.15.2":"1.2-28.142"
 					]
 						
+	config.uteamcore.version = uteamcore_version."$version";					
 	config.jei.version = jei_version."$version";
 	config.patchouli.version = patchouli_version."$version";
 }
@@ -17,6 +22,26 @@ def setupMods() {
 	}
 }
 
+def getUTeamCoreDependency() {
+	return "info.u-team:u_team_core-${config.forge.mcversion}:${config.uteamcore.version}:dev"
+}
+
+def getJeiDependency() {
+  	return "mezz.jei:jei-${config.forge.mcversion}:${config.jei.version}"
+}
+
+def getJeiApiDependency() {
+	return getJeiDependency() + ":api"
+}
+
+def getPatchouliDependency() {
+  	return "vazkii.patchouli:Patchouli:${config.forge.mcversion}-${config.patchouli.version}"
+}
+
 ext {
 	setupMods = this.&setupMods
+	getUTeamCoreDependency = this.&getUTeamCoreDependency
+	getJeiDependency = this.&getJeiDependency
+	getJeiApiDependency = this.&getJeiApiDependency
+	getPatchouliDependency = this.&getPatchouliDependency
 }
