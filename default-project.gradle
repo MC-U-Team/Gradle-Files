@@ -1,0 +1,4 @@
+apply from: "https://gradle-files.u-team.info/forge-configuration.gradle"
+apply from: "https://gradle-files.u-team.info/mod-configuration"
+apply from: "https://gradle-files.u-team.info/build-number.gradle"
+apply from: "https://gradle-files.u-team.info/signjar.gradle"
