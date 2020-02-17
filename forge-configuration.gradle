@@ -6,7 +6,7 @@ def findVersions(version) {
 						"1.15.2": "1.12"
 					]
 	def mapping = 			[
-						"1.15.2":"20200203-1.15.1"
+						"1.15.2":"20200217-1.15.1"
 					]
 	def mapping_channel = 		[
 						"1.15.2":"snapshot"
