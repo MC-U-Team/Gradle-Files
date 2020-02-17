@@ -35,7 +35,7 @@ def findVersions(version) {
 	def uteamcore_version = 	[	
 						"1.15.2":"2.10.4.153"
 					]
-	
+						
 	config.forge.major_version = major_forge_version."$version";
 	config.forge.version = "$version" << "-" << major_forge_version."$version" << "." << forge_minor_version."$version";
 	config.forge.mapping = mapping."$version";
