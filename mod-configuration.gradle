@@ -1,0 +1,12 @@
+def findVersion(version) {
+	def jei_version = 	[	
+						"1.15.2":"6.0.0.2"
+					]
+					
+	def patchouli_version = 	[	
+						"1.15.2":"1.2-27"
+					]
+						
+	ext.config.jei.version = jei_version."$version";
+	ext.config.patchouli.version = patchouli_version."$version";
+}
