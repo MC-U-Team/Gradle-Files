@@ -1,4 +1,4 @@
-def findVersion(version) {
+def findVersions(version) {
 	def jei_version = 	[	
 						"1.15.2":"6.0.0.2"
 					]
@@ -7,6 +7,16 @@ def findVersion(version) {
 						"1.15.2":"1.2-27"
 					]
 						
-	ext.config.jei.version = jei_version."$version";
-	ext.config.patchouli.version = patchouli_version."$version";
+	config.jei.version = jei_version."$version";
+	config.patchouli.version = patchouli_version."$version";
+}
+
+def setupMods() {
+	if(config.get("forge").get("mcversion") != null) {
+		findVersions(config.forge.mcversion)
+	}
+}
+
+ext {
+	setupMods = this.&setupMods
 }
