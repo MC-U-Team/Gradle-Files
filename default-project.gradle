@@ -1,3 +1,4 @@
+apply from: "https://gradle-files.u-team.info/rename-run-configuration.gradle"
 apply from: "https://gradle-files.u-team.info/forge-configuration.gradle"
 apply from: "https://gradle-files.u-team.info/mod-configuration.gradle"
 apply from: "https://gradle-files.u-team.info/build-number.gradle"
