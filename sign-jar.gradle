@@ -14,6 +14,9 @@ import org.gradle.api.internal.artifacts.dsl.LazyPublishArtifact
 
 def createSignJarTask(taskName, depends, file) {
 	tasks.create(name: taskName, type: SignJar) {
+		onlyIf {
+        		project.hasProperty("keystore")
+    		}
 		afterEvaluate {
 			dependsOn depends
 		}
