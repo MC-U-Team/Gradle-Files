@@ -4,7 +4,7 @@ def findVersions(version) {
 					]
 
 	def jei_version = 	[	
-						"1.15.2":"6.0.0.2"
+						"1.15.2":"6.0.0.4"
 					]
 					
 	def patchouli_version = 	[	
