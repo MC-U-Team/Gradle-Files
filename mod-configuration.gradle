@@ -1,6 +1,6 @@
 def findVersions(version) {
 	def uteamcore_version = 	[	
-						"1.15.2":"2.12.1.158"
+						"1.15.2":"3.0.0.159-SNAPSHOT"
 					]
 
 	def jei_version = 	[	
