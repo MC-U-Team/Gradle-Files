@@ -6,11 +6,12 @@ def findVersions(version) {
 
 	def jei_version = 		[	
 						"1.15.2":"6.0.2.12",
-						"1.16.1":"7.0.0.6",
+						"1.16.1":"7.0.0.6"
 					]
 					
 	def patchouli_version = 	[	
-						"1.15.2":"1.2-29.151"
+						"1.15.2":"1.2-29.151",
+						"1.16.1":"1.16-39"
 					]
 						
 	config.uteamcore.version = uteamcore_version."$version";					
