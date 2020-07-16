@@ -10,7 +10,7 @@ def findVersions(version) {
 					]
 					
 	def patchouli_version = 	[	
-						"1.15.2":"1.2-29.151",
+						"1.15.2":"1.15.2-1.2-29.151",
 						"1.16.1":"1.16-39"
 					]
 						
@@ -38,7 +38,7 @@ def getJeiApiDependency() {
 }
 
 def getPatchouliDependency() {
-  	return "vazkii.patchouli:Patchouli:${config.forge.mcversion}-${config.patchouli.version}"
+  	return "vazkii.patchouli:Patchouli:${config.patchouli.version}"
 }
 
 ext {
