@@ -11,11 +11,13 @@ def findVersions(version) {
 					]
 	def mapping = 			[
 						"1.15.2": "20200702-1.15.1",
-						"1.16.1": "20200723-1.16.1"
+						"1.16.1": "20200723-1.16.1",
+						"1.16.2": "20200723-1.16.1"
 					]
 	def mapping_channel = 		[
 						"1.15.2": "snapshot",
-						"1.16.1": "snapshot"
+						"1.16.1": "snapshot",
+						"1.16.2": "snapshot"
 					]	
 						
 	config.forge.major_version = major_forge_version."$version";
