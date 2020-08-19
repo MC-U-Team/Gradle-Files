@@ -10,12 +10,16 @@ def printInfo() {
 	println "Forge version: ${config.forge.version}"
 	println "Forge mapping: ${config.forge.mapping}-${config.forge.mapping_channel}"
 	
+	println ""
+	
 	if(!isUTeamCore()) {
 		println "UTeamCore version: ${config.uteamcore.version}"
 	}
 	
 	println "Jei version: ${config.jei.version}"
 	println "Patchouli version: ${config.patchouli.version}"
+	println "Curios version: ${config.curios.version}"
+	println ""
 }
 
 ext {
