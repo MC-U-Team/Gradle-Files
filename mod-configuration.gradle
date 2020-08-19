@@ -24,6 +24,7 @@ def findVersions(version) {
 	config.uteamcore.version = uteamcore_version."$version";					
 	config.jei.version = jei_version."$version";
 	config.patchouli.version = patchouli_version."$version";
+	config.curios.version = curios_version."$version";
 }
 
 def setupMods() {
