@@ -16,6 +16,10 @@ def findVersions(version) {
 						"1.16.1":"1.16-39",
 						"1.16.2":"1.16-41",
 					]
+					
+	def curios_version = 	[	
+						"1.16.2":"4.0.0.0",
+					]
 						
 	config.uteamcore.version = uteamcore_version."$version";					
 	config.jei.version = jei_version."$version";
