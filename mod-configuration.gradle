@@ -49,6 +49,10 @@ def getPatchouliDependency() {
   	return "vazkii.patchouli:Patchouli:${config.patchouli.version}"
 }
 
+def getPatchouliApiDependency() {
+  	return getPatchouliDependency() + ":api"
+}
+
 def getCuriosDependency() {
   	return "top.theillusivec4.curios:curios-forge:${config.forge.mcversion}-${config.curios.version}"
 }
@@ -63,6 +67,7 @@ ext {
 	getJeiDependency = this.&getJeiDependency
 	getJeiApiDependency = this.&getJeiApiDependency
 	getPatchouliDependency = this.&getPatchouliDependency
+	getPatchouliApiDependency = this.&getPatchouliApiDependency
 	getCuriosDependency = this.&getCuriosDependency
 	getCuriosApiDependency = this.&getCuriosApiDependency
 }
