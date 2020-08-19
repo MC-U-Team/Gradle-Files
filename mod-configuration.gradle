@@ -49,6 +49,14 @@ def getPatchouliDependency() {
   	return "vazkii.patchouli:Patchouli:${config.patchouli.version}"
 }
 
+def getCuriosDependency() {
+  	return "top.theillusivec4.curios:curios-forge:${config.forge.mcversion}-${config.curios.version}"
+}
+
+def getCuriosApiDependency() {
+	return getCuriosDependency() + ":api"
+}
+
 ext {
 	setupMods = this.&setupMods
 	getUTeamCoreDependency = this.&getUTeamCoreDependency
