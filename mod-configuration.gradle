@@ -14,7 +14,7 @@ def findVersions(version) {
 	def patchouli_version = 	[	
 						"1.15.2":"1.15.2-1.2-29.151",
 						"1.16.1":"1.16-39",
-						"1.16.1":"1.16-41",
+						"1.16.2":"1.16-41",
 					]
 						
 	config.uteamcore.version = uteamcore_version."$version";					
