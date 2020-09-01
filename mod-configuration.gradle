@@ -18,7 +18,7 @@ def findVersions(version) {
 					]
 					
 	def curios_version = 		[	
-						"1.16.2":"4.0.0.0",
+						"1.16.2":"4.0.0.1",
 					]
 						
 	config.uteamcore.version = uteamcore_version."$version";					
