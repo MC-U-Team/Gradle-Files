@@ -6,10 +6,10 @@ def findVersions(version) {
 					]
 
 	def jei_version = 		[	
-						"1.15.2":"6.0.2.12",
-						"1.16.1":"7.0.0.6",
-						"1.16.2":"7.3.2.25",
-						"1.16.3":"7.3.2.25"
+						"1.15.2":"1.15.2:6.0.2.12",
+						"1.16.1":"1.16.1:7.0.0.6",
+						"1.16.2":"1.16.2:7.3.2.25",
+						"1.16.3":"1.16.2:7.3.2.25"
 					]
 					
 	def patchouli_version = 	[	
@@ -20,8 +20,8 @@ def findVersions(version) {
 					]
 					
 	def curios_version = 		[	
-						"1.16.2":"4.0.0.1",
-						"1.16.3":"4.0.0.1"
+						"1.16.2":"1.16.2-4.0.0.1",
+						"1.16.3":"1.16.2-4.0.0.1"
 					]
 						
 	config.uteamcore.version = uteamcore_version."$version";					
@@ -41,7 +41,7 @@ def getUTeamCoreDependency() {
 }
 
 def getJeiDependency() {
-  	return "mezz.jei:jei-${config.forge.mcversion}:${config.jei.version}"
+  	return "mezz.jei:jei-${config.jei.version}"
 }
 
 def getJeiApiDependency() {
@@ -57,7 +57,7 @@ def getPatchouliApiDependency() {
 }
 
 def getCuriosDependency() {
-  	return "top.theillusivec4.curios:curios-forge:${config.forge.mcversion}-${config.curios.version}"
+  	return "top.theillusivec4.curios:curios-forge:${config.curios.version}"
 }
 
 def getCuriosApiDependency() {
