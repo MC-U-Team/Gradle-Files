@@ -1,6 +1,6 @@
 task tagRelease {
 	doLast {
-    def tagName = "${config.forge.mcversion}-${project.version}"
+    		def tagName = "${config.forge.mcversion}-${project.version}"
 		println "Tag release commit with tag ${tagName}"
-  }
+ 	}
 }
