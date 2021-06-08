@@ -2,5 +2,6 @@ task tagRelease {
 	doLast {
     		def tagName = "${config.forge.mcversion}-${project.version}"
 		println "Tag release commit with tag ${tagName}"
+		println execute("git rev-parse --verify ${versionBranch}").trim()
  	}
 }
