@@ -117,4 +117,5 @@ def execute(command) {
 ext {
 	getBuildNumber = this.&getBuildNumber
 	validateBuild = this.&validateBuild
+	execute = this.&execute
 }
