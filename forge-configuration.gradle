@@ -5,7 +5,8 @@ def findVersions(version) {
 						"1.16.2": "33",
 						"1.16.3": "34",
 						"1.16.4": "35",
-						"1.16.5": "36"
+						"1.16.5": "36",
+						"1.17.1": "37"
 					]
 	def forge_minor_version = 	[
 						"1.15.2": "2.30",
@@ -13,7 +14,8 @@ def findVersions(version) {
 						"1.16.2": "0.61",
 						"1.16.3": "1.42",
 						"1.16.4": "1.37",
-						"1.16.5": "1.30"
+						"1.16.5": "1.30",
+						"1.17.1": "0.2"
 					]
 	def mapping = 			[
 						"1.15.2": "20200702-1.15.1",
@@ -21,7 +23,8 @@ def findVersions(version) {
 						"1.16.2": "20200723-1.16.1",
 						"1.16.3": "20201028-1.16.3",
 						"1.16.4": "20201028-1.16.3",
-						"1.16.5": "20210309-1.16.5"
+						"1.16.5": "20210309-1.16.5",
+						"1.17.1": "1.17.1"
 					]
 	def mapping_channel = 		[
 						"1.15.2": "snapshot",
@@ -29,7 +32,8 @@ def findVersions(version) {
 						"1.16.2": "snapshot",
 						"1.16.3": "snapshot",
 						"1.16.4": "snapshot",
-						"1.16.5": "snapshot"
+						"1.16.5": "snapshot",
+						"1.17.1": "official"
 					]	
 						
 	config.forge.major_version = major_forge_version."$version";
