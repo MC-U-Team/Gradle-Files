@@ -8,7 +8,7 @@ buildscript {
     }
 }
 
-import net.minecraftforge.gradle.common.task.SignJar
+import net.minecraftforge.gradle.common.tasks.SignJar
 import org.gradle.api.internal.artifacts.dsl.LazyPublishArtifact
 
 def createSignJarTask(taskName, depends, file) {
