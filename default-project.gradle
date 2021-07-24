@@ -1,13 +1,13 @@
-apply from: "load-config.gradle"
-apply from: "rename-run-configuration.gradle"
-apply from: "forge-configuration.gradle"
-apply from: "mod-configuration.gradle"
-apply from: "info.gradle"
-apply from: "build-number.gradle"
-apply from: "project-methods.gradle"
-apply from: "changelog.gradle"
-apply from: "sign-jar.gradle"
-apply from: "tag-release.gradle"
+apply from: "gradle_files/load-config.gradle"
+apply from: "gradle_files/rename-run-configuration.gradle"
+apply from: "gradle_files/forge-configuration.gradle"
+apply from: "gradle_files/mod-configuration.gradle"
+apply from: "gradle_files/info.gradle"
+apply from: "gradle_files/build-number.gradle"
+apply from: "gradle_files/project-methods.gradle"
+apply from: "gradle_files/changelog.gradle"
+apply from: "gradle_files/sign-jar.gradle"
+apply from: "gradle_files/tag-release.gradle"
 
 repositories {
     maven { url = "https://repo.u-team.info" }
