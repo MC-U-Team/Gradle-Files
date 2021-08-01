@@ -1,8 +1,10 @@
-def generateArchivesBaseName() {
+ext.generateArchivesBaseName = {
+	->
 	return "${config.mod.filename}-${config.forge.mcversion}"
 }
 
-def generateVersion() {
+ext.generateVersion = {
+	->
 	return "${config.mod.version}.${config.buildnumber}" + getAppendix()
 }
 
@@ -14,7 +16,7 @@ def getAppendix() {
 	}
 }
 
-def getValue(name) {
+ext.getValue = { name ->
 	def envVariable = System.getenv(name)
 	if(envVariable != null) {
 		return envVariable
@@ -23,20 +25,13 @@ def getValue(name) {
 			return project.getProperty(name)
 		}
 	}
-	return null;
+	return null
 }
 
-def getValueDefault(name) {
+ext.getValueDefault = { name ->
 	def value = getValue(name)
 	if(value == null) {
 		return "noValue"
 	}
 	return value
-}
-
-ext {
-	generateArchivesBaseName = this.&generateArchivesBaseName
-	generateVersion = this.&generateVersion
-	getValue = this.&getValue
-	getValueDefault = this.&getValueDefault
 }
