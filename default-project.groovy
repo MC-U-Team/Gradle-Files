@@ -1,16 +1,20 @@
-apply from: "./load-config.groovy"
-apply from: "./execute.groovy"
-apply from: "./rename-run-configuration.groovy"
-apply from: "./info.groovy"
-apply from: "./build-number.groovy"
-apply from: "./project-methods.groovy"
-apply from: "./changelog.groovy"
-apply from: "./manifest.groovy"
-apply from: "./sign-jar.groovy"
-apply from: "./tag-release.groovy"
+def directory = buildscript.sourceFile.getParent()
+
+apply from: "$directory/load-config.groovy"
+apply from: "$directory/execute.groovy"
+apply from: "$directory/rename-run-configuration.groovy"
+apply from: "$directory/info.groovy"
+apply from: "$directory/build-number.groovy"
+apply from: "$directory/project-methods.groovy"
+apply from: "$directory/changelog.groovy"
+apply from: "$directory/manifest.groovy"
+apply from: "$directory/sign-jar.groovy"
+apply from: "$directory/tag-release.groovy"
 
 repositories {
-	maven { url = "https://repo.u-team.info" }
+	maven {
+		url = "https://repo.u-team.info"
+	}
 }
 
 loadConfig()
