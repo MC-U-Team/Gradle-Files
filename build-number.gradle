@@ -1,5 +1,6 @@
-def getBuildNumber() {
-	print "Fetching build number "	
+ext.getBuildNumber = {
+	->
+	print "Fetching build number "
 	
 	def buildnumber = "0"
 	
@@ -9,18 +10,18 @@ def getBuildNumber() {
 		def mainBranch = execute("git rev-parse --abbrev-ref HEAD").trim()
 		def versionBranch = "versioning"
 		def patchFile = new File("patch")
-
+		
 		commit(".", "Commit forced, because of new build", mainBranch)
 		execute("git pull")
-
+		
 		println "Check if branch ${versionBranch} already exists"
-
+		
 		def existBranch = execute("git rev-parse --verify ${versionBranch}").trim();
 		
 		if(existBranch != null && existBranch.length() > 0) {
 			println "Branch exists. Read ${patchFile} file"
 			buildnumber = findBuildNumber(versionBranch, patchFile)
-		} else {	
+		} else {
 			println "Branch was not found. First check if the branch exists in the upstream repo"
 			execute("git checkout ${versionBranch}");
 			existBranch = execute("git rev-parse --verify ${versionBranch}").trim()
@@ -33,34 +34,27 @@ def getBuildNumber() {
 				execute("git checkout --orphan ${versionBranch}");
 				execute("git rm --cache -r -f *");
 				patchFile.write "0"
-				commit("patch", "Created versioning branch with start build number", versionBranch)	
+				commit("patch", "Created versioning branch with start build number", versionBranch)
 				buildnumber = "1"
 			}
 		}
-
+		
 		execute("git checkout ${mainBranch} -f")
 	} else {
 		println "with with dev build version"
-	
+		
 		buildnumber = "DEV"
 	}
 	
 	config.buildnumber = buildnumber
 	
-	println "Finished fetching build number"	
+	println "Finished fetching build number"
 	print "The buildnumber is "
 	println config.buildnumber
 }
 
-def findBuildNumber(versionBranch, patchFile) {
-	execute("git checkout ${versionBranch} -f");
-	execute("git pull origin ${versionBranch}");
-	Integer count = patchFile.text as Integer
-	count += 1
-	return count as String
-}
-
-def validateBuild() {
+ext.validateBuild = {
+	->
 	if (!project.hasProperty("createBuild")) {
 		throw new GradleException("Can only publish if the property createBuild is set")
 	}
@@ -73,49 +67,39 @@ task setBuildNumber {
 		def mainBranch = execute("git rev-parse --abbrev-ref HEAD").trim()
 		def versionBranch = "versioning"
 		def patchFile = new File("patch")
-
+		
 		def buildnumber = config.buildnumber
-
+		
 		commit(".", "Commit forced, because of new build", mainBranch)
-
+		
 		def existBranch = execute("git rev-parse --verify ${versionBranch}").trim();
-
+		
 		if(existBranch != null && existBranch.length() > 0) {
 			execute("git checkout ${versionBranch} -f");
 			execute("git pull origin ${versionBranch}");
 			execute("git rm --cache -r -f *");
 			patchFile.write "" + buildnumber
 			commit("patch", "Updated build number to ${buildnumber}", versionBranch)
-		} else {		
+		} else {
 			println "Please use getBuildNumber before to create branch!"
 		}
-
+		
 		execute("git checkout ${mainBranch} -f")
 		
 		println "Updated buildnumber"
 	}
 }
 
+def findBuildNumber(versionBranch, patchFile) {
+	execute("git checkout ${versionBranch} -f")
+	execute("git pull origin ${versionBranch}")
+	Integer count = patchFile.text as Integer
+	count += 1
+	return count as String
+}
+
 def commit(files, message, branch) {
 	execute("git add ${files}")
 	execute("git commit -m \"${message}\"")
 	execute("git push -u origin ${branch}")
-}
-
-def execute(command) {
-	def process = command.execute();
-	def output = new StringWriter(), error = new StringWriter()
-	process.waitForProcessOutput(output, error)
-	project.logger.debug "---------------------------"
-	project.logger.debug "Using command: ${command}"
-	project.logger.debug "Output: ${output}"
-	project.logger.debug "Error: ${error}"
-	project.logger.debug "---------------------------"
-	return output.toString()
-}
-
-ext {
-	getBuildNumber = this.&getBuildNumber
-	validateBuild = this.&validateBuild
-	execute = this.&execute
 }
