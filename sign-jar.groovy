@@ -1,21 +1,21 @@
 buildscript {
-    repositories {
-        maven { url = "https://files.minecraftforge.net/maven" }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true
-    }
+	repositories {
+		maven { url = "https://files.minecraftforge.net/maven" }
+		mavenCentral()
+	}
+	dependencies {
+		classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true
+	}
 }
 
 import net.minecraftforge.gradle.common.tasks.SignJar
 import org.gradle.api.internal.artifacts.dsl.LazyPublishArtifact
 
-def createSignJarTask(taskName, depends, file) {
+ext.createSignJarTask = { taskName, depends, file ->
 	tasks.create(name: taskName, type: SignJar) {
 		onlyIf {
-        		project.hasProperty("keystore")
-    		}
+			project.hasProperty("keystore")
+		}
 		afterEvaluate {
 			dependsOn depends
 		}
@@ -32,16 +32,17 @@ def createSignJarTask(taskName, depends, file) {
 		} else {
 			println "Could not sign " + file.getName() + ". No keystore property could be found"
 		}
-	}  
+	}
 }
 
-def signJar(task) {
+ext.signJar = { task ->
 	def taskName = "sign${task.name}"
 	createSignJarTask(taskName, task, task.archivePath)
 	build.dependsOn taskName
 }
 
-def signAllJars() {
+ext.signAllJars = {
+	->
 	configurations.archives.allArtifacts.each { artifact ->
 		if(!(artifact instanceof LazyPublishArtifact)) {
 			def taskName = "signJar${artifact.getClassifier()}"
@@ -49,10 +50,4 @@ def signAllJars() {
 			build.dependsOn taskName
 		}
 	}
-}
-
-ext {
-	createSignJarTask = this.&createSignJarTask
-	signJar = this.&signJar
-	signAllJars = this.&signAllJars
 }
