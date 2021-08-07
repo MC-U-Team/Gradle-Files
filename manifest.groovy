@@ -2,7 +2,7 @@ ext.normalManifest = {
 	attributes(
 	"Specification-Title": config.mod.name,
 	"Specification-Vendor": "Team UTeam",
-	"Specification-Version": config.forge.major_version,
+	"Specification-Version": config.mod.version,
 	"Built-On": config.forge.mcversion,
 	"Implementation-Title": config.mod.name,
 	"Implementation-Version": project.version,
