@@ -1,4 +1,6 @@
 ext.printInfo = {
 	->
-	println("Java: " + System.getProperty("java.version") + " JVM: " + System.getProperty("java.vm.version") + "(" + System.getProperty("java.vendor") + ") Arch: " + System.getProperty("os.arch"))
+	println "Java: " + System.getProperty("java.version")
+	println "JVM: " + System.getProperty("java.vm.version") + "(" + System.getProperty("java.vendor") + ")"
+	println "Arch: " + System.getProperty("os.arch")
 }
