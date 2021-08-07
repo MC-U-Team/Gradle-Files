@@ -21,7 +21,7 @@ ext.createSignJarTask = { taskName, depends, file ->
 		}
 		if (project.hasProperty("keystore")) {
 			doLast {
-				println "Signing jar " + file.getName()
+				println "Signing jar ${file.getName()}"
 			}
 			keyStore = project.findProperty("keystore")
 			alias = project.findProperty("keystore.alias")
@@ -30,7 +30,7 @@ ext.createSignJarTask = { taskName, depends, file ->
 			inputFile = file
 			outputFile = file
 		} else {
-			println "Could not sign " + file.getName() + ". No keystore property could be found"
+			println "Could not sign ${file.getName()}. No keystore property could be found"
 		}
 	}
 }
