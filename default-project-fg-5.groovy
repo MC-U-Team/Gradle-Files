@@ -8,7 +8,7 @@ apply from: "$directory/build-number.groovy"
 apply from: "$directory/project-methods.groovy"
 apply from: "$directory/changelog.groovy"
 apply from: "$directory/manifest.groovy"
-apply from: "$directory/sign-jar.groovy"
+apply from: "$directory/sign-jar-fg-5.groovy"
 apply from: "$directory/tag-release.groovy"
 
 repositories {
