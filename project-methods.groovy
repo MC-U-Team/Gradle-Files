@@ -5,7 +5,7 @@ ext.generateArchivesBaseName = {
 
 ext.generateVersion = {
 	->
-	return "${config.mod.version}.${config.buildnumber}" + getAppendix()
+	return "${config.mod.version}.${config.buildnumber}${getAppendix()}"
 }
 
 def getAppendix() {
