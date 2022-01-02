@@ -19,13 +19,13 @@ public class GradleFilesPlugin implements Plugin<Project> {
 		this.logger = project.getLogger();
 		this.extension = project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class);
 		
+		PrintJVMInformationTool.print(this);
+		
 		project.afterEvaluate((unused_) -> {
 			// Set config file to default if not specified
 			if (extension.getConfigFile() == null) {
 				extension.setConfigFile(project.file(Constants.DEFAULT_CONFIG_FILE));
 			}
-			
-			PrintJVMInformationTool.print(this);
 			LoadConfigTool.load(this);
 		});
 		
