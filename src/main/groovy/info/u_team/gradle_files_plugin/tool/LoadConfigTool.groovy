@@ -14,6 +14,6 @@ class LoadConfigTool {
 			properties.load(reader)
 		}
 		
-		plugin.project.extensions.extraProperties."config" = properties
+		plugin.project.extensions.extraProperties.config = properties
 	}
 }

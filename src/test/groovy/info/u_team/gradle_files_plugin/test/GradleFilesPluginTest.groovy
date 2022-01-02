@@ -7,7 +7,7 @@ import info.u_team.gradle_files_plugin.GradleFilesPlugin
 class GradleFilesPluginTest {
 	
 	static void main(String[] args) {
-		def project = ProjectBuilder.builder().withName("Gradle Files Plugin Test").withProjectDir(new File(System.properties."gradle.project_dir")).build();
+		final def project = ProjectBuilder.builder().withName("Gradle Files Plugin Test").withProjectDir(new File(System.properties."gradle.project_dir")).build();
 		
 		// Apply plugin
 		project.pluginManager.apply(GradleFilesPlugin)

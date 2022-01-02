@@ -4,6 +4,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 
+import info.u_team.gradle_files_plugin.tool.AddRepositoryTool;
 import info.u_team.gradle_files_plugin.tool.LoadConfigTool;
 import info.u_team.gradle_files_plugin.tool.PrintJVMInformationTool;
 
@@ -19,6 +20,7 @@ public class GradleFilesPlugin implements Plugin<Project> {
 		this.logger = project.getLogger();
 		this.extension = project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class);
 		
+		AddRepositoryTool.add(this);
 		PrintJVMInformationTool.print(this);
 		
 		project.afterEvaluate((unused_) -> {
