@@ -11,14 +11,24 @@ public class GradleFilesPlugin implements Plugin<Project> {
 	
 	private Project project;
 	private Logger logger;
+	private GradleFilesExtension extension;
 	
 	@Override
 	public void apply(Project project) {
 		this.project = project;
 		this.logger = project.getLogger();
+		this.extension = project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class);
 		
-		PrintJVMInformationTool.print(this);
-		LoadConfigTool.load(this);
+		project.afterEvaluate((unused_) -> {
+			// Set config file to default if not specified
+			if (extension.getConfigFile() == null) {
+				extension.setConfigFile(project.file(Constants.DEFAULT_CONFIG_FILE));
+			}
+			
+			PrintJVMInformationTool.print(this);
+			LoadConfigTool.load(this);
+		});
+		
 	}
 	
 	public Project getProject() {
@@ -27,6 +37,10 @@ public class GradleFilesPlugin implements Plugin<Project> {
 	
 	public Logger getLogger() {
 		return logger;
+	}
+	
+	public GradleFilesExtension getExtension() {
+		return extension;
 	}
 	
 }

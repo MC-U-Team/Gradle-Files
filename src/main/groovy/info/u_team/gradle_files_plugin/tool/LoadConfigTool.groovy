@@ -6,7 +6,7 @@ import info.u_team.gradle_files_plugin.GradleFilesPlugin
 class LoadConfigTool {
 	
 	static void load(final GradleFilesPlugin plugin) {
-		final def propertiesFile = plugin.project.file(Constants.DEFAULT_PROPERTIES_FILE)
+		final def propertiesFile = plugin.project.file(plugin.extension.configFile)
 		
 		final def properties = new Properties()
 		
