@@ -2,10 +2,9 @@ package info.u_team.gradle_files_plugin.tool
 
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
 
-class PrintJVMInformationTool implements Tool {
+class PrintJVMInformationTool {
 	
-	@Override
-	void run(final GradleFilesPlugin plugin) {
+	static void print(final GradleFilesPlugin plugin) {
 		final def logger = plugin.logger
 		
 		final def javaVersion = System.properties."java.version"
