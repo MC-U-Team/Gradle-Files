@@ -7,11 +7,11 @@ import info.u_team.gradle_files_plugin.GradleFilesPlugin
 class GradleFilesPluginTest {
 	
 	static void main(String[] args) {
-		def project = ProjectBuilder.builder().withName("Gradle Files Plugin Test").withProjectDir(new File("D:\\Programmieren\\Java\\Forge\\U Team\\Gradle Files\\Gradle-Files\\test")).build();
+		def project = ProjectBuilder.builder().withName("Gradle Files Plugin Test").withProjectDir(new File(System.properties."gradle.project_dir")).build();
 		project.getPluginManager().apply(GradleFilesPlugin)
 		
-		project.logger.lifecycle(project.config.test)
+		project.logger.lifecycle(project.config.myvalue)
 		
-		project.logger.lifecycle("Project finished")
+		println("Project script finished")
 	}
 }

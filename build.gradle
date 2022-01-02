@@ -2,6 +2,7 @@ plugins {
 	id "java-gradle-plugin"
 	id "groovy"
 	id "maven-publish"
+	id "com.palantir.launch-config" version "1.2.0"
 }
 
 version = "1.0.0"
@@ -36,4 +37,14 @@ jar.manifest.mainAttributes([
 	it.options.encoding = "UTF-8"
 	it.options.deprecation = true
 	it.options.fork = true
+}
+
+task runPluginTest(type: JavaExec) {
+	def run = file("${rootDir}/test")
+	
+	workingDir  run
+	main "info.u_team.gradle_files_plugin.test.GradleFilesPluginTest"
+	systemProperties = [
+		"gradle.project_dir": "\"${run}\""
+	]
 }
