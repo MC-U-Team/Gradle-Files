@@ -10,7 +10,7 @@ class GradleFilesPluginTest {
 		def project = ProjectBuilder.builder().withName("Gradle Files Plugin Test").withProjectDir(new File(System.properties."gradle.project_dir")).build();
 		
 		// Apply plugin
-		project.getPluginManager().apply(GradleFilesPlugin)
+		project.pluginManager.apply(GradleFilesPlugin)
 		
 		// Setup extension
 		project.extensions.gradlefiles.configFile = project.file("build2.properties")
@@ -18,7 +18,7 @@ class GradleFilesPluginTest {
 		// Test stuff
 		project.afterEvaluate {
 			// Print value of loaded config
-			project.logger.lifecycle(project.config.myvalue)
+			project.logger.lifecycle("Config value is {}", project.config.myvalue)
 			
 			// Finished test
 			project.logger.lifecycle("Test script evaluated")
