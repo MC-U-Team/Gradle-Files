@@ -1,4 +1,5 @@
 plugins {
+	id "java-gradle-plugin"
 	id "groovy"
 	id "maven-publish"
 }
@@ -14,13 +15,20 @@ java {
 	}
 }
 
+gradlePlugin {
+	plugins {
+		gradleFilesPlugin {
+			id = "info.u_team.gradle_files"
+			implementationClass = "info.u_team.gradle_files_plugin.GradleFilesPlugin"
+		}
+	}
+}
+
 dependencies {
-	compileOnly gradleApi()
-	compileOnly localGroovy()
 }
 
 jar.manifest.mainAttributes([
-	"Implementation-Title"  : project.name,
+	"Implementation-Title": project.name,
 	"Implementation-Version": project.version
 ])
 
