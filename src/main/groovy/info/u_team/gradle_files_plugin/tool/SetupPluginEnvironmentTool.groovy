@@ -1,6 +1,7 @@
 package info.u_team.gradle_files_plugin.tool
 
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository
+import org.gradle.plugins.ide.eclipse.EclipsePlugin
 
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
@@ -17,5 +18,8 @@ class SetupPluginEnvironmentTool {
 		
 		// Apply forge gradle plugin
 		plugin.project.pluginManager.apply(UserDevPlugin)
+		
+		// Apply eclipse gradle plugin
+		plugin.project.pluginManager.apply(EclipsePlugin)
 	}
 }
