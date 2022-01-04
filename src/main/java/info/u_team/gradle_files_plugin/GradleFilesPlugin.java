@@ -4,7 +4,8 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 
-import info.u_team.gradle_files_plugin.tool.AddRepositoryTool;
+import info.u_team.gradle_files_plugin.tool.SetupPluginEnvironmentTool;
+import info.u_team.gradle_files_plugin.tool.GeneralTaskSettingsTool;
 import info.u_team.gradle_files_plugin.tool.LoadConfigTool;
 import info.u_team.gradle_files_plugin.tool.PrintJVMInformationTool;
 
@@ -20,7 +21,7 @@ public class GradleFilesPlugin implements Plugin<Project> {
 		this.logger = project.getLogger();
 		this.extension = project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class);
 		
-		AddRepositoryTool.add(this);
+		SetupPluginEnvironmentTool.setup(this);
 		PrintJVMInformationTool.print(this);
 		
 		project.afterEvaluate((unused_) -> {
@@ -29,6 +30,7 @@ public class GradleFilesPlugin implements Plugin<Project> {
 				extension.setConfigFile(project.file(Constants.DEFAULT_CONFIG_FILE));
 			}
 			LoadConfigTool.load(this);
+			GeneralTaskSettingsTool.setup(this);
 		});
 		
 	}

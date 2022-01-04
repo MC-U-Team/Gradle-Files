@@ -4,13 +4,18 @@ import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
+import net.minecraftforge.gradle.userdev.UserDevPlugin
 
-class AddRepositoryTool {
+class SetupPluginEnvironmentTool {
 	
-	static void add(final GradleFilesPlugin plugin) {
+	static void setup(final GradleFilesPlugin plugin) {
+		// Add uteam maven repository
 		plugin.project.repositories.maven { maven ->
 			maven.name = Constants.U_TEAM_MAVEN_NAME
 			maven.url = Constants.U_TEAM_MAVEN_URL
 		}
+		
+		// Apply forge gradle plugin
+		plugin.project.pluginManager.apply(UserDevPlugin)
 	}
 }

@@ -25,7 +25,14 @@ gradlePlugin {
 	}
 }
 
+repositories {
+	maven {
+		url = "https://maven.minecraftforge.net"
+	}
+}
+
 dependencies {
+	implementation group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true
 }
 
 jar.manifest.mainAttributes([
