@@ -52,7 +52,7 @@ minecraft {
 		data = {
 			workingDirectory file("run/data")
 			
-			args "--mod", "test"
+			args "--mod", config.mod.modid
 			args "--all"
 			args "--output", file("src/generated/resources")
 			args "--validate"
