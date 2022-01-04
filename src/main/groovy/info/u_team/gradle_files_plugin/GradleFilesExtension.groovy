@@ -14,6 +14,11 @@ class GradleFilesExtension {
 	String vendor
 	
 	/**
+	 * If all jar files should be signed
+	 */
+	boolean signJars = false
+	
+	/**
 	 * Returns a manifest default file
 	 * @return Manifest
 	 */

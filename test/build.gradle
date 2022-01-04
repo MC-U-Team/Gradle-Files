@@ -21,6 +21,8 @@ version = "1.0.0"
 
 gradlefiles {
 	vendor "Team UTeam"
+	
+	signJars true
 }
 
 java {
