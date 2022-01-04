@@ -1,13 +1,15 @@
 buildscript {
 	repositories {
 		maven {
+			url = "file:///${projectDir}/../build/mavenRepo"
+		}
+		maven {
 			url = "https://maven.minecraftforge.net"
 		}
 		mavenCentral()
 	}
 	dependencies {
-		classpath fileTree(dir: "${projectDir}/../build/libs", include: ["gradle_files-*.jar"])
-		classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true
+		classpath group: "info.u-team.gradle_files", name: "Gradle-Files-Plugin", version: "1.0.0", changing: true
 	}
 }
 

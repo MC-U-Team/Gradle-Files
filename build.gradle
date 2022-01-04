@@ -69,3 +69,16 @@ task runPluginTest(type: JavaExec) {
 		"gradle.project_dir": "\"${run}\""
 	]
 }
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			artifact jar
+		}
+	}
+	repositories {
+		maven {
+			url "file:///${buildDir}/mavenRepo"
+		}
+	}
+}
