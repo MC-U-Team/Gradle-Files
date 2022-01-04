@@ -1,5 +1,3 @@
-import info.u_team.gradle_files_plugin.GradleFilesExtension
-
 buildscript {
 	repositories {
 		maven {
