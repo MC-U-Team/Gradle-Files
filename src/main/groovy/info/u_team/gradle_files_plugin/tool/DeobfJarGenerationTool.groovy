@@ -19,6 +19,7 @@ class DeobfJarGenerationTool {
 				task.description = "Assemble a jar archive containing the deobfed classes"
 				task.group = BasePlugin.BUILD_GROUP
 				task.archiveClassifier = "deobf"
+				task.from(javaPluginExtension.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME).output)
 			}
 			
 			if (tasks.names.contains(LifecycleBasePlugin.ASSEMBLE_TASK_NAME)) {
