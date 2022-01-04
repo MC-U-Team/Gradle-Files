@@ -8,12 +8,12 @@ class LoadConfigTool {
 	static void load(final GradleFilesPlugin plugin) {
 		final def propertiesFile = plugin.project.file(Constants.CONFIG_FILE)
 		
-		final def properties = new Properties()
-		
 		propertiesFile.withReader { reader ->
+			final def properties = new Properties()
 			properties.load(reader)
+			
+			final def config = new ConfigSlurper().parse(properties)
+			plugin.project.extensions.extraProperties.config = config
 		}
-		
-		plugin.project.extensions.extraProperties.config = properties
 	}
 }

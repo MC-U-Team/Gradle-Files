@@ -1,3 +1,5 @@
+import info.u_team.gradle_files_plugin.GradleFilesExtension
+
 buildscript {
 	repositories {
 		maven {
@@ -14,6 +16,10 @@ buildscript {
 }
 
 apply plugin: "info.u_team.gradle_files"
+
+gradlefiles {
+	vendor "Team UTeam"
+}
 
 java {
 	toolchain {
@@ -59,6 +65,10 @@ minecraft {
 			}
 		}
 	}
+}
+
+jar {
+	manifest gradlefiles.defaultManifest()
 }
 
 dependencies {

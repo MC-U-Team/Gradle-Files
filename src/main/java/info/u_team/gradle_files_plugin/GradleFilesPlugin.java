@@ -12,9 +12,15 @@ import info.u_team.gradle_files_plugin.tool.SetupPluginEnvironmentTool;
 
 public class GradleFilesPlugin implements Plugin<Project> {
 	
+	private static GradleFilesPlugin INSTANCE;
+	
 	private Project project;
 	private Logger logger;
 	private GradleFilesExtension extension;
+	
+	public GradleFilesPlugin() {
+		INSTANCE = this;
+	}
 	
 	@Override
 	public void apply(Project project) {
@@ -31,6 +37,10 @@ public class GradleFilesPlugin implements Plugin<Project> {
 			GeneralTaskSettingsTool.setup(this);
 		});
 		
+	}
+	
+	public static GradleFilesPlugin getInstance() {
+		return INSTANCE;
 	}
 	
 	public Project getProject() {
