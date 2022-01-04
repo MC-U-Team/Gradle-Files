@@ -9,7 +9,6 @@ class RenameRunConfigurationTool {
 		final def minecraftExtension = plugin.project.extensions.getByType(MinecraftExtension)
 		minecraftExtension.runs.each { run ->
 			run.taskName = "${plugin.project.name}_${run.taskName}"
-			println(run.taskName)
 		}
 	}
 }
