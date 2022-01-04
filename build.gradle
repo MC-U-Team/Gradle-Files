@@ -39,6 +39,7 @@ gradlePlugin {
 			implementationClass = "info.u_team.gradle_files_plugin.GradleFilesPlugin"
 		}
 	}
+	automatedPublishing = false
 }
 
 repositories {
@@ -73,14 +74,16 @@ task runPluginTest(type: JavaExec) {
 }
 
 publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			artifact jar
-		}
-	}
 	repositories {
 		maven {
-			url "file:///${buildDir}/mavenRepo"
+			url layout.buildDirectory.dir("mavenRepo")
+		}
+	}
+	publications {
+		mavenJava(MavenPublication) {
+			artifactId = project.archivesBaseName
+			
+			from components.java
 		}
 	}
 }
