@@ -27,6 +27,7 @@ java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
+	withDeobfJar()
 	withSourcesJar()
 	withJavadocJar()
 }
