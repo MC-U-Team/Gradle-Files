@@ -4,10 +4,10 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 
-import info.u_team.gradle_files_plugin.tool.SetupPluginEnvironmentTool;
 import info.u_team.gradle_files_plugin.tool.GeneralTaskSettingsTool;
 import info.u_team.gradle_files_plugin.tool.LoadConfigTool;
 import info.u_team.gradle_files_plugin.tool.PrintJVMInformationTool;
+import info.u_team.gradle_files_plugin.tool.SetupPluginEnvironmentTool;
 
 public class GradleFilesPlugin implements Plugin<Project> {
 	
@@ -23,13 +23,9 @@ public class GradleFilesPlugin implements Plugin<Project> {
 		
 		SetupPluginEnvironmentTool.setup(this);
 		PrintJVMInformationTool.print(this);
+		LoadConfigTool.load(this);
 		
 		project.afterEvaluate((unused_) -> {
-			// Set config file to default if not specified
-			if (extension.getConfigFile() == null) {
-				extension.setConfigFile(project.file(Constants.DEFAULT_CONFIG_FILE));
-			}
-			LoadConfigTool.load(this);
 			GeneralTaskSettingsTool.setup(this);
 		});
 		
