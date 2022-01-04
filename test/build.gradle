@@ -28,14 +28,14 @@ java {
 }
 
 minecraft {
-	mappings channel: "official", version: "1.18.1"
+	mappings channel: config.forge.mapping_channel, version: config.forge.mapping
 	
 	runs {
 		client = {
 			workingDirectory file("run/client")
 			
 			mods {
-				test {
+				"${config.mod.modid}" {
 					source sourceSets.main
 				}
 			}
@@ -44,7 +44,7 @@ minecraft {
 			workingDirectory file("run/server")
 			
 			mods {
-				test {
+				"${config.mod.modid}" {
 					source sourceSets.main
 				}
 			}
@@ -59,7 +59,7 @@ minecraft {
 			args "--existing", file("src/main/resources")
 			
 			mods {
-				test {
+				"${config.mod.modid}" {
 					source sourceSets.main
 				}
 			}
@@ -72,5 +72,5 @@ jar {
 }
 
 dependencies {
-	minecraft "net.minecraftforge:forge:1.18.1-39.0.10"
+	minecraft gradlefiles.forgeDependency()
 }
