@@ -17,6 +17,10 @@ buildscript {
 
 apply plugin: "info.u_team.gradle_files"
 
+group = "info.u-team"
+archivesBaseName = "test_mod"
+version = "1.0.0"
+
 gradlefiles {
 	vendor "Team UTeam"
 }
@@ -25,6 +29,8 @@ java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
+	withSourcesJar()
+	withJavadocJar()
 }
 
 minecraft {
@@ -67,8 +73,9 @@ minecraft {
 	}
 }
 
-jar {
+tasks.withType(Jar) { task ->
 	manifest gradlefiles.defaultManifest()
+	gradlefiles.defaultJar(task)
 }
 
 dependencies {
