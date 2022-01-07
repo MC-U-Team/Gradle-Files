@@ -16,7 +16,7 @@ class GradleFilesExtension {
 	/**
 	 * If all jar files should be signed
 	 */
-	boolean signJars = false
+	boolean signJars
 	
 	/**
 	 * Returns a manifest default file

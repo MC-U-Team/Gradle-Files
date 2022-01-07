@@ -1,7 +1,9 @@
 package info.u_team.gradle_files_plugin.extension
 
-import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 import org.gradle.api.Project
+
+import info.u_team.gradle_files_plugin.Constants
+import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 
 class DefaultManifestExtensionImpl {
 	
@@ -21,7 +23,7 @@ class DefaultManifestExtensionImpl {
 					
 					"Built-On": config.forge.mcversion,
 					
-					"Fingerprint": project.findProperty("keystore.fingerprint") ?: "NONE",
+					"Fingerprint": project.findProperty(Constants.KEYSTORE_FINGERPRINT) ?: "NONE",
 					
 					"Automatic-Module-Name": "${project.group}.${config.mod.modid}"
 					)

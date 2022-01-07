@@ -14,6 +14,7 @@ buildscript {
 }
 
 apply plugin: "info.u_team.gradle_files"
+apply plugin: "maven-publish"
 
 group = "info.u-team"
 archivesBaseName = "test_mod"
@@ -82,3 +83,73 @@ tasks.withType(Jar) { task ->
 dependencies {
 	minecraft gradlefiles.forgeDependency()
 }
+
+publishing {
+	repositories {
+		maven {
+			url layout.buildDirectory.dir("mavenRepo")
+		}
+	}
+	publications {
+		mavenJava(MavenPublication) {
+			artifactId archivesBaseName
+			
+			from components.java
+		}
+	}
+}
+
+println "---------------------------------------------------------------------------------------------------------"
+
+//println project.getExtensions().getByType(DefaultArtifactPublicationSet)
+
+println ""
+println ""
+
+println components.java
+println components.java.getName()
+println components.java.getUsages().each { usages ->
+	println usages.getName()
+	println usages.getArtifacts().each { artifact ->
+		println artifact
+		println artifact.getName()
+		println artifact.getExtension()
+		println artifact.getType()
+		println artifact.getClassifier()
+		println artifact.getFile()
+		println "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+	}
+	println "---------------------------------------------------------------------------------------------------------"
+}
+
+
+
+/*
+ println "ROROROROOROROROROR"
+ artifacts {
+ archives jar
+ archives deobfJar
+ archives sourcesJar
+ archives javadocJar
+ }
+ println project.configurations.getByName("archives").allArtifacts
+ println project.configurations.getByName("archives").allArtifacts.getClass()
+ println project.configurations.getByName("archives").allArtifacts.getMetaClass()
+ project.configurations.getByName("archives").allArtifacts.each { artifact ->
+ println artifact
+ println artifact.getName()
+ println artifact.getExtension()
+ println artifact.getType()
+ println artifact.getClassifier()
+ println artifact.getFile()
+ println "____________________________________________"
+ }
+ */
+
+
+/*configurations.resolvedConfiguration.resolvedArtifacts.each { artifact ->
+ println artifact.moduleVersion.id.group
+ println artifact.moduleVersion.id.name
+ println artifact.moduleVersion.id.version
+ println artifact.file
+ }*/

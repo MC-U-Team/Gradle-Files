@@ -46,10 +46,12 @@ repositories {
 	maven {
 		url = "https://maven.minecraftforge.net"
 	}
+	mavenCentral()
 }
 
 dependencies {
 	implementation group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true
+	implementation group: "org.apache.commons", name: "commons-lang3", version: "3.9"
 }
 
 jar.manifest.mainAttributes([

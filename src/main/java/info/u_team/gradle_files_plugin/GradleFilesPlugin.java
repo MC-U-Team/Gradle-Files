@@ -4,12 +4,13 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 
-import info.u_team.gradle_files_plugin.tool.DeobfJarGenerationTool;
+import info.u_team.gradle_files_plugin.tool.DeobfJarTaskTool;
 import info.u_team.gradle_files_plugin.tool.GeneralTaskSettingsTool;
 import info.u_team.gradle_files_plugin.tool.LoadConfigTool;
 import info.u_team.gradle_files_plugin.tool.PrintJVMInformationTool;
 import info.u_team.gradle_files_plugin.tool.RenameRunConfigurationTool;
 import info.u_team.gradle_files_plugin.tool.SetupPluginEnvironmentTool;
+import info.u_team.gradle_files_plugin.tool.SignJarTaskTool;
 
 public class GradleFilesPlugin implements Plugin<Project> {
 	
@@ -32,11 +33,12 @@ public class GradleFilesPlugin implements Plugin<Project> {
 		SetupPluginEnvironmentTool.setup(this);
 		PrintJVMInformationTool.print(this);
 		LoadConfigTool.load(this);
-		DeobfJarGenerationTool.add(this);
+		DeobfJarTaskTool.add(this);
 		
 		project.afterEvaluate((unused_) -> {
 			RenameRunConfigurationTool.rename(this);
 			GeneralTaskSettingsTool.setup(this);
+			SignJarTaskTool.add(this);
 		});
 		
 	}
