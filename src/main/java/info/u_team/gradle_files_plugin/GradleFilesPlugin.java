@@ -1,8 +1,11 @@
 package info.u_team.gradle_files_plugin;
 
+import javax.inject.Inject;
+
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
+import org.gradle.api.plugins.jvm.internal.JvmPluginServices;
 
 import info.u_team.gradle_files_plugin.tool.DeobfJarTaskTool;
 import info.u_team.gradle_files_plugin.tool.GeneralTaskSettingsTool;
@@ -16,11 +19,14 @@ public class GradleFilesPlugin implements Plugin<Project> {
 	
 	private static GradleFilesPlugin INSTANCE;
 	
+	private final JvmPluginServices jvmPluginServices;
 	private Project project;
 	private Logger logger;
 	private GradleFilesExtension extension;
 	
-	public GradleFilesPlugin() {
+	@Inject
+	public GradleFilesPlugin(JvmPluginServices jvmPluginServices) {
+		this.jvmPluginServices = jvmPluginServices;
 		INSTANCE = this;
 	}
 	
@@ -45,6 +51,10 @@ public class GradleFilesPlugin implements Plugin<Project> {
 	
 	public static GradleFilesPlugin getInstance() {
 		return INSTANCE;
+	}
+	
+	public JvmPluginServices getJvmPluginServices() {
+		return jvmPluginServices;
 	}
 	
 	public Project getProject() {

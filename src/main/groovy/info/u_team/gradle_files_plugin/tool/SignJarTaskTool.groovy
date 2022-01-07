@@ -3,6 +3,9 @@ package info.u_team.gradle_files_plugin.tool
 import org.apache.commons.lang3.StringUtils
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.plugins.BasePlugin
+import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.plugins.jvm.internal.JvmPluginExtension
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.internal.impldep.org.jetbrains.annotations.Nls.Capitalization
 
@@ -30,12 +33,12 @@ class SignJarTaskTool {
 			return
 		}
 		
-//		project.configurations.getByName("archives").allArtifacts.first()
-//		
-//		project.components.getByName("java").art
-//		
-//		NamedDomainObjectContainer<RenameJarInPlace> reobf = null
-//		reobf.create("")
+		//		project.configurations.getByName("archives").allArtifacts.first()
+		//
+		//		project.components.getByName("java").art
+		//
+		//		NamedDomainObjectContainer<RenameJarInPlace> reobf = null
+		//		reobf.create("")
 		
 		project.tasks.withType(Jar) { jarTask ->
 			final def signJarTask = project.tasks.register("sign" + StringUtils.capitalize(jarTask.name), SignJar) { task ->
