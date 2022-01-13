@@ -33,31 +33,12 @@ class DeobfJarTaskTool {
 	
 	static void add(final GradleFilesPlugin plugin) {
 		final def project = plugin.project
-		
-		final def jvmPluginServices = plugin.jvmPluginServices
-		
 		final def javaPluginExtension = plugin.project.extensions.getByType(JavaPluginExtension)
-		
-		final def mainSourceSet = javaPluginExtension.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
-		
-		final def defaultConfiguration = project.configurations.getByName(Dependency.DEFAULT_CONFIGURATION);
-		final def implementationConfiguration = project.configurations.getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME)
-		final def runtimeOnlyConfiguration = project.configurations.getByName(JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME)
-		
-		final def deobfRuntimeElementsConfiguration = jvmPluginServices.createOutgoingElements("deobfRuntimeElements") { builder ->
-			builder .fromSourceSet(mainSourceSet)
-					.providesRuntime()
-					.withDescription("Deobf elements of runtime for main.")
-					.extendsFrom(implementationConfiguration, runtimeOnlyConfiguration)
-		}
-		defaultConfiguration.extendsFrom(deobfRuntimeElementsConfiguration)
-		
-		deobfRuntimeElementsConfiguration.deprecateForDeclaration(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME, JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME, JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME);
-		
-		
 		
 		javaPluginExtension.metaClass.withDeobfJar {
 			final def tasks = project.tasks
+			
+			final def mainSourceSet = javaPluginExtension.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
 			
 			final def jarTask = tasks.register("deobfJar", Jar) { task ->
 				task.description = "Assemble a jar archive containing the deobfed classes"
@@ -72,7 +53,23 @@ class DeobfJarTaskTool {
 				}
 			}
 			
-			//attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, Integer.parseInt(JavaVersion.current().getMajorVersion()))
+			final def jvmPluginServices = plugin.jvmPluginServices
+			
+			final def defaultConfiguration = project.configurations.getByName(Dependency.DEFAULT_CONFIGURATION);
+			final def implementationConfiguration = project.configurations.getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME)
+			final def runtimeOnlyConfiguration = project.configurations.getByName(JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME)
+			
+			final def deobfRuntimeElementsConfiguration = jvmPluginServices.createOutgoingElements("deobfRuntimeElements") { builder ->
+				builder .fromSourceSet(mainSourceSet)
+						.providesRuntime()
+						.withDescription("Deobf elements of runtime for main.")
+						.extendsFrom(implementationConfiguration, runtimeOnlyConfiguration)
+			}
+			defaultConfiguration.extendsFrom(deobfRuntimeElementsConfiguration)
+			
+			deobfRuntimeElementsConfiguration.deprecateForDeclaration(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME, JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME, JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME);
+			
+			deobfRuntimeElementsConfiguration.attributes.attribute(Category.CATEGORY_ATTRIBUTE, project.objects.named(Category, Category.ENFORCED_PLATFORM))
 			
 			final def publications = deobfRuntimeElementsConfiguration.outgoing
 			final def artifact = new LazyPublishArtifact(jarTask, (project as ProjectInternal).fileResolver)
@@ -81,7 +78,7 @@ class DeobfJarTaskTool {
 			
 			publications.artifacts.add(artifact)
 			publications.attributes.attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, ArtifactTypeDefinition.JAR_TYPE)
-			publications.attributes.attribute(DocsType.DOCS_TYPE_ATTRIBUTE, project.objects.named(DocsType, DocsType.SOURCES))
+			
 			jvmPluginServices.configureClassesDirectoryVariant("deobfRuntimeElements", mainSourceSet)
 			
 			final def deobfRuntimeVariants = publications.variants
@@ -94,7 +91,7 @@ class DeobfJarTaskTool {
 						
 						@Override
 						public File getFile() {
-							return processResources.get().destinationDir;
+							return processResources.get().destinationDir
 						}
 					})
 			
