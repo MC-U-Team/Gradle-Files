@@ -31,6 +31,9 @@ import javax.inject.Inject
 
 class DeobfJarTaskTool {
 	
+	private static final def TASK_NAME = "deobfJar"
+	private static final def CONFIGURATION_NAME = "deobfRuntimeElements";
+	
 	static void add(final GradleFilesPlugin plugin) {
 		final def project = plugin.project
 		final def javaPluginExtension = plugin.project.extensions.getByType(JavaPluginExtension)
@@ -40,7 +43,7 @@ class DeobfJarTaskTool {
 			
 			final def mainSourceSet = javaPluginExtension.sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
 			
-			final def jarTask = tasks.register("deobfJar", Jar) { task ->
+			final def jarTask = tasks.register(TASK_NAME, Jar) { task ->
 				task.description = "Assemble a jar archive containing the deobfed classes"
 				task.group = BasePlugin.BUILD_GROUP
 				task.archiveClassifier = "deobf"
@@ -59,7 +62,7 @@ class DeobfJarTaskTool {
 			final def implementationConfiguration = project.configurations.getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME)
 			final def runtimeOnlyConfiguration = project.configurations.getByName(JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME)
 			
-			final def deobfRuntimeElementsConfiguration = jvmPluginServices.createOutgoingElements("deobfRuntimeElements") { builder ->
+			final def deobfRuntimeElementsConfiguration = jvmPluginServices.createOutgoingElements(CONFIGURATION_NAME) { builder ->
 				builder .fromSourceSet(mainSourceSet)
 						.providesRuntime()
 						.withDescription("Deobf elements of runtime for main.")
@@ -69,6 +72,7 @@ class DeobfJarTaskTool {
 			
 			deobfRuntimeElementsConfiguration.deprecateForDeclaration(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME, JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME, JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME);
 			
+			// We need different attributes than the runtimeElements. Ensures that with the enforced platform category. Is there a better option?
 			deobfRuntimeElementsConfiguration.attributes.attribute(Category.CATEGORY_ATTRIBUTE, project.objects.named(Category, Category.ENFORCED_PLATFORM))
 			
 			final def publications = deobfRuntimeElementsConfiguration.outgoing
@@ -79,7 +83,7 @@ class DeobfJarTaskTool {
 			publications.artifacts.add(artifact)
 			publications.attributes.attribute(ArtifactTypeDefinition.ARTIFACT_TYPE_ATTRIBUTE, ArtifactTypeDefinition.JAR_TYPE)
 			
-			jvmPluginServices.configureClassesDirectoryVariant("deobfRuntimeElements", mainSourceSet)
+			jvmPluginServices.configureClassesDirectoryVariant(CONFIGURATION_NAME, mainSourceSet)
 			
 			final def deobfRuntimeVariants = publications.variants
 			final def resourcesVariant = deobfRuntimeVariants.create("resources")
