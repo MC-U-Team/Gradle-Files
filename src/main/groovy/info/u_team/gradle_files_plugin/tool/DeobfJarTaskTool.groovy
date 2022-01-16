@@ -32,7 +32,7 @@ import javax.inject.Inject
 class DeobfJarTaskTool {
 	
 	private static final def TASK_NAME = "deobfJar"
-	private static final def CONFIGURATION_NAME = "deobfRuntimeElements";
+	protected static final def CONFIGURATION_NAME = "deobfRuntimeElements";
 	
 	static void add(final GradleFilesPlugin plugin) {
 		final def project = plugin.project
