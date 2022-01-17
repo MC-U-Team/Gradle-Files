@@ -1,20 +1,12 @@
 package info.u_team.gradle_files_plugin.tool
 
 import org.apache.commons.lang3.StringUtils
-import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.plugins.BasePlugin
-import org.gradle.api.plugins.JavaPlugin
-import org.gradle.api.plugins.JavaPluginExtension
-import org.gradle.api.plugins.jvm.internal.JvmPluginExtension
 import org.gradle.api.tasks.bundling.Jar
-import org.gradle.internal.impldep.org.jetbrains.annotations.Nls.Capitalization
-import org.gradle.internal.logging.progress.ProgressLogger
-import org.gradle.internal.logging.progress.ProgressLoggerFactory
 
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
 import net.minecraftforge.gradle.common.tasks.SignJar
-import net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace
 
 class SignJarTaskTool {
 
@@ -31,9 +23,7 @@ class SignJarTaskTool {
 		final def project = plugin.project
 
 		if(!project.properties.keySet().containsAll(requiredProperties)) {
-			plugin.project.gradle.sharedServices.properties
-			
-						project.logger.warn("Signing of jars was requested, but required properties are missing")
+			project.logger.warn("Signing of jars was requested, but required properties are missing")
 			return
 		}
 
