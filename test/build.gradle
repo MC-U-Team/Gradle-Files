@@ -99,6 +99,8 @@ publishing {
 	}
 }
 
+/*
+
 println "---------------------------------------------------------------------------------------------------------"
 
 //println project.getExtensions().getByType(DefaultArtifactPublicationSet)
