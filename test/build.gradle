@@ -22,7 +22,7 @@ version = "1.0.0"
 
 gradlefiles {
 	vendor "Team UTeam"
-	
+
 	signJars true
 }
 
@@ -37,11 +37,11 @@ java {
 
 minecraft {
 	mappings channel: config.forge.mapping_channel, version: config.forge.mapping
-	
+
 	runs {
 		client = {
 			workingDirectory file("run/client")
-			
+
 			mods {
 				"${config.mod.modid}" {
 					source sourceSets.main
@@ -50,7 +50,7 @@ minecraft {
 		}
 		server = {
 			workingDirectory file("run/server")
-			
+
 			mods {
 				"${config.mod.modid}" {
 					source sourceSets.main
@@ -59,13 +59,13 @@ minecraft {
 		}
 		data = {
 			workingDirectory file("run/data")
-			
+
 			args "--mod", config.mod.modid
 			args "--all"
 			args "--output", file("src/generated/resources")
 			args "--validate"
 			args "--existing", file("src/main/resources")
-			
+
 			mods {
 				"${config.mod.modid}" {
 					source sourceSets.main
@@ -82,6 +82,9 @@ tasks.withType(Jar) { task ->
 
 dependencies {
 	minecraft gradlefiles.forgeDependency()
+
+	implementation "net.harawata:appdirs:1.0.0"
+	implementation fg.deobf("info.u-team:u_team_core-1.18.1:4.0.0.201-SNAPSHOT")
 }
 
 publishing {
@@ -93,40 +96,33 @@ publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			artifactId archivesBaseName
-			
+
 			from components.java
 		}
 	}
 }
 
 /*
-
-println "---------------------------------------------------------------------------------------------------------"
-
-//println project.getExtensions().getByType(DefaultArtifactPublicationSet)
-
-println ""
-println ""
-
-println components.java
-println components.java.getName()
-println components.java.getUsages().each { usages ->
-	println usages.getName()
-	println usages.getArtifacts().each { artifact ->
-		println artifact
-		println artifact.getName()
-		println artifact.getExtension()
-		println artifact.getType()
-		println artifact.getClassifier()
-		println artifact.getFile()
-		println "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
-	}
-	println "---------------------------------------------------------------------------------------------------------"
-}
-
-
-
-/*
+ println "---------------------------------------------------------------------------------------------------------"
+ //println project.getExtensions().getByType(DefaultArtifactPublicationSet)
+ println ""
+ println ""
+ println components.java
+ println components.java.getName()
+ println components.java.getUsages().each { usages ->
+ println usages.getName()
+ println usages.getArtifacts().each { artifact ->
+ println artifact
+ println artifact.getName()
+ println artifact.getExtension()
+ println artifact.getType()
+ println artifact.getClassifier()
+ println artifact.getFile()
+ println "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+ }
+ println "---------------------------------------------------------------------------------------------------------"
+ }
+ /*
  println "ROROROROOROROROROR"
  artifacts {
  archives jar

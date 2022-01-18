@@ -1,61 +1,81 @@
 package info.u_team.gradle_files_plugin.tool
 
+import org.apache.tools.ant.taskdefs.optional.depend.Depend
+import org.gradle.api.publish.maven.internal.publication.MavenPublicationInternal
+import org.gradle.api.publish.tasks.GenerateModuleMetadata
+
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
-import org.gradle.api.DomainObjectSet
-import org.gradle.api.artifacts.Configuration
-import org.gradle.api.artifacts.ConfigurationPublications
-import org.gradle.api.artifacts.Dependency
-import org.gradle.api.artifacts.DependencySet
-import org.gradle.api.artifacts.ExcludeRule
-import org.gradle.api.artifacts.ModuleDependency
-import org.gradle.api.component.AdhocComponentWithVariants
-import org.gradle.api.component.SoftwareComponentVariant
-import org.gradle.api.internal.CompositeDomainObjectSet
-import org.gradle.api.internal.DefaultDomainObjectCollection
-import org.gradle.api.internal.DelegatingDomainObjectSet
-import org.gradle.api.internal.artifacts.DefaultDependencySet
-import org.gradle.api.internal.artifacts.DefaultExcludeRule
-import org.gradle.api.plugins.JavaPlugin
-import org.gradle.api.plugins.internal.DefaultAdhocSoftwareComponent
-import org.gradle.api.plugins.internal.JavaConfigurationVariantMapping
-import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
-import org.gradle.api.specs.Spec
+import info.u_team.gradle_files_plugin.util.DependencyFilteredMavenPublicationInternal
 
 class RemovedMappedDependenciesTool {
 
 	static void remove(final GradleFilesPlugin plugin) {
 
-		println plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).dependencies
-		println plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).dependencies.getClass()
-		println plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).allDependencies
-		println plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).allDependencies.getClass()
+		/*PublicationContainer container = plugin.project.extensions.getByType(PublishingExtension).publications;
+		 container.withType(MavenPublication) { publication ->
+		 MavenPublicationInternal mavenPublication = publication
+		 println mavenPublication.runtimeDependencies.clear()
+		 println "________________________________________________________________________________________________"
+		 println mavenPublication
+		 println ""
+		 println mavenPublication.apiDependencies
+		 println mavenPublication.runtimeDependencies
+		 println mavenPublication.optionalDependencies
+		 }*/
 
-		println "RRRR"
+		plugin.project.tasks.withType(GenerateModuleMetadata) { task ->
+			final def publication = task.getPublication().get()
+			if(publication instanceof MavenPublicationInternal) {
+				final def internalPublication = publication as MavenPublicationInternal
+				final def filteredPublication = new DependencyFilteredMavenPublicationInternal(internalPublication)
 
-		DefaultDependencySet set = plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).allDependencies
+				task.getPublication().set(filteredPublication)
+				task.getPublications().set([filteredPublication])
 
-		println set.getClass()
-		println DelegatingDomainObjectSet.class.declaredFields
-		println set.getClass().declaredFields
 
-		def field = DelegatingDomainObjectSet.class.declaredFields.find { field ->
-			field.name == "backingSet"
+				task.getPublication().get().component.usages.each {
+					println it.dependencies
+				}
+
+				//				internalPublication.component.usages.each {
+				//					it.dependencies.clear()
+				//					println it.dependencies
+				//				}
+			}
 		}
-		field.accessible = true
-
-		println field
-		println "________________________"
-		final CompositeDomainObjectSet<Dependency> backingSet = field.get(plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).allDependencies)
 
 
-		println backingSet
+		//		println plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).dependencies
+		//		println plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).dependencies.getClass()
+		//		println plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).allDependencies
+		//		println plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).allDependencies.getClass()
+		//
+		//		println "RRRR"
+		//
+		//		DefaultDependencySet set = plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).allDependencies
+		//
+		//		println set.getClass()
+		//		println DelegatingDomainObjectSet.class.declaredFields
+		//		println set.getClass().declaredFields
+		//
+		//		def field = DelegatingDomainObjectSet.class.declaredFields.find { field ->
+		//			field.name == "backingSet"
+		//		}
+		//		field.accessible = true
+		//
+		//		println field
+		//		println "________________________"
+		//		final CompositeDomainObjectSet<Dependency> backingSet = field.get(plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).allDependencies)
+		//
+		//
+		//		println backingSet
+		//
+		//		backingSet.removeCollection(plugin.project.configurations.getByName("minecraft").dependencies)
+		//
+		//
+		//		println ":::::::::::::::::::::::"
+		//		println plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).allDependencies
 
-		backingSet.removeCollection(plugin.project.configurations.getByName("minecraft").dependencies)
-
-
-		println ":::::::::::::::::::::::"
-		println plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).allDependencies
-		
 
 		//println plugin.project.configurations.getByName(JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME).allDependencies.add(null)
 
