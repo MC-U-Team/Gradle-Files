@@ -1,15 +1,10 @@
 package info.u_team.gradle_files_plugin.tool
 
-import org.gradle.api.JavaVersion
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.type.ArtifactTypeDefinition
-import org.gradle.api.attributes.Bundling
 import org.gradle.api.attributes.Category
-import org.gradle.api.attributes.DocsType
 import org.gradle.api.attributes.LibraryElements
 import org.gradle.api.attributes.Usage
-import org.gradle.api.attributes.java.TargetJvmEnvironment
-import org.gradle.api.attributes.java.TargetJvmVersion
 import org.gradle.api.component.AdhocComponentWithVariants
 import org.gradle.api.internal.artifacts.dsl.LazyPublishArtifact
 import org.gradle.api.internal.plugins.DefaultArtifactPublicationSet
@@ -19,15 +14,12 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.plugins.internal.JavaConfigurationVariantMapping
 import org.gradle.api.plugins.internal.JvmPluginsHelper
-import org.gradle.api.plugins.jvm.internal.JvmPluginExtension
-import org.gradle.api.plugins.jvm.internal.JvmPluginServices
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.language.jvm.tasks.ProcessResources
 
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
-import javax.inject.Inject
 
 class DeobfJarTaskTool {
 	

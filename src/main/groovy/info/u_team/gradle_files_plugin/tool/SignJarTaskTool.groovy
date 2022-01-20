@@ -9,31 +9,31 @@ import info.u_team.gradle_files_plugin.GradleFilesPlugin
 import net.minecraftforge.gradle.common.tasks.SignJar
 
 class SignJarTaskTool {
-
+	
 	private static final def requiredProperties = [
 		Constants.KEYSTORE,
 		Constants.KEYSTORE_ALIAS,
 		Constants.KEYSTORE_PASSWORD
 	]
-
+	
 	static void add(final GradleFilesPlugin plugin) {
 		if(!plugin.extension.signJars) {
 			return
 		}
 		final def project = plugin.project
-
+		
 		if(!project.properties.keySet().containsAll(requiredProperties)) {
 			project.logger.warn("Signing of jars was requested, but required properties are missing")
 			return
 		}
-
+		
 		//		project.configurations.getByName("archives").allArtifacts.first()
 		//
 		//		project.components.getByName("java").art
 		//
 		//		NamedDomainObjectContainer<RenameJarInPlace> reobf = null
 		//		reobf.create("")
-
+		
 		project.tasks.withType(Jar) { jarTask ->
 			final def signJarTask = project.tasks.register("sign" + StringUtils.capitalize(jarTask.name), SignJar) { task ->
 				task.description = "Sign the jar ${jarTask.name}"

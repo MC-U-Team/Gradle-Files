@@ -1,8 +1,5 @@
 package info.u_team.gradle_files_plugin.tool
 
-import java.lang.reflect.Field
-
-import org.gradle.api.publish.maven.internal.publication.DefaultMavenPom
 import org.gradle.api.publish.maven.internal.publication.MavenPomInternal
 import org.gradle.api.publish.maven.internal.publication.MavenPublicationInternal
 import org.gradle.api.publish.maven.tasks.GenerateMavenPom

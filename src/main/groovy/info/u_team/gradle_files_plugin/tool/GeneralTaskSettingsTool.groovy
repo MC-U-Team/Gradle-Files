@@ -1,11 +1,8 @@
 package info.u_team.gradle_files_plugin.tool
 
-import javax.tools.JavaCompiler
-
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.javadoc.Javadoc
 
-import groovy.json.JsonGenerator.Options
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
 
 class GeneralTaskSettingsTool {
