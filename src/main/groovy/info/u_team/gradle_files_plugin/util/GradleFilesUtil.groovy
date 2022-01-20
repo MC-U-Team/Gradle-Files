@@ -6,9 +6,10 @@ import info.u_team.gradle_files_plugin.GradleFilesPlugin
 class GradleFilesUtil {
 	
 	static def getProjectProperties() {
-		final def project = GradleFilesPlugin.instance.project
+		final def plugin = GradleFilesPlugin.instance
+		final def project = plugin.project
 		final def config = project.extensions.extraProperties.config
-		final def extension = project.extensions.getByType(GradleFilesExtension)
+		final def extension = plugin.extension
 		
 		return [project, config, extension]
 	}

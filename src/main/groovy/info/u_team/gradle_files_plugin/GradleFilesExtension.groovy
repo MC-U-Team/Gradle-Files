@@ -15,6 +15,11 @@ class GradleFilesExtension {
 	boolean signJars
 	
 	/**
+	 * If dependencies with a mapped component should be stripped from maven pom and gradle meta data
+	 */
+	boolean stripMappedDependencies = true
+	
+	/**
 	 * Returns a manifest default file
 	 * @return Manifest
 	 */

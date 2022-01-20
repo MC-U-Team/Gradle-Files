@@ -12,6 +12,10 @@ import info.u_team.gradle_files_plugin.util.DependencyFilteredMavenPublicationIn
 class RemovedMappedDependenciesTool {
 	
 	static void remove(final GradleFilesPlugin plugin) {
+		if(!plugin.extension.stripMappedDependencies) {
+			return
+		}
+		
 		plugin.project.tasks.withType(GenerateMavenPom) { task ->
 			final def pom = task.pom
 			if(pom instanceof MavenPomInternal) {
