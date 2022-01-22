@@ -8,6 +8,7 @@ import org.gradle.api.logging.Logger;
 import org.gradle.api.plugins.jvm.internal.JvmPluginServices;
 
 import info.u_team.gradle_files_plugin.tool.DeobfJarTaskTool;
+import info.u_team.gradle_files_plugin.tool.FetchGitBuilderNumber;
 import info.u_team.gradle_files_plugin.tool.GeneralTaskSettingsTool;
 import info.u_team.gradle_files_plugin.tool.LoadConfigTool;
 import info.u_team.gradle_files_plugin.tool.PrintJVMInformationTool;
@@ -41,6 +42,7 @@ public class GradleFilesPlugin implements Plugin<Project> {
 		PrintJVMInformationTool.print(this);
 		LoadConfigTool.load(this);
 		DeobfJarTaskTool.add(this);
+		FetchGitBuilderNumber.fetch(this);
 		
 		project.afterEvaluate((unused_) -> {
 			RenameRunConfigurationTool.rename(this);
