@@ -39,7 +39,7 @@ minecraft {
 	mappings channel: config.forge.mapping_channel, version: config.forge.mapping
 	
 	runs {
-		client = {
+		client {
 			workingDirectory file("run/client")
 			
 			mods {
@@ -48,7 +48,7 @@ minecraft {
 				}
 			}
 		}
-		server = {
+		server {
 			workingDirectory file("run/server")
 			
 			mods {
@@ -57,7 +57,7 @@ minecraft {
 				}
 			}
 		}
-		data = {
+		data {
 			workingDirectory file("run/data")
 			
 			args "--mod", config.mod.modid
