@@ -6,6 +6,7 @@ import org.gradle.api.tasks.bundling.Jar
 
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
+import info.u_team.gradle_files_plugin.util.DependencyUtil
 import net.minecraftforge.gradle.common.tasks.SignJar
 
 class SignJarTaskTool {
@@ -13,7 +14,8 @@ class SignJarTaskTool {
 	private static final def requiredProperties = [
 		Constants.KEYSTORE,
 		Constants.KEYSTORE_ALIAS,
-		Constants.KEYSTORE_PASSWORD
+		Constants.KEYSTORE_PASSWORD,
+		Constants.KEYSTORE_KEY_PASSWORD
 	]
 	
 	static void add(final GradleFilesPlugin plugin) {
@@ -27,13 +29,6 @@ class SignJarTaskTool {
 			return
 		}
 		
-		//		project.configurations.getByName("archives").allArtifacts.first()
-		//
-		//		project.components.getByName("java").art
-		//
-		//		NamedDomainObjectContainer<RenameJarInPlace> reobf = null
-		//		reobf.create("")
-		
 		project.tasks.withType(Jar) { jarTask ->
 			final def signJarTask = project.tasks.register("sign" + StringUtils.capitalize(jarTask.name), SignJar) { task ->
 				task.description = "Sign the jar ${jarTask.name}"
@@ -41,11 +36,13 @@ class SignJarTaskTool {
 				task.keyStore = project.property(Constants.KEYSTORE)
 				task.alias = project.property(Constants.KEYSTORE_ALIAS)
 				task.storePass = project.property(Constants.KEYSTORE_PASSWORD)
-				task.keyPass = project.property(Constants.KEYSTORE_PASSWORD)
+				task.keyPass = project.property(Constants.KEYSTORE_KEY_PASSWORD)
 				task.inputFile = jarTask.archivePath
 				task.outputFile = jarTask.archivePath
 			}
-			jarTask.finalizedBy(signJarTask)
+			
+			DependencyUtil.assembleDependOn(project, signJarTask)
+			DependencyUtil.allPublishingDependOn(project, signJarTask)
 		}
 	}
 }

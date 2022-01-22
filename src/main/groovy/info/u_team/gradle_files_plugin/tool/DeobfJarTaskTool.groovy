@@ -20,6 +20,7 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.language.jvm.tasks.ProcessResources
 
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
+import info.u_team.gradle_files_plugin.util.DependencyUtil
 
 class DeobfJarTaskTool {
 	
@@ -42,11 +43,7 @@ class DeobfJarTaskTool {
 				task.from(mainSourceSet.output)
 			}
 			
-			if (tasks.names.contains(LifecycleBasePlugin.ASSEMBLE_TASK_NAME)) {
-				tasks.named(LifecycleBasePlugin.ASSEMBLE_TASK_NAME).configure { task ->
-					task.dependsOn(jarTask)
-				}
-			}
+			DependencyUtil.assembleDependOn(project, jarTask)
 			
 			final def jvmPluginServices = plugin.jvmPluginServices
 			

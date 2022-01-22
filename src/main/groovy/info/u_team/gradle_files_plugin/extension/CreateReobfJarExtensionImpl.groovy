@@ -6,6 +6,7 @@ import org.gradle.api.Task
 import org.gradle.api.publish.plugins.PublishingPlugin
 import org.gradle.jvm.tasks.Jar
 
+import info.u_team.gradle_files_plugin.util.DependencyUtil
 import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 import net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace
 
@@ -15,14 +16,6 @@ class CreateReobfJarExtensionImpl {
 		final def (Project project) = GradleFilesUtil.getProjectProperties()
 		
 		final def reobfTask = project.extensions.findByName("reobf").create(task.name)
-		allPublishingDependOn(project, reobfTask)
-	}
-	
-	static def allPublishingDependOn(final Project project, final Task reobfTask) {
-		project.tasks.matching { task ->
-			task.group == PublishingPlugin.PUBLISH_TASK_GROUP // Stupid check for publishing, but found no other way
-		}.each { task ->
-			task.dependsOn(reobfTask)
-		}
+		DependencyUtil.allPublishingDependOn(project, reobfTask)
 	}
 }

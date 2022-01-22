@@ -6,7 +6,7 @@ import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.javadoc.Javadoc
 
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
-import info.u_team.gradle_files_plugin.extension.CreateReobfJarExtensionImpl
+import info.u_team.gradle_files_plugin.util.DependencyUtil
 
 class GeneralTaskSettingsTool {
 	
@@ -26,7 +26,7 @@ class GeneralTaskSettingsTool {
 		// Set all publish tasks depend on reobfJar. This is necessary for correct metadata generation
 		final def reobfTask = tasks.findByName("reobf" + StringUtils.capitalize(JavaPlugin.JAR_TASK_NAME))
 		if(reobfTask.enabled) {
-			CreateReobfJarExtensionImpl.allPublishingDependOn(plugin.project, reobfTask)
+			DependencyUtil.allPublishingDependOn(plugin.project, reobfTask)
 		}
 	}
 }
