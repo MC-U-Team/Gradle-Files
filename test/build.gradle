@@ -103,5 +103,3 @@ publishing {
 		}
 	}
 }
-
-gradlefiles.createReobfJar(deobfJar)
