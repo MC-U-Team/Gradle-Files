@@ -7,11 +7,11 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 class DependencyUtil {
 	
-	static def assembleDependOn(final Project project, final Task dependTask) {
+	static def assembleDependOn(final Project project, final Object... dependTask) {
 		project.tasks.findByName(LifecycleBasePlugin.ASSEMBLE_TASK_NAME).dependsOn(dependTask)
 	}
 	
-	static def allPublishingDependOn(final Project project, final Task dependTask) {
+	static def allPublishingDependOn(final Project project, final Object... dependTask) {
 		project.tasks.matching { task ->
 			task.group == PublishingPlugin.PUBLISH_TASK_GROUP // Stupid check for publishing, but found no other way
 		}.each { task ->

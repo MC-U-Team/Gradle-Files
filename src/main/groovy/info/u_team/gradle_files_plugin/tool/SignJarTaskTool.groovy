@@ -30,7 +30,7 @@ class SignJarTaskTool {
 		}
 		
 		project.tasks.withType(Jar) { jarTask ->
-			final def signJarTask = project.tasks.register("sign" + StringUtils.capitalize(jarTask.name), SignJar) { task ->
+			final def signJarTaks = project.tasks.register("sign" + StringUtils.capitalize(jarTask.name), SignJar) { task ->
 				task.description = "Sign the jar ${jarTask.name}"
 				task.group = BasePlugin.BUILD_GROUP
 				task.keyStore = project.property(Constants.KEYSTORE)
@@ -39,10 +39,12 @@ class SignJarTaskTool {
 				task.keyPass = project.property(Constants.KEYSTORE_KEY_PASSWORD)
 				task.inputFile = jarTask.archivePath
 				task.outputFile = jarTask.archivePath
+				
+				task.dependsOn(jarTask)
 			}
 			
-			DependencyUtil.assembleDependOn(project, signJarTask)
-			DependencyUtil.allPublishingDependOn(project, signJarTask)
+			DependencyUtil.assembleDependOn(project, signJarTaks)
+			DependencyUtil.allPublishingDependOn(project, signJarTaks)
 		}
 	}
 }
