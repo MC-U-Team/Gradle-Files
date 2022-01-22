@@ -1,6 +1,3 @@
-import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.jvm.toolchain.JavaLanguageVersion
-
 buildscript {
 	repositories {
 		maven {
@@ -20,8 +17,8 @@ apply plugin: "info.u_team.gradle_files"
 apply plugin: "maven-publish"
 
 group = "info.u-team"
-archivesBaseName = "test_mod"
-version = "1.0.0"
+archivesBaseName = gradlefiles.archivesBaseName()
+version = gradlefiles.version()
 
 gradlefiles {
 	vendor "Team UTeam"

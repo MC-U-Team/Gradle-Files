@@ -17,5 +17,7 @@ class CreateReobfJarExtensionImpl {
 		
 		final def reobfTask = project.extensions.findByName("reobf").create(task.name)
 		DependencyUtil.allPublishingDependOn(project, reobfTask)
+		
+		return reobfTask
 	}
 }
