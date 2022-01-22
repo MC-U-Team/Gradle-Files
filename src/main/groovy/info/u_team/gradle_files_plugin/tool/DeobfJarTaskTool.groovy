@@ -43,7 +43,11 @@ class DeobfJarTaskTool {
 				task.from(mainSourceSet.output)
 			}
 			
-			DependencyUtil.assembleDependOn(project, jarTask)
+			if (tasks.names.contains(LifecycleBasePlugin.ASSEMBLE_TASK_NAME)) {
+				tasks.named(LifecycleBasePlugin.ASSEMBLE_TASK_NAME).configure { task ->
+					task.dependsOn(jarTask)
+				}
+			}
 			
 			final def jvmPluginServices = plugin.jvmPluginServices
 			
