@@ -1,6 +1,7 @@
 package info.u_team.gradle_files_plugin.tool
 
 import org.gradle.plugins.ide.eclipse.EclipsePlugin
+import org.gradle.plugins.ide.idea.IdeaPlugin
 
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
@@ -20,5 +21,8 @@ class SetupPluginEnvironmentTool {
 		
 		// Apply eclipse gradle plugin
 		plugin.project.pluginManager.apply(EclipsePlugin)
+		
+		// Apply intellij gradle plugin
+		plugin.project.pluginManager.apply(IdeaPlugin)
 	}
 }
