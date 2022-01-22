@@ -8,6 +8,7 @@ import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
 import info.u_team.gradle_files_plugin.util.DependencyUtil
 import net.minecraftforge.gradle.common.tasks.SignJar
+import net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace
 
 class SignJarTaskTool {
 	
@@ -29,7 +30,9 @@ class SignJarTaskTool {
 			return
 		}
 		
-		project.tasks.withType(Jar) { jarTask ->
+		final def tasks = project.tasks
+		
+		tasks.withType(Jar) { jarTask ->
 			final def signJarTaks = project.tasks.register("sign" + StringUtils.capitalize(jarTask.name), SignJar) { task ->
 				task.description = "Sign the jar ${jarTask.name}"
 				task.group = BasePlugin.BUILD_GROUP
@@ -41,6 +44,12 @@ class SignJarTaskTool {
 				task.outputFile = jarTask.archivePath
 				
 				task.dependsOn(jarTask)
+			}
+			
+			tasks.withType(RenameJarInPlace) { reobfTask ->
+				signJarTaks.configure { task ->
+					task.dependsOn(reobfTask)
+				}
 			}
 			
 			DependencyUtil.assembleDependOn(project, signJarTaks)
