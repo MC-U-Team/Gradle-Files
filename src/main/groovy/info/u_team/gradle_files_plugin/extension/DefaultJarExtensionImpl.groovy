@@ -7,5 +7,7 @@ class DefaultJarExtensionImpl {
 	static void defaultJar(Jar task) {
 		task.from("LICENSE")
 		task.exclude(".cache")
+		
+		task.manifest(DefaultManifestExtensionImpl.defaultManifest())
 	}
 }

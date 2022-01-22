@@ -2,6 +2,7 @@ package info.u_team.gradle_files_plugin
 
 import org.gradle.jvm.tasks.Jar
 
+import info.u_team.gradle_files_plugin.extension.CreateReobfJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DefaultJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DefaultManifestExtensionImpl
 import info.u_team.gradle_files_plugin.extension.ForgeDependencyExtensionImpl
@@ -33,7 +34,8 @@ class GradleFilesExtension {
 	
 	/**
 	 * Include license file to build
-	 * Exclude .cache file	
+	 * Exclude .cache file
+	 * Also add the defaultManifest to the jar
 	 * @param task Jar task
 	 */
 	void defaultJar(Jar task) {
@@ -46,5 +48,13 @@ class GradleFilesExtension {
 	 */
 	def forgeDependency() {
 		ForgeDependencyExtensionImpl.forgeDependency()
+	}
+	
+	/**
+	 * Create custom reobf Task for a jar task
+	 * @param task Jar Task
+	 */
+	void createReobfJar(Jar task) {
+		CreateReobfJarExtensionImpl.createReobfJar(task)
 	}
 }

@@ -1,3 +1,6 @@
+import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+
 buildscript {
 	repositories {
 		maven {
@@ -76,7 +79,6 @@ minecraft {
 }
 
 tasks.withType(Jar) { task ->
-	manifest gradlefiles.defaultManifest()
 	gradlefiles.defaultJar(task)
 }
 
@@ -101,3 +103,5 @@ publishing {
 		}
 	}
 }
+
+gradlefiles.createReobfJar(deobfJar)
