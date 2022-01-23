@@ -16,6 +16,11 @@ class FetchGitBuilderNumber {
 		}
 		
 		// Check for git repository with git status
-		GitUtil.executeGitCommandException(plugin.project, "status")
+		GitUtil.executeGitCommandException(project, "status")
+		
+		final def mainBranch = GitUtil.executeGitCommandException(project, "rev-parse", "--abbrev-ref", "HEAD")
+		
+		println "____________________________________________________________________________________________"
+		println mainBranch
 	}
 }
