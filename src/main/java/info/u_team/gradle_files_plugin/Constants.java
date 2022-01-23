@@ -14,4 +14,6 @@ public class Constants {
 	public static final String KEYSTORE_PASSWORD = KEYSTORE + ".password";
 	public static final String KEYSTORE_KEY_PASSWORD = KEYSTORE + ".password_key";
 	public static final String KEYSTORE_FINGERPRINT = KEYSTORE + ".fingerprint";
+	
+	public static final String BUILD_PROPERTY = "createBuild";
 }
