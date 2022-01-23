@@ -15,10 +15,7 @@ class FetchGitBuilderNumber {
 			return
 		}
 		
-		final def (success, output) = GitUtil.executeGitCommand(plugin.project, "help")
-		
-		if(!success) {
-			throw new GradleException("Cannot execute git because: ${output}")
-		}
+		// Check for git repository with git status
+		GitUtil.executeGitCommandException(plugin.project, "status")
 	}
 }
