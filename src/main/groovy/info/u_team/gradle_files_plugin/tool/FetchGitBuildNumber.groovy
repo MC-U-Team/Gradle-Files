@@ -6,7 +6,7 @@ import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
 import info.u_team.gradle_files_plugin.util.GitUtil
 
-class FetchGitBuilderNumber {
+class FetchGitBuildNumber {
 	
 	static void fetch(final GradleFilesPlugin plugin) {
 		final def project = plugin.project
