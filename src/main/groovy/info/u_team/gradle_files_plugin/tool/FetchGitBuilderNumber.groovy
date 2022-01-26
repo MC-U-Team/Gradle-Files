@@ -15,12 +15,23 @@ class FetchGitBuilderNumber {
 			return
 		}
 		
-		// Check for git repository with git status
-		GitUtil.executeGitCommandException(project, "status")
-		
+		// Get main branch and check if branch match expected one
+		final def expectedBranch = project.extensions.extraProperties.config.github.branch
 		final def mainBranch = GitUtil.executeGitCommandException(project, "rev-parse", "--abbrev-ref", "HEAD")
 		
-		println "____________________________________________________________________________________________"
-		println mainBranch
+		if(expectedBranch != mainBranch) {
+			throw new GradleException("Expected git branch to be ${expectedBranch} but its ${mainBranch}")
+		}
+		
+		project.logger.quiet("Fetching build number for branch {} with git {} branch", mainBranch, Constants.VERSIONING_BRANCH)
+		
+		// Commit changes on main branch
+		def changed = GitUtil.commit(project, ".", mainBranch)
+		
+		// TODO use git stash!!!
+		
+		if(changed) {
+			GitUtil.push(project, mainBranch)
+		}
 	}
 }
