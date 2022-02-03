@@ -10,28 +10,71 @@ class FetchGitBuildNumber {
 	
 	static void fetch(final GradleFilesPlugin plugin) {
 		final def project = plugin.project
+		final def config = project.extensions.extraProperties.config
 		
-		if(!project.hasProperty(Constants.BUILD_PROPERTY)) {
-			return
+		def buildNumber = "DEV"
+		
+		if(project.hasProperty(Constants.BUILD_PROPERTY)) {
+			
+			final def versioningBranch = Constants.VERSIONING_BRANCH
+			
+			// Get main branch and check if branch match expected one
+			final def expectedBranch = config.github.branch
+			final def mainBranch = GitUtil.executeGitCommandException(project, "rev-parse", "--abbrev-ref", "HEAD")
+			
+			if(expectedBranch != mainBranch) {
+				throw new GradleException("Expected git branch to be ${expectedBranch} but its ${mainBranch}")
+			}
+			
+			project.logger.quiet("Fetching build number for branch {} with git {} branch", mainBranch, versioningBranch)
+			
+			// Commit changes on main branch
+			final def changed = GitUtil.commit(project, ".", mainBranch)
+			
+			// Fetch upstream
+			GitUtil.fetch(project)
+			
+			project.logger.quiet("Check if branch {} already exists locally", versioningBranch)
+			
+			final def branchExists = GitUtil.branchExists(project, versioningBranch)
+			
+			if(branchExists) {
+				project.logger.quiet("Branch exists. Try to read patch file")
+				
+				// Checkout existing versioning branch
+				GitUtil.executeGitCommandException(project, "checkout", "-f", versioningBranch)
+				
+				// Read patch number and increment
+				final def patchNumber = (project.file(Constants.PATCH_FILE).text as Integer) + 1
+				buildNumber = patchNumber as String
+			} else {
+				project.logger.quiet("Branch does not exist. Create new branch and patch file starting at build number 1")
+				
+				// Create new orphan branch and remove all files
+				GitUtil.executeGitCommandException(project, "checkout", "--orphan", "-f", versioningBranch)
+				GitUtil.executeGitCommandException(project, "rm", "--cache", "-r", "-f", "*")
+				
+				// Create patch file, commit and push. Set incremented patch number as start value
+				project.file(Constants.PATCH_FILE).write("0", "UTF-8")
+				GitUtil.alwaysCommit(project, Constants.PATCH_FILE) { "Created ${versioningBranch} branch with build number 1" }
+				GitUtil.push(project, versioningBranch)
+				buildNumber = 1
+			}
+			
+			// Checkout main branch
+			GitUtil.executeGitCommandException(project, "checkout", "-f", mainBranch)
+			
+			// Push possible changes on main branch
+			if(changed) {
+				GitUtil.pullAndPush(project, mainBranch)
+			}
+		} else {
+			project.logger.quiet("Using dev as build number")
 		}
 		
-		// Get main branch and check if branch match expected one
-		final def expectedBranch = project.extensions.extraProperties.config.github.branch
-		final def mainBranch = GitUtil.executeGitCommandException(project, "rev-parse", "--abbrev-ref", "HEAD")
+		project.logger.quiet("Finished fetching build number")
+		project.logger.quiet("The current buildnumber is {}", buildNumber)
 		
-		if(expectedBranch != mainBranch) {
-			throw new GradleException("Expected git branch to be ${expectedBranch} but its ${mainBranch}")
-		}
-		
-		project.logger.quiet("Fetching build number for branch {} with git {} branch", mainBranch, Constants.VERSIONING_BRANCH)
-		
-		// Commit changes on main branch
-		def changed = GitUtil.commit(project, ".", mainBranch)
-		
-		// TODO use git stash!!!
-		
-		if(changed) {
-			GitUtil.push(project, mainBranch)
-		}
+		config.mod.buildnumber = buildNumber
 	}
 }
