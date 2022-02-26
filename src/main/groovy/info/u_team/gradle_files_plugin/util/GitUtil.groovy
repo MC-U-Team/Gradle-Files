@@ -68,6 +68,8 @@ class GitUtil {
 	static String executeGitCommandException(final Project project, final String... args) {
 		final def (success, output) = executeGitCommand(project, args)
 		
+		println "HERE: " + success + " -> " + output
+		
 		if(!success) {
 			throw new GradleException("Cannot execute git because: ${output}")
 		}

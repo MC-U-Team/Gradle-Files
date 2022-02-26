@@ -34,7 +34,7 @@ class FetchGitBuildNumber {
 			// Fetch upstream
 			GitUtil.fetch(project)
 			
-			project.logger.quiet("Check if branch {} already exists locally", versioningBranch)
+			project.logger.quiet("Check if branch {} already exists", versioningBranch)
 			
 			final def branchExists = GitUtil.branchExists(project, versioningBranch)
 			
@@ -51,7 +51,7 @@ class FetchGitBuildNumber {
 				project.logger.quiet("Branch does not exist. Create new branch and patch file starting at build number 1")
 				
 				// Create new orphan branch and remove all files
-				GitUtil.executeGitCommandException(project, "checkout", "--orphan", "-f", versioningBranch)
+				GitUtil.executeGitCommandException(project, "checkout", "--orphan", versioningBranch)
 				GitUtil.executeGitCommandException(project, "rm", "--cache", "-r", "-f", "*")
 				
 				// Create patch file, commit and push. Set incremented patch number as start value
