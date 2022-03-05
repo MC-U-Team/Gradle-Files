@@ -6,8 +6,8 @@ import net.minecraftforge.gradle.common.util.MinecraftExtension
 class RenameRunConfigurationTool {
 	
 	static void rename(final GradleFilesPlugin plugin) {
-		final def minecraftExtension = plugin.project.extensions.getByType(MinecraftExtension)
-		minecraftExtension.runs.each { run ->
+		final def minecraftExtension = plugin.project.extensions.findByType(MinecraftExtension)
+		minecraftExtension?.runs.each { run ->
 			run.taskName = "${plugin.project.name}_${run.taskName}"
 		}
 	}
