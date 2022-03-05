@@ -65,6 +65,10 @@ class GitUtil {
 		executeGitCommandException(project, "push", "-u", "origin", branch)
 	}
 	
+	static String repositoryPath(final Project project) {
+		return project.file(executeGitCommandException(project, "rev-parse", "--show-toplevel")).canonicalPath
+	}
+	
 	static String executeGitCommandException(final Project project, final String... args) {
 		final def (success, output) = executeGitCommand(project, args)
 		
