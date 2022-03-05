@@ -1,5 +1,6 @@
 package info.u_team.gradle_files_plugin.tool
 
+import org.gradle.api.plugins.JavaPlugin
 import org.gradle.plugins.ide.eclipse.EclipsePlugin
 import org.gradle.plugins.ide.idea.IdeaPlugin
 
@@ -14,6 +15,9 @@ class SetupPluginEnvironmentTool {
 			maven.name = Constants.U_TEAM_MAVEN_NAME
 			maven.url = Constants.U_TEAM_MAVEN_URL
 		}
+		
+		// Apply java gradle plugin
+		plugin.project.pluginManager.apply(JavaPlugin)
 		
 		// Apply eclipse gradle plugin
 		plugin.project.pluginManager.apply(EclipsePlugin)
