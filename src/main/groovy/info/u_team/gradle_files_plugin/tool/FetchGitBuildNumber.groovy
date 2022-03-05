@@ -2,6 +2,7 @@ package info.u_team.gradle_files_plugin.tool
 
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
+import info.u_team.gradle_files_plugin.task.UpdateGitBuildNumberTask
 import info.u_team.gradle_files_plugin.util.GitUtil
 
 class FetchGitBuildNumber {
@@ -58,8 +59,11 @@ class FetchGitBuildNumber {
 				new File(gitRepo, Constants.PATCH_FILE).write("0", "UTF-8")
 				GitUtil.alwaysCommit(project, gitRepo, Constants.PATCH_FILE) { "Created ${versioningBranch} branch with build number 1" }
 				GitUtil.push(project, gitRepo, versioningBranch)
-				buildNumber = 1
+				buildNumber = 1 as String
 			}
+			
+			// Register updateBuildNumber task
+			project.tasks.register(Constants.UPDATE_BUILD_NUMBER_TASK, UpdateGitBuildNumberTask)
 		} else {
 			project.logger.quiet("Using dev as build number")
 		}
