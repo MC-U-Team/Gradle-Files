@@ -7,9 +7,12 @@ import org.gradle.api.logging.Logger
 import org.gradle.process.ExecSpec
 import org.gradle.process.internal.ExecException
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class ExecuteUtil {
 	
-	static def executeCommand(final Project project, final String executable, final String... args) {
+	static def executeCommand(final Project project, final def workingDir, final String executable, final String... args) {
 		final def logger = project.logger
 		
 		logEdge(logger, "Start")
@@ -19,6 +22,7 @@ class ExecuteUtil {
 			def output = new ByteArrayOutputStream(), error = new ByteArrayOutputStream()
 			
 			final def exitValue = project.exec { ExecSpec spec ->
+				spec.workingDir(workingDir)
 				spec.executable(executable)
 				spec.args(args)
 				spec.setErrorOutput(error)
