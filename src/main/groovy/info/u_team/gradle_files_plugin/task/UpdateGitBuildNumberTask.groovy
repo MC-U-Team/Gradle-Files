@@ -1,18 +1,11 @@
 package info.u_team.gradle_files_plugin.task
 
-import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.util.GitUtil
 
-class UpdateGitBuildNumberTask extends DefaultTask {
-	
-	UpdateGitBuildNumberTask() {
-		onlyIf {
-			project.hasProperty(Constants.BUILD_PROPERTY)
-		}
-	}
+class UpdateGitBuildNumberTask extends ReleaseTask {
 	
 	@TaskAction
 	void update() {
@@ -32,6 +25,6 @@ class UpdateGitBuildNumberTask extends DefaultTask {
 		GitUtil.alwaysCommit(project, gitRepo, Constants.PATCH_FILE) { "Updated build number to ${buildNumber}" }
 		GitUtil.push(project, gitRepo, versioningBranch)
 		
-		project.logger.quiet("Updated build number to ${buildNumber}")
+		project.logger.quiet("Updated build number to ${buildNumber+1}")
 	}
 }

@@ -1,0 +1,20 @@
+package info.u_team.gradle_files_plugin.task
+
+import org.gradle.api.tasks.TaskAction
+
+import info.u_team.gradle_files_plugin.Constants
+import info.u_team.gradle_files_plugin.util.GitUtil
+
+class CreateGitTagTask extends ReleaseTask {
+	
+	@TaskAction
+	void create() {
+		final def config = project.extensions.extraProperties.config
+		final def tagName = "${config.forge.mcversion}-${project.version}"
+		
+		GitUtil.executeGitCommandException(project, project.rootDir, "tag", tagName)
+		GitUtil.executeGitCommandException(project, project.rootDir, "push", "origin", tagName)
+		
+		project.logger.quiet("Created release tag ${tagName}")
+	}
+}

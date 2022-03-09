@@ -61,9 +61,6 @@ class FetchGitBuildNumber {
 				GitUtil.push(project, gitRepo, versioningBranch)
 				buildNumber = 1 as String
 			}
-			
-			// Register updateBuildNumber task
-			project.tasks.register(Constants.UPDATE_BUILD_NUMBER_TASK, UpdateGitBuildNumberTask)
 		} else {
 			project.logger.quiet("Using dev as build number")
 		}
