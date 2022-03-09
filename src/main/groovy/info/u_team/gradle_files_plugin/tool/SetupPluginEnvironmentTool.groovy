@@ -24,5 +24,21 @@ class SetupPluginEnvironmentTool {
 		
 		// Apply intellij gradle plugin
 		plugin.project.pluginManager.apply(IdeaPlugin)
+		
+		// Add value methods
+		final def extraProperties = plugin.project.extensions.extraProperties
+		
+		extraProperties.defaultPropertyValue = this.&defaultPropertyValue
+		extraProperties.propertyValue = this.&propertyValue
+	}
+	
+	private static def defaultPropertyValue(def name) {
+		final def property = propertyValue(name)
+		return property != null ? property : "noValue"
+	}
+	
+	private static def propertyValue(def name) {
+		final def env = System.getenv(name)
+		return env != null ? env : GradleFilesPlugin.getInstance().project.findProperty(name)
 	}
 }

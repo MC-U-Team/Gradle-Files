@@ -98,7 +98,7 @@ dependencies {
 }
 
 curseforge {
-	apiKey = System.getenv("CURSEFORGE_API_KEY") ?: "unset"
+	apiKey = defaultPropertyValue("curseforge.token")
 	options {
 		debug = true
 	}
