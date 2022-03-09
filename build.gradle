@@ -101,7 +101,11 @@ task runPluginTest(type: JavaExec) {
 publishing {
 	repositories {
 		maven {
-			url layout.buildDirectory.dir("mavenRepo")
+			url "https://repo.u-team.info"
+			credentials {
+				username = "maven"
+				password = getValue("maven.password")
+			}
 		}
 	}
 	publications {
@@ -109,6 +113,43 @@ publishing {
 			artifactId = project.archivesBaseName
 			
 			from components.java
+			
+			pom {
+				name = project.archivesBaseName
+				description = project.description
+				url = "https://github.com/MC-U-Team/Gradle-Files"
+				scm {
+					url = "https://github.com/MC-U-Team/Gradle-Files"
+					connection = "scm:git:git://github.com/MC-U-Team/Gradle-Files.git"
+					developerConnection = "scm:git:git@github.com:MC-U-Team/Gradle-Files.git"
+				}
+				issueManagement {
+					system = "github"
+					url = "https://github.com/MC-U-Team/Gradle-Files/issues"
+				}
+				licenses {
+					license {
+						name = "All rights reserved"
+					}
+				}
+				developers {
+					developer {
+						name = "HyCraftHD"
+					}
+				}
+			}
 		}
 	}
+}
+
+def getValue(name) {
+	def envVariable = System.getenv(name)
+	if(envVariable != null) {
+		return envVariable
+	} else {
+		if (project.hasProperty(name)) {
+			return project.getProperty(name)
+		}
+	}
+	return null;
 }
