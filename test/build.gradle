@@ -17,7 +17,7 @@ buildscript {
 	dependencies {
 		classpath group: "org.parchmentmc", name: "librarian", version: "1.+", changing: true
 		classpath group: "info.u-team.gradle_files", name: "gradle_files", version: "1.0.+", changing: true
-		classpath group: "info.u-team.curse_gradle_uploader", name: "curse_gradle_uploader", version: "1.4.1"
+		classpath group: "info.u-team.curse_gradle_uploader", name: "curse_gradle_uploader", version: "1.5.0"
 	}
 }
 
@@ -93,8 +93,36 @@ tasks.withType(Jar) { task ->
 dependencies {
 	minecraft gradlefiles.forgeDependency()
 	
-	implementation "net.harawata:appdirs:1.0.0"
-	implementation fg.deobf("info.u-team:u_team_core-1.18.1:4.0.0.201-SNAPSHOT")
+	implementation group: "net.harawata", name: "appdirs", version: "1.0.0"
+	implementation fg.deobf(group: "info.u-team", name: "u_team_core-1.18.1", version: "4.0.0.201-SNAPSHOT")
+}
+
+curseforge {
+	apiKey = System.getenv("CURSEFORGE_API_KEY") ?: "unset"
+	options {
+		debug = true
+	}
+	project {
+		id = "70690"
+		changelog = "Changelog"
+		releaseType = "alpha"
+		
+		addGameVersion "Forge"
+		addGameVersion "1.18.2"
+		addGameVersion "Java 17"
+		
+		mainArtifact(tasks.getByName("jar")) {
+			displayName = "Main Artifact"
+		}
+		
+		addArtifact(tasks.getByName("sourcesJar")) {
+			displayName = "Second Artifact"
+		}
+		
+		addArtifact(tasks.getByName("deobfJar")) {
+			displayName = "Third Artifact"
+		}
+	}
 }
 
 publishing {
@@ -108,6 +136,33 @@ publishing {
 			artifactId archivesBaseName
 			
 			from components.java
+			
+			pom {
+				name = project.archivesBaseName
+				description = "${config.github.name}"
+				url = "https://github.com/MC-U-Team/${config.github.name}"
+				scm {
+					url = "https://github.com/MC-U-Team/${config.github.name}"
+					connection = "scm:git:git://github.com/MC-U-Team/${config.github.name}.git"
+					developerConnection = "scm:git:git@github.com:MC-U-Team/${config.github.name}.git"
+				}
+				issueManagement {
+					system = "github"
+					url = "https://github.com/MC-U-Team/${config.github.name}/issues"
+				}
+				licenses {
+					license {
+						name = "Apache License 2.0"
+						url = "https://github.com/MC-U-Team/${config.github.name}/blob/${config.github.branch}/LICENSE"
+						distribution = "repo"
+					}
+				}
+				developers {
+					developer {
+						name = "HyCraftHD"
+					}
+				}
+			}
 		}
 	}
 }
