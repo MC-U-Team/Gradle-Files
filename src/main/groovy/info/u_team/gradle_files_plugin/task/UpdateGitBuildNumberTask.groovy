@@ -25,6 +25,6 @@ class UpdateGitBuildNumberTask extends ReleaseTask {
 		GitUtil.alwaysCommit(project, gitRepo, Constants.PATCH_FILE) { "Updated build number to ${buildNumber}" }
 		GitUtil.push(project, gitRepo, versioningBranch)
 		
-		project.logger.quiet("Updated build number to ${buildNumber+1}")
+		project.logger.quiet("Updated build number to ${(buildNumber as Integer)+1}")
 	}
 }

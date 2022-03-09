@@ -17,4 +17,12 @@ class DependencyUtil {
 			task.dependsOn(dependTask)
 		}
 	}
+	
+	static def allUploadDependOn(final Project project, final Object... dependTask) {
+		project.tasks.matching { task ->
+			task.group == "upload"
+		}.each { task ->
+			task.dependsOn(dependTask)
+		}
+	}
 }

@@ -44,9 +44,9 @@ public class GradleFilesPlugin implements Plugin<Project> {
 		LoadConfigTool.load(this);
 		DeobfJarTaskTool.add(this);
 		FetchGitBuildNumber.fetch(this);
-		RegisterReleaseTasks.register(this);
 		
 		project.afterEvaluate((unused_) -> {
+			RegisterReleaseTasks.register(this);
 			RenameRunConfigurationTool.rename(this);
 			GeneralTaskSettingsTool.setup(this);
 			SignJarTaskTool.add(this);

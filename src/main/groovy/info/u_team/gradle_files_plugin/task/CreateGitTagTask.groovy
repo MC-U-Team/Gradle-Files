@@ -7,6 +7,10 @@ import info.u_team.gradle_files_plugin.util.GitUtil
 
 class CreateGitTagTask extends ReleaseTask {
 	
+	CreateGitTagTask() {
+		dependsOn(Constants.CHECK_GIT_TASK)
+	}
+	
 	@TaskAction
 	void create() {
 		final def config = project.extensions.extraProperties.config

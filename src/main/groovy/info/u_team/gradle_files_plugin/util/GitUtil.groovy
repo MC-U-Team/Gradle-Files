@@ -40,7 +40,7 @@ class GitUtil {
 	}
 	
 	static def commit(final Project project, final def workingDir, final String files, Closure closure) {
-		if(!executeGitCommandException(project, "status", "--porcelain").empty) {
+		if(!executeGitCommandException(project, workingDir, "status", "--porcelain").empty) {
 			alwaysCommit(project, workingDir, files, closure)
 			return true
 		}

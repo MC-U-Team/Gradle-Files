@@ -22,6 +22,7 @@ public class Constants {
 	public static final String PATCH_FILE = "patch";
 	public static final String COMMIT_FORCE_MESSAGE = "Commit forced, because of new build";
 	public static final String UPDATE_BUILD_NUMBER_TASK = "updateBuildNumber";
+	public static final String CHECK_GIT_TASK = "checkGit";
 	public static final String CREATE_GIT_TAG_TASK = "createGitTag";
 	public static final String RELEASE_MOD_TASK = "releaseMod";
 }
