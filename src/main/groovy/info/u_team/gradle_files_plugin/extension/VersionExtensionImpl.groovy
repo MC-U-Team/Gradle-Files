@@ -10,7 +10,7 @@ class VersionExtensionImpl {
 		final def (Project project, config) = GradleFilesUtil.getProjectProperties()
 		
 		final def appendix
-		if(config.mod.snapshot) {
+		if(Boolean.valueOf(config.mod.snapshot)) {
 			appendix = "-SNAPSHOT"
 		} else {
 			appendix = ""
