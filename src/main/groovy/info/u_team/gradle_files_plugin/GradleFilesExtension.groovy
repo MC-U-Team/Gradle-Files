@@ -3,6 +3,7 @@ package info.u_team.gradle_files_plugin
 import org.gradle.jvm.tasks.Jar
 
 import info.u_team.gradle_files_plugin.extension.ArchiveBaseNameExtensionImpl
+import info.u_team.gradle_files_plugin.extension.ChangelogUrlImpl
 import info.u_team.gradle_files_plugin.extension.CreateReobfJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DefaultJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DefaultManifestExtensionImpl
@@ -75,5 +76,13 @@ class GradleFilesExtension {
 	 */
 	def version() {
 		VersionExtensionImpl.version()
+	}
+	
+	/**
+	 * Return the changelog url
+	 * @return Changelog url
+	 */
+	def changelogUrl() {
+		ChangelogUrlImpl.changelogUrl()
 	}
 }

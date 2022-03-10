@@ -121,6 +121,8 @@ curseforge {
 		
 		mainArtifact(tasks.getByName("jar")) {
 			displayName = "Main Artifact"
+			changelogType = "text"
+			changelog = gradlefiles.changelogUrl()
 		}
 		
 		addArtifact(tasks.getByName("sourcesJar")) {

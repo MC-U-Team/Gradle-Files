@@ -42,6 +42,7 @@ class SignJarTaskTool {
 				task.keyPass = project.property(Constants.KEYSTORE_KEY_PASSWORD)
 				task.inputFile = jarTask.archivePath
 				task.outputFile = jarTask.archivePath
+				task.enabled = project.hasProperty(Constants.BUILD_PROPERTY)
 				
 				task.dependsOn(jarTask)
 			}
@@ -52,6 +53,7 @@ class SignJarTaskTool {
 				}
 			}
 			
+			// TODO refactor to not add all sign task to publishing and assemble dependencies
 			DependencyUtil.assembleDependOn(project, signJarTaks)
 			DependencyUtil.allPublishingDependOn(project, signJarTaks)
 		}
