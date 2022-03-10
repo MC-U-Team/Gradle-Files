@@ -32,8 +32,10 @@ class CheckGitTask extends DefaultTask {
 		
 		// Commit changes if there are some
 		if(GitUtil.commit(project, project.rootDir, ".", mainBranch)) {
-			GitUtil.pullAndPush(project, project.rootDir, mainBranch)
 			project.logger.quiet("Committed to branch ${mainBranch}")
 		}
+		
+		// Pull push all changes
+		GitUtil.pullAndPush(project, project.rootDir, mainBranch)
 	}
 }
