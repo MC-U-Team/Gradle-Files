@@ -86,6 +86,14 @@ minecraft {
 	}
 }
 
+tasks.create("testJar", Jar) { task ->
+	archiveClassifier = "test"
+	
+	from sourceSets.main.output
+}
+
+gradlefiles.createReobfJar(tasks.getByName("testJar"))
+
 tasks.withType(Jar) { task ->
 	gradlefiles.defaultJar(task)
 }
@@ -136,6 +144,7 @@ publishing {
 			artifactId archivesBaseName
 			
 			from components.java
+			artifact tasks.getByName("testJar")
 			
 			pom {
 				name = project.archivesBaseName
