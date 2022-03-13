@@ -33,6 +33,10 @@ class SignJarTaskTool {
 		final def tasks = project.tasks
 		
 		tasks.withType(Jar) { jarTask ->
+			if(!jarTask.enabled) {
+				return;
+			}
+
 			final def signJarTaks = project.tasks.register("sign" + StringUtils.capitalize(jarTask.name), SignJar) { task ->
 				task.description = "Sign the jar ${jarTask.name}"
 				task.group = BasePlugin.BUILD_GROUP
