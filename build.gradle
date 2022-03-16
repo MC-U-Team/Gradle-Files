@@ -101,11 +101,7 @@ task runPluginTest(type: JavaExec) {
 publishing {
 	repositories {
 		maven {
-			url "https://repo.u-team.info"
-			credentials {
-				username = "maven"
-				password = getValue("maven.password")
-			}
+			url layout.buildDirectory.dir("mavenRepo")
 		}
 	}
 	publications {

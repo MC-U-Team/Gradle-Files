@@ -1,14 +1,13 @@
 package info.u_team.gradle_files_plugin.tool
 
-import org.apache.commons.lang3.StringUtils
-import org.gradle.api.plugins.BasePlugin
-import org.gradle.api.tasks.bundling.Jar
-
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
 import info.u_team.gradle_files_plugin.util.DependencyUtil
 import net.minecraftforge.gradle.common.tasks.SignJar
 import net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace
+import org.apache.commons.lang3.StringUtils
+import org.gradle.api.plugins.BasePlugin
+import org.gradle.jvm.tasks.Jar
 
 class SignJarTaskTool {
 	
@@ -32,7 +31,7 @@ class SignJarTaskTool {
 		
 		final def tasks = project.tasks
 		
-		tasks.withType(Jar) { jarTask ->
+		tasks.withType(org.gradle.api.tasks.bundling.Jar) { jarTask ->
 			if(!jarTask.enabled) {
 				return;
 			}
@@ -44,8 +43,8 @@ class SignJarTaskTool {
 				task.alias = project.property(Constants.KEYSTORE_ALIAS)
 				task.storePass = project.property(Constants.KEYSTORE_PASSWORD)
 				task.keyPass = project.property(Constants.KEYSTORE_KEY_PASSWORD)
-				task.inputFile = jarTask.archivePath
-				task.outputFile = jarTask.archivePath
+				task.inputFile = jarTask.archiveFile.get()
+				task.outputFile = jarTask.archiveFile.get()
 				task.enabled = project.hasProperty(Constants.BUILD_PROPERTY)
 				
 				task.dependsOn(jarTask)
@@ -54,6 +53,20 @@ class SignJarTaskTool {
 			tasks.withType(RenameJarInPlace) { reobfTask ->
 				signJarTaks.configure { task ->
 					task.dependsOn(reobfTask)
+				}
+			}
+
+			tasks.matching { remapTask ->
+				remapTask.name.startsWith("remap")
+			}.each { remapTask ->
+				signJarTaks.configure { task ->
+					task.dependsOn(remapTask)
+					if(remapTask instanceof Jar) {
+						if(task.inputFile.getAsFile().get().canonicalPath == remapTask.inputFile.getAsFile().get().canonicalPath) {
+							task.inputFile = remapTask.archiveFile.get()
+							task.outputFile = remapTask.archiveFile.get()
+						}
+					}
 				}
 			}
 			
