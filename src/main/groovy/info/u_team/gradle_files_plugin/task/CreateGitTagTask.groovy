@@ -14,7 +14,7 @@ class CreateGitTagTask extends ReleaseTask {
 	@TaskAction
 	void create() {
 		final def config = project.extensions.extraProperties.config
-		final def tagName = "${config.forge.mcversion}-${project.version}"
+		final def tagName = "${config.minecraft.version}-${project.version}"
 		
 		GitUtil.executeGitCommandException(project, project.rootDir, "tag", tagName)
 		GitUtil.executeGitCommandException(project, project.rootDir, "push", "origin", tagName)

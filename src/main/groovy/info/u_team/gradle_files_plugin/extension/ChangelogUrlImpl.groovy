@@ -11,7 +11,7 @@ class ChangelogUrlImpl {
 		
 		// TODO change hardcoded path to extension in gradlefiles?
 		final def url = "https://github.com/MC-U-Team/${config.github.name}/blob/${config.github.branch}/CHANGELOG.md"
-		final def mcversion = "${config.forge.mcversion}".replace(".", "")
+		final def mcversion = "${config.minecraft.version}".replace(".", "")
 		final def version = "${project.version}".replace(".", "")
 		final def date = new Date().format("yyyy-MM-dd")
 		return "${url}#${mcversion}-${version}---${date}"

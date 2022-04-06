@@ -9,6 +9,6 @@ class ForgeDependencyExtensionImpl {
 	static def forgeDependency() {
 		final def (Project project, config) = GradleFilesUtil.getProjectProperties()
 		
-		return "net.minecraftforge:forge:${config.forge.mcversion}-${config.forge.version}"
+		return "net.minecraftforge:forge:${config.minecraft.version}-${config.forge.version}"
 	}
 }

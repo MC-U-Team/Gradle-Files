@@ -81,9 +81,9 @@ curseforge {
 			displayName = "Second Artifact"
 		}
 		
-		/*addArtifact(tasks.getByName("deobfJar")) {
+		addArtifact(tasks.getByName("deobfJar")) {
 			displayName = "Third Artifact"
-		}*/
+		}
 	}
 }
 

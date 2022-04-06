@@ -9,6 +9,6 @@ class ArchiveBaseNameExtensionImpl {
 	static def archivesBaseName() {
 		final def (Project project, config) = GradleFilesUtil.getProjectProperties()
 		
-		return "${config.mod.filename}-${config.forge.mcversion}"
+		return "${config.mod.filename}-${config.minecraft.version}"
 	}
 }
