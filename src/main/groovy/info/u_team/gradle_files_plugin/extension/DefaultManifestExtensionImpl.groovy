@@ -2,6 +2,7 @@ package info.u_team.gradle_files_plugin.extension
 
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.tasks.compile.JavaCompile
 
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.util.GradleFilesUtil
@@ -26,7 +27,6 @@ class DefaultManifestExtensionImpl {
 					
 					"Built-On": "Minecraft ${config.minecraft.version}",
 					"Built-Timestamp": timestamp,
-					"Built-Jdk": project.extensions.getByType(JavaPluginExtension).toolchain.getDisplayName(),
 					
 					"Fingerprint": project.findProperty(Constants.KEYSTORE_FINGERPRINT) ?: "NONE",
 					
