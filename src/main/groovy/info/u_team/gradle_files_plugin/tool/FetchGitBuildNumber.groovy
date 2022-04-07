@@ -46,6 +46,9 @@ class FetchGitBuildNumber {
 				// Checkout existing versioning branch
 				GitUtil.executeGitCommandException(project, gitRepo, "checkout", "-f", versioningBranch)
 				
+				// Pull with merge existing
+				GitUtil.pull(project, gitRepo)
+				
 				// Read patch number and increment
 				final def patchNumber = (new File(gitRepo, Constants.PATCH_FILE).text as Integer) + 1
 				buildNumber = patchNumber as String
