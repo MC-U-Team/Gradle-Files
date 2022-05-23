@@ -21,7 +21,7 @@ class SignJarExtensionImpl {
 	]
 	
 	static Task signJar(Jar jarTask) {
-		final def (Project project, config) = GradleFilesUtil.getProjectProperties()
+		final Project project = GradleFilesUtil.getProjectProperties()
 		
 		final boolean canSign = project.properties.keySet().containsAll(requiredProperties)
 		
@@ -46,5 +46,20 @@ class SignJarExtensionImpl {
 		
 		DependencyUtil.assembleDependOn(project, signJarTaks)
 		DependencyUtil.allPublishingDependOn(project, signJarTaks)
+		
+		return signJarTaks
+	}
+	
+	static Task signJar(String taskName) {
+		final Project project = GradleFilesUtil.getProjectProperties()
+		return signJar(project.tasks.getByName(taskName) as Jar)
+	}
+	
+	static Task signDefaultForgeJar() {
+		signJar("reobfJar")
+	}
+	
+	static Task signDefaultFabricJar() {
+		signJar("remapJar")
 	}
 }
