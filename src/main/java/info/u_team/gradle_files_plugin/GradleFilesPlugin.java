@@ -15,7 +15,6 @@ import info.u_team.gradle_files_plugin.tool.RegisterReleaseTasks;
 import info.u_team.gradle_files_plugin.tool.RemovedMappedDependenciesTool;
 import info.u_team.gradle_files_plugin.tool.RenameRunConfigurationTool;
 import info.u_team.gradle_files_plugin.tool.SetupPluginEnvironmentTool;
-import info.u_team.gradle_files_plugin.tool.SignJarTaskTool;
 
 public class GradleFilesPlugin implements Plugin<Project> {
 	
@@ -47,7 +46,6 @@ public class GradleFilesPlugin implements Plugin<Project> {
 			RegisterReleaseTasks.register(this);
 			RenameRunConfigurationTool.rename(this);
 			GeneralTaskSettingsTool.setup(this);
-			SignJarTaskTool.add(this);
 			RemovedMappedDependenciesTool.remove(this);
 		});
 		

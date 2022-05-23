@@ -1,5 +1,6 @@
 package info.u_team.gradle_files_plugin
 
+import org.gradle.api.Task
 import org.gradle.jvm.tasks.Jar
 
 import info.u_team.gradle_files_plugin.extension.ArchiveBaseNameExtensionImpl
@@ -17,11 +18,6 @@ class GradleFilesExtension {
 	 * Should be set to configure the vendor of the build
 	 */
 	String vendor
-	
-	/**
-	 * If all jar files should be signed
-	 */
-	boolean signJars
 	
 	/**
 	 * If dependencies with a mapped component should be stripped from maven pom and gradle meta data
@@ -44,6 +40,15 @@ class GradleFilesExtension {
 	 */
 	void defaultJar(Jar task) {
 		DefaultJarExtensionImpl.defaultJar(task)
+	}
+	
+	/**
+	 * Add a sign task to a jar task. Also sets the dependency for publishing and assemble
+	 * @param task Jar task to sign
+	 * @return The sign task
+	 */
+	Task signJar(Jar task) {
+		SignJarExtensionImpl.signJar(task)
 	}
 	
 	/**
