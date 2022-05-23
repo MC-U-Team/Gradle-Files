@@ -7,6 +7,7 @@ import info.u_team.gradle_files_plugin.extension.ChangelogUrlImpl
 import info.u_team.gradle_files_plugin.extension.CreateReobfJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DefaultJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DefaultManifestExtensionImpl
+import info.u_team.gradle_files_plugin.extension.FabricDpendenciesExtensionImpl
 import info.u_team.gradle_files_plugin.extension.ForgeDependencyExtensionImpl
 import info.u_team.gradle_files_plugin.extension.VersionExtensionImpl
 
@@ -54,7 +55,31 @@ class GradleFilesExtension {
 	}
 	
 	/**
-	 * Create custom reobf Task for a jar task
+	 * Return the fabric minecraft dependency
+	 * @return Fabric minecraft dependency
+	 */
+	def fabricMinecraftDependency() {
+		FabricDpendenciesExtensionImpl.fabricMinecraftDependency()
+	}
+	
+	/**
+	 * Return the fabric loader dependency
+	 * @return Fabric loader dependency
+	 */
+	def fabricLoaderDependency() {
+		FabricDpendenciesExtensionImpl.fabricLoaderDependency()
+	}
+	
+	/**
+	 * Return the fabric api dependency
+	 * @return Fabric api dependency
+	 */
+	def fabricApiDependency() {
+		FabricDpendenciesExtensionImpl.fabricApiDependency()
+	}
+	
+	/**
+	 * Create custom reobf Task (forge gradle) for a jar task
 	 * @param task Jar task
 	 * @return Reobf task
 	 */
