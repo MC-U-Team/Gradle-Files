@@ -8,7 +8,7 @@ import info.u_team.gradle_files_plugin.extension.ChangelogUrlImpl
 import info.u_team.gradle_files_plugin.extension.CreateReobfJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DefaultJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DefaultManifestExtensionImpl
-import info.u_team.gradle_files_plugin.extension.FabricDpendenciesExtensionImpl
+import info.u_team.gradle_files_plugin.extension.FabricDependenciesExtensionImpl
 import info.u_team.gradle_files_plugin.extension.ForgeDependencyExtensionImpl
 import info.u_team.gradle_files_plugin.extension.SignJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.VersionExtensionImpl
@@ -82,7 +82,7 @@ class GradleFilesExtension {
 	 * @return Fabric minecraft dependency
 	 */
 	def fabricMinecraftDependency() {
-		FabricDpendenciesExtensionImpl.fabricMinecraftDependency()
+		FabricDependenciesExtensionImpl.fabricMinecraftDependency()
 	}
 	
 	/**
@@ -90,7 +90,7 @@ class GradleFilesExtension {
 	 * @return Fabric loader dependency
 	 */
 	def fabricLoaderDependency() {
-		FabricDpendenciesExtensionImpl.fabricLoaderDependency()
+		FabricDependenciesExtensionImpl.fabricLoaderDependency()
 	}
 	
 	/**
@@ -98,7 +98,7 @@ class GradleFilesExtension {
 	 * @return Fabric api dependency
 	 */
 	def fabricApiDependency() {
-		FabricDpendenciesExtensionImpl.fabricApiDependency()
+		FabricDependenciesExtensionImpl.fabricApiDependency()
 	}
 	
 	/**

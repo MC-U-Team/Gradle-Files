@@ -4,7 +4,7 @@ import org.gradle.api.Project
 
 import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 
-class FabricDpendenciesExtensionImpl {
+class FabricDependenciesExtensionImpl {
 	
 	static def fabricMinecraftDependency() {
 		final def (Project project, config) = GradleFilesUtil.getProjectProperties()
@@ -21,6 +21,6 @@ class FabricDpendenciesExtensionImpl {
 	static def fabricApiDependency() {
 		final def (Project project, config) = GradleFilesUtil.getProjectProperties()
 		
-		return "net.fabricmc.fabric-api:fabric-api:${config.fabric.loader.version}"
+		return "net.fabricmc.fabric-api:fabric-api:${config.fabric.api.version}"
 	}
 }
