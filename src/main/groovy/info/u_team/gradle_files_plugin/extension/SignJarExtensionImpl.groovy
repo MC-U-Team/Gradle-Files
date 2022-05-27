@@ -2,7 +2,7 @@ package info.u_team.gradle_files_plugin.extension
 
 import org.apache.commons.lang3.StringUtils
 import org.gradle.api.Project
-import org.gradle.api.Task
+import org.gradle.api.file.RegularFile
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.jvm.tasks.Jar
 
@@ -10,6 +10,7 @@ import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.util.DependencyUtil
 import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 import net.minecraftforge.gradle.common.tasks.SignJar
+import net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace
 
 class SignJarExtensionImpl {
 	
@@ -20,8 +21,8 @@ class SignJarExtensionImpl {
 		Constants.KEYSTORE_KEY_PASSWORD
 	]
 	
-	static Task signJar(Jar jarTask) {
-		final Project project = GradleFilesUtil.getProjectProperties()
+	static def signJar(String taskName) {
+		final def (Project project) = GradleFilesUtil.getProjectProperties()
 		
 		final boolean canSign = project.properties.keySet().containsAll(requiredProperties)
 		
@@ -29,37 +30,49 @@ class SignJarExtensionImpl {
 			project.logger.warn("Signing of jars was requested, but required properties are missing")
 		}
 		
-		final def signJarTaks = project.tasks.register("sign" + StringUtils.capitalize(jarTask.name), SignJar) { task ->
-			task.description = "Sign the jar ${jarTask.name}"
-			task.group = BasePlugin.BUILD_GROUP
-			task.keyStore = project.property(Constants.KEYSTORE)
-			task.alias = project.property(Constants.KEYSTORE_ALIAS)
-			task.storePass = project.property(Constants.KEYSTORE_PASSWORD)
-			task.keyPass = project.property(Constants.KEYSTORE_KEY_PASSWORD)
-			task.inputFile = jarTask.archiveFile.get()
-			task.outputFile = jarTask.archiveFile.get()
-			task.enabled = canSign && project.hasProperty(Constants.BUILD_PROPERTY)
+		final def signJarTaskName = "sign" + StringUtils.capitalize(taskName)
+		
+		project.afterEvaluate {
+			final tasks = project.tasks
 			
-			task.dependsOn(jarTask)
-			task.mustRunAfter(jarTask)
+			final def jarTask = tasks.getByName(taskName)
+			
+			RegularFile archiveFile
+			if(jarTask instanceof Jar) {
+				archiveFile = jarTask.archiveFile.get()
+			} else if(jarTask instanceof RenameJarInPlace) {
+				archiveFile = jarTask.input.get()
+			} else {
+				throw new IllegalArgumentException("Task for signing must be a jar or remap / reobf task")
+			}
+			
+			final def signJarTask = project.tasks.register(signJarTaskName, SignJar) { task ->
+				task.description = "Sign the jar ${jarTask.name}"
+				task.group = BasePlugin.BUILD_GROUP
+				task.keyStore = project.property(Constants.KEYSTORE)
+				task.alias = project.property(Constants.KEYSTORE_ALIAS)
+				task.storePass = project.property(Constants.KEYSTORE_PASSWORD)
+				task.keyPass = project.property(Constants.KEYSTORE_KEY_PASSWORD)
+				task.inputFile = archiveFile
+				task.outputFile = archiveFile
+				task.enabled = canSign && project.hasProperty(Constants.BUILD_PROPERTY)
+				
+				task.dependsOn(jarTask)
+				task.mustRunAfter(jarTask)
+			}
+			
+			DependencyUtil.assembleDependOn(project, signJarTask)
+			DependencyUtil.allPublishingDependOn(project, signJarTask)
 		}
 		
-		DependencyUtil.assembleDependOn(project, signJarTaks)
-		DependencyUtil.allPublishingDependOn(project, signJarTaks)
-		
-		return signJarTaks
+		return signJarTaskName
 	}
 	
-	static Task signJar(String taskName) {
-		final Project project = GradleFilesUtil.getProjectProperties()
-		return signJar(project.tasks.getByName(taskName) as Jar)
-	}
-	
-	static Task signDefaultForgeJar() {
+	static def signDefaultForgeJar() {
 		signJar("reobfJar")
 	}
 	
-	static Task signDefaultFabricJar() {
+	static def signDefaultFabricJar() {
 		signJar("remapJar")
 	}
 }

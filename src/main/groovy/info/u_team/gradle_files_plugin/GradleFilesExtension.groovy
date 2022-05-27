@@ -1,8 +1,8 @@
 package info.u_team.gradle_files_plugin
 
-import org.gradle.api.Task
 import org.gradle.jvm.tasks.Jar
 
+import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.extension.ArchiveBaseNameExtensionImpl
 import info.u_team.gradle_files_plugin.extension.ChangelogUrlImpl
 import info.u_team.gradle_files_plugin.extension.CreateReobfJarExtensionImpl
@@ -13,6 +13,7 @@ import info.u_team.gradle_files_plugin.extension.ForgeDependencyExtensionImpl
 import info.u_team.gradle_files_plugin.extension.SignJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.VersionExtensionImpl
 
+@CompileStatic
 class GradleFilesExtension {
 	
 	/**
@@ -45,27 +46,18 @@ class GradleFilesExtension {
 	
 	/**
 	 * Add a sign task to a jar task. Also sets the dependency for publishing and assemble
-	 * @param task Jar task to sign
-	 * @return The sign task
-	 */
-	Task signJar(Jar task) {
-		SignJarExtensionImpl.signJar(task)
-	}
-	
-	/**
-	 * Add a sign task to a jar task. Also sets the dependency for publishing and assemble
 	 * @param task Jar task name to sign
 	 * @return The sign task
 	 */
-	Task signJar(String taskName) {
-		SignJarExtensionImpl.signJar(task)
+	def signJar(String taskName) {
+		SignJarExtensionImpl.signJar(taskName)
 	}
 	
 	/**
 	 * Add sign task to default forge ouput jar
 	 * @return The sign task
 	 */
-	Task signDefaultForgeJar() {
+	def signDefaultForgeJar() {
 		SignJarExtensionImpl.signDefaultForgeJar()
 	}
 	
@@ -73,7 +65,7 @@ class GradleFilesExtension {
 	 * Add sign task to default fabric output jar
 	 * @return The sign task
 	 */
-	Task signDefaultFabricJar() {
+	def signDefaultFabricJar() {
 		SignJarExtensionImpl.signDefaultFabricJar()
 	}
 	
