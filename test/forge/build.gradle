@@ -15,7 +15,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.36", changing: true
+		classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.36", changing: true // TODO Forge forge gradle version. Remove if artifact bug is resolved
 		classpath group: "org.parchmentmc", name: "librarian", version: "1.+", changing: true
 		classpath group: "info.u-team.gradle_files", name: "gradle_files", version: "1.+", changing: true
 		classpath group: "info.u-team.curse_gradle_uploader", name: "curse_gradle_uploader", version: "1.5.0"
