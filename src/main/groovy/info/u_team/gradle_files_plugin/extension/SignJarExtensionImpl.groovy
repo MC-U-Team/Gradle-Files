@@ -49,10 +49,10 @@ class SignJarExtensionImpl {
 			final def signJarTask = project.tasks.register(signJarTaskName, SignJar) { task ->
 				task.description = "Sign the jar ${jarTask.name}"
 				task.group = BasePlugin.BUILD_GROUP
-				task.keyStore = project.property(Constants.KEYSTORE)
-				task.alias = project.property(Constants.KEYSTORE_ALIAS)
-				task.storePass = project.property(Constants.KEYSTORE_PASSWORD)
-				task.keyPass = project.property(Constants.KEYSTORE_KEY_PASSWORD)
+				task.keyStore = project.findProperty(Constants.KEYSTORE)
+				task.alias = project.findProperty(Constants.KEYSTORE_ALIAS)
+				task.storePass = project.findProperty(Constants.KEYSTORE_PASSWORD)
+				task.keyPass = project.findProperty(Constants.KEYSTORE_KEY_PASSWORD)
 				task.inputFile = archiveFile
 				task.outputFile = archiveFile
 				task.enabled = canSign && project.hasProperty(Constants.BUILD_PROPERTY)
