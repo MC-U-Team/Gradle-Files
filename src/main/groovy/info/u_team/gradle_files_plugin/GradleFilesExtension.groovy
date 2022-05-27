@@ -47,7 +47,7 @@ class GradleFilesExtension {
 	/**
 	 * Add a sign task to a jar task. Also sets the dependency for publishing and assemble
 	 * @param task Jar task name to sign
-	 * @return The sign task
+	 * @return The sign task name
 	 */
 	def signJar(String taskName) {
 		SignJarExtensionImpl.signJar(taskName)
@@ -55,7 +55,7 @@ class GradleFilesExtension {
 	
 	/**
 	 * Add sign task to default forge ouput jar
-	 * @return The sign task
+	 * @return The sign task name
 	 */
 	def signDefaultForgeJar() {
 		SignJarExtensionImpl.signDefaultForgeJar()
@@ -63,7 +63,7 @@ class GradleFilesExtension {
 	
 	/**
 	 * Add sign task to default fabric output jar
-	 * @return The sign task
+	 * @return The sign task name
 	 */
 	def signDefaultFabricJar() {
 		SignJarExtensionImpl.signDefaultFabricJar()
