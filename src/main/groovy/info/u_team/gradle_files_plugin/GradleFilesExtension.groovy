@@ -8,6 +8,7 @@ import info.u_team.gradle_files_plugin.extension.ChangelogUrlImpl
 import info.u_team.gradle_files_plugin.extension.CreateReobfJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DefaultJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DefaultManifestExtensionImpl
+import info.u_team.gradle_files_plugin.extension.DependsOnImpl
 import info.u_team.gradle_files_plugin.extension.FabricDependenciesExtensionImpl
 import info.u_team.gradle_files_plugin.extension.ForgeDependencyExtensionImpl
 import info.u_team.gradle_files_plugin.extension.SignJarExtensionImpl
@@ -132,5 +133,21 @@ class GradleFilesExtension {
 	 */
 	def changelogUrl() {
 		ChangelogUrlImpl.changelogUrl()
+	}
+	
+	/**
+	 * Mark the tasks as a dependency for the assemble task
+	 * @param dependTask Tasks
+	 */
+	void assembleDependOn(final Object... dependTask) {
+		DependsOnImpl.assembleDependOn(dependTask)
+	}
+	
+	/**
+	 * Mark the tasks as a dependency for all publishing task
+	 * @param dependTask
+	 */
+	void allPublishingDependOn(final Object... dependTask) {
+		DependsOnImpl.allPublishingDependOn(dependTask)
 	}
 }
