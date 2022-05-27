@@ -16,7 +16,7 @@ buildscript {
 	}
 	dependencies {
 		classpath group: "fabric-loom", name: "fabric-loom.gradle.plugin", version: "0.12-SNAPSHOT", changing: true
-		classpath group: "info.u-team.gradle_files", name: "gradle_files", version: "1.0.+", changing: true
+		classpath group: "info.u-team.gradle_files", name: "gradle_files", version: "1.+", changing: true
 		classpath group: "info.u-team.curse_gradle_uploader", name: "curse_gradle_uploader", version: "1.5.0"
 	}
 }
@@ -32,15 +32,12 @@ version = gradlefiles.version()
 
 gradlefiles {
 	vendor "Team UTeam"
-	
-	signJars true
 }
 
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
-	withDeobfJar()
 	withSourcesJar()
 	withJavadocJar()
 }
@@ -49,12 +46,24 @@ tasks.withType(Jar) { task ->
 	gradlefiles.defaultJar(task)
 }
 
-dependencies {
-	minecraft "com.mojang:minecraft:1.18.2"
-	mappings loom.officialMojangMappings()
+gradlefiles.signDefaultFabricJar()
+gradlefiles.signJar("remapSourcesJar")
 
-	modImplementation "net.fabricmc:fabric-loader:0.13.3"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:0.47.8+1.18.2"
+repositories {
+	maven {
+		url = "https://maven.parchmentmc.org"
+	}
+}
+
+dependencies {
+	minecraft gradlefiles.fabricMinecraftDependency()
+	mappings loom.layered() {
+		officialMojangMappings()
+		parchment(config.fabric.parchment)
+	}
+	
+	modImplementation gradlefiles.fabricLoaderDependency()
+	modImplementation gradlefiles.fabricApiDependency()
 }
 
 curseforge {
@@ -80,10 +89,6 @@ curseforge {
 		addArtifact(tasks.getByName("sourcesJar")) {
 			displayName = "Second Artifact"
 		}
-		
-		addArtifact(tasks.getByName("deobfJar")) {
-			displayName = "Third Artifact"
-		}
 	}
 }
 
@@ -98,7 +103,6 @@ publishing {
 			artifactId archivesBaseName
 			
 			from components.java
-			//artifact tasks.getByName("testJar")
 			
 			pom {
 				name = project.archivesBaseName
