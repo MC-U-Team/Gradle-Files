@@ -11,6 +11,7 @@ import info.u_team.gradle_files_plugin.tool.FetchGitBuildNumber;
 import info.u_team.gradle_files_plugin.tool.GeneralTaskSettingsTool;
 import info.u_team.gradle_files_plugin.tool.LoadConfigTool;
 import info.u_team.gradle_files_plugin.tool.PrintJVMInformationTool;
+import info.u_team.gradle_files_plugin.tool.PrintModInformationTool;
 import info.u_team.gradle_files_plugin.tool.RegisterReleaseTasks;
 import info.u_team.gradle_files_plugin.tool.RemovedMappedDependenciesTool;
 import info.u_team.gradle_files_plugin.tool.RenameRunConfigurationTool;
@@ -40,6 +41,7 @@ public class GradleFilesPlugin implements Plugin<Project> {
 		SetupPluginEnvironmentTool.setup(this);
 		PrintJVMInformationTool.print(this);
 		LoadConfigTool.load(this);
+		PrintModInformationTool.print(this);
 		FetchGitBuildNumber.fetch(this);
 		
 		project.afterEvaluate((unused_) -> {

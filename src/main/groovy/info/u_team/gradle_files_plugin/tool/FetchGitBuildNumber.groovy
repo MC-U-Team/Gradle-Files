@@ -2,6 +2,7 @@ package info.u_team.gradle_files_plugin.tool
 
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
+import info.u_team.gradle_files_plugin.extension.VersionExtensionImpl
 import info.u_team.gradle_files_plugin.task.UpdateGitBuildNumberTask
 import info.u_team.gradle_files_plugin.util.GitUtil
 
@@ -72,5 +73,7 @@ class FetchGitBuildNumber {
 		project.logger.quiet("The current buildnumber is {}", buildNumber)
 		
 		config.mod.buildnumber = buildNumber
+		
+		project.logger.quiet("Buildversion is {}", VersionExtensionImpl.version())
 	}
 }
