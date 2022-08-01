@@ -22,12 +22,10 @@ class PrintJVMInformationTool {
 			archString
 		]*.length().max()
 		
-		logger.lifecycle("")
 		logger.lifecycle("-"*length)
 		logger.lifecycle(javaString)
 		logger.lifecycle(jvmString)
 		logger.lifecycle(archString)
 		logger.lifecycle("-"*length)
-		logger.lifecycle("")
 	}
 }

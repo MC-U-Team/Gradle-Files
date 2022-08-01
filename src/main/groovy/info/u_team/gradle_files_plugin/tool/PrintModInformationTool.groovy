@@ -13,10 +13,10 @@ class PrintModInformationTool {
 		final def fabricLoaderVersion = config.fabric.loader.version
 		final def fabricApiVersion = config.fabric.api.version
 		
-		final def minecraftVersionString = minecraftVersion != null ? "Minecraft Version: ${minecraftVersion}" : ""
-		final def forgeVersionString = forgeVersion != null ? "Forge Version: ${forgeVersion}" : ""
-		final def fabricLoaderVersionString = fabricLoaderVersion != null ? "Fabric Loader Version: ${fabricLoaderVersion}" : ""
-		final def fabricApiVersionString = fabricApiVersion != null ? "Fabric API Version: ${fabricApiVersion}" : ""
+		final def minecraftVersionString = "Minecraft Version: ${minecraftVersion}"
+		final def forgeVersionString = "Forge Version: ${forgeVersion}"
+		final def fabricLoaderVersionString = "Fabric Loader Version: ${fabricLoaderVersion}"
+		final def fabricApiVersionString = "Fabric API Version: ${fabricApiVersion}"
 		
 		final int length = [
 			minecraftVersionString,
@@ -27,16 +27,16 @@ class PrintModInformationTool {
 		
 		logger.lifecycle("")
 		logger.lifecycle("-"*length)
-		if(minecraftVersionString) {
+		if(!minecraftVersion.isEmpty()) {
 			logger.lifecycle(minecraftVersionString)
 		}
-		if(forgeVersionString) {
+		if(!forgeVersion.isEmpty()) {
 			logger.lifecycle(forgeVersionString)
 		}
-		if(fabricLoaderVersionString) {
+		if(!fabricLoaderVersion.isEmpty()) {
 			logger.lifecycle(fabricLoaderVersionString)
 		}
-		if(fabricApiVersionString) {
+		if(!fabricApiVersion.isEmpty()) {
 			logger.lifecycle(fabricApiVersionString)
 		}
 		logger.lifecycle("-"*length)
