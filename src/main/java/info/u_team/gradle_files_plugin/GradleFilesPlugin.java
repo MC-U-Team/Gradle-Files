@@ -2,6 +2,7 @@ package info.u_team.gradle_files_plugin;
 
 import javax.inject.Inject;
 
+import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
@@ -16,6 +17,7 @@ import info.u_team.gradle_files_plugin.tool.RegisterReleaseTasks;
 import info.u_team.gradle_files_plugin.tool.RemovedMappedDependenciesTool;
 import info.u_team.gradle_files_plugin.tool.RenameRunConfigurationTool;
 import info.u_team.gradle_files_plugin.tool.SetupPluginEnvironmentTool;
+import info.u_team.gradle_files_plugin.util.GradleFilesUtil;
 
 public class GradleFilesPlugin implements Plugin<Project> {
 	
@@ -37,6 +39,12 @@ public class GradleFilesPlugin implements Plugin<Project> {
 		this.project = project;
 		this.logger = project.getLogger();
 		this.extension = project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class);
+		
+		logger.lifecycle("--------------------------------------------------------------------------------------------------");
+		logger.lifecycle("isRootProject:" + GradleFilesUtil.isRootProject());
+		logger.lifecycle("--------------------------------------------------------------------------------------------------");
+		
+		new GradleException("ERROR!!");
 		
 		SetupPluginEnvironmentTool.setup(this);
 		PrintJVMInformationTool.print(this);
