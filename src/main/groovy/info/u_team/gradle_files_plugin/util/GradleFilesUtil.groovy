@@ -13,4 +13,9 @@ class GradleFilesUtil {
 		
 		return [project, config, extension]
 	}
+	
+	static boolean isRootProject() {
+		final def project = GradleFilesPlugin.instance.project
+		return project.rootProject.is(project)
+	}
 }
