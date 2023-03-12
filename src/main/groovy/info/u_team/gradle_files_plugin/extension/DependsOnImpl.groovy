@@ -7,13 +7,11 @@ import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 
 class DependsOnImpl {
 	
-	static def assembleDependOn(final Object... dependTask) {
-		final def (Project project) = GradleFilesUtil.getProjectProperties()
+	static def assembleDependOn(final Project project, final Object... dependTask) {
 		DependencyUtil.assembleDependOn(project, dependTask)
 	}
 	
-	static def allPublishingDependOn(final Object... dependTask) {
-		final def (Project project) = GradleFilesUtil.getProjectProperties()
+	static def allPublishingDependOn(final Project project, final Object... dependTask) {
 		DependencyUtil.allPublishingDependOn(project, dependTask)
 	}
 }

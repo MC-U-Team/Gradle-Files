@@ -38,7 +38,7 @@ public class GradleFilesPlugin implements Plugin<Project> {
 	public void apply(Project project) {
 		this.project = project;
 		this.logger = project.getLogger();
-		this.extension = project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class);
+		this.extension = project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class, this);
 		
 		logger.lifecycle("--------------------------------------------------------------------------------------------------");
 		logger.lifecycle("isRootProject:" + GradleFilesUtil.isRootProject());

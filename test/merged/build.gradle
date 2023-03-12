@@ -18,10 +18,12 @@ buildscript {
 
 apply plugin: "info.u_team.gradle_files"
 
-/*group = "info.u-team"
+group = "info.u-team"
 archivesBaseName = gradlefiles.archivesBaseName()
-version = gradlefiles.version()*/
+version = gradlefiles.version()
 
 gradlefiles {
 	vendor "Team UTeam"
 }
+
+println defaultPropertyValue("rofl")

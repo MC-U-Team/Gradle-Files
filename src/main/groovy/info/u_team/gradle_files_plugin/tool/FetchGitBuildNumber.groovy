@@ -74,6 +74,6 @@ class FetchGitBuildNumber {
 		
 		config.mod.buildnumber = buildNumber
 		
-		project.logger.quiet("Buildversion is {}", VersionExtensionImpl.version())
+		project.logger.quiet("Buildversion is {}", VersionExtensionImpl.version(project))
 	}
 }

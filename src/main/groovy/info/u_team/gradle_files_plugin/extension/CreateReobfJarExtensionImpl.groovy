@@ -12,9 +12,7 @@ import net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace
 
 class CreateReobfJarExtensionImpl {
 	
-	static def createReobfJar(Jar task) {
-		final def (Project project) = GradleFilesUtil.getProjectProperties()
-		
+	static def createReobfJar(final Project project, final Jar task) {
 		final def reobfTask = project.extensions.findByName("reobf").create(task.name)
 		DependencyUtil.allPublishingDependOn(project, reobfTask)
 		

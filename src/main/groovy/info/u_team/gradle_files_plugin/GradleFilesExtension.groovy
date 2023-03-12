@@ -17,6 +17,12 @@ import info.u_team.gradle_files_plugin.extension.VersionExtensionImpl
 @CompileStatic
 class GradleFilesExtension {
 	
+	private final GradleFilesPlugin plugin
+	
+	GradleFilesExtension(GradleFilesPlugin plugin) {
+		this.plugin = plugin
+	}
+	
 	/**
 	 * Should be set to configure the vendor of the build
 	 */
@@ -51,7 +57,7 @@ class GradleFilesExtension {
 	 * @return The sign task name
 	 */
 	def signJar(String taskName) {
-		SignJarExtensionImpl.signJar(taskName)
+		SignJarExtensionImpl.signJar(plugin.project, taskName)
 	}
 	
 	/**
@@ -59,7 +65,7 @@ class GradleFilesExtension {
 	 * @return The sign task name
 	 */
 	def signDefaultForgeJar() {
-		SignJarExtensionImpl.signDefaultForgeJar()
+		SignJarExtensionImpl.signDefaultForgeJar(plugin.project)
 	}
 	
 	/**
@@ -67,7 +73,7 @@ class GradleFilesExtension {
 	 * @return The sign task name
 	 */
 	def signDefaultFabricJar() {
-		SignJarExtensionImpl.signDefaultFabricJar()
+		SignJarExtensionImpl.signDefaultFabricJar(plugin.project)
 	}
 	
 	/**
@@ -75,7 +81,7 @@ class GradleFilesExtension {
 	 * @return Forge dependency
 	 */
 	def forgeDependency() {
-		ForgeDependencyExtensionImpl.forgeDependency()
+		ForgeDependencyExtensionImpl.forgeDependency(plugin.project)
 	}
 	
 	/**
@@ -83,7 +89,7 @@ class GradleFilesExtension {
 	 * @return Fabric minecraft dependency
 	 */
 	def fabricMinecraftDependency() {
-		FabricDependenciesExtensionImpl.fabricMinecraftDependency()
+		FabricDependenciesExtensionImpl.fabricMinecraftDependency(plugin.project)
 	}
 	
 	/**
@@ -91,7 +97,7 @@ class GradleFilesExtension {
 	 * @return Fabric loader dependency
 	 */
 	def fabricLoaderDependency() {
-		FabricDependenciesExtensionImpl.fabricLoaderDependency()
+		FabricDependenciesExtensionImpl.fabricLoaderDependency(plugin.project)
 	}
 	
 	/**
@@ -99,7 +105,7 @@ class GradleFilesExtension {
 	 * @return Fabric api dependency
 	 */
 	def fabricApiDependency() {
-		FabricDependenciesExtensionImpl.fabricApiDependency()
+		FabricDependenciesExtensionImpl.fabricApiDependency(plugin.project)
 	}
 	
 	/**
@@ -107,8 +113,8 @@ class GradleFilesExtension {
 	 * @param task Jar task
 	 * @return Reobf task
 	 */
-	def createReobfJar(Jar task) {
-		CreateReobfJarExtensionImpl.createReobfJar(task)
+	def createReobfJar(final Jar task) {
+		CreateReobfJarExtensionImpl.createReobfJar(plugin.project, task)
 	}
 	
 	/**
@@ -116,7 +122,7 @@ class GradleFilesExtension {
 	 * @return Archive base name
 	 */
 	def archivesBaseName() {
-		ArchiveBaseNameExtensionImpl.archivesBaseName()
+		ArchiveBaseNameExtensionImpl.archivesBaseName(plugin.project)
 	}
 	
 	/**
@@ -124,7 +130,7 @@ class GradleFilesExtension {
 	 * @return Version
 	 */
 	def version() {
-		VersionExtensionImpl.version()
+		VersionExtensionImpl.version(plugin.project)
 	}
 	
 	/**
@@ -132,7 +138,7 @@ class GradleFilesExtension {
 	 * @return Changelog url
 	 */
 	def changelogUrl() {
-		ChangelogUrlImpl.changelogUrl()
+		ChangelogUrlImpl.changelogUrl(plugin.project)
 	}
 	
 	/**
@@ -140,7 +146,7 @@ class GradleFilesExtension {
 	 * @param dependTask Tasks
 	 */
 	void assembleDependOn(final Object... dependTask) {
-		DependsOnImpl.assembleDependOn(dependTask)
+		DependsOnImpl.assembleDependOn(plugin.project, dependTask)
 	}
 	
 	/**
@@ -148,6 +154,6 @@ class GradleFilesExtension {
 	 * @param dependTask
 	 */
 	void allPublishingDependOn(final Object... dependTask) {
-		DependsOnImpl.allPublishingDependOn(dependTask)
+		DependsOnImpl.allPublishingDependOn(plugin.project, dependTask)
 	}
 }

@@ -21,9 +21,7 @@ class SignJarExtensionImpl {
 		Constants.KEYSTORE_KEY_PASSWORD
 	]
 	
-	static def signJar(String taskName) {
-		final def (Project project) = GradleFilesUtil.getProjectProperties()
-		
+	static def signJar(final Project project, String taskName) {
 		final boolean canSign = project.properties.keySet().containsAll(requiredProperties)
 		
 		if(!canSign) {
@@ -68,11 +66,11 @@ class SignJarExtensionImpl {
 		return signJarTaskName
 	}
 	
-	static def signDefaultForgeJar() {
-		signJar("reobfJar")
+	static def signDefaultForgeJar(final Project project) {
+		signJar(project, "reobfJar")
 	}
 	
-	static def signDefaultFabricJar() {
-		signJar("remapJar")
+	static def signDefaultFabricJar(final Project project) {
+		signJar(project, "remapJar")
 	}
 }
