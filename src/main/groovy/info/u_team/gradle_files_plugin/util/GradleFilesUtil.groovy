@@ -3,8 +3,6 @@ package info.u_team.gradle_files_plugin.util
 import org.gradle.api.Project
 
 import groovy.transform.CompileStatic
-import groovy.transform.Memoized
-import info.u_team.gradle_files_plugin.GradleFilesPlugin
 
 @CompileStatic
 class GradleFilesUtil {

@@ -4,7 +4,6 @@ import org.gradle.api.Project
 import org.gradle.jvm.tasks.Jar
 
 import groovy.transform.CompileStatic
-import groovyjarjarantlr4.v4.codegen.model.chunk.ThisRulePropertyRef_start
 import info.u_team.gradle_files_plugin.extension.ArchiveBaseNameExtensionImpl
 import info.u_team.gradle_files_plugin.extension.ChangelogUrlImpl
 import info.u_team.gradle_files_plugin.extension.CreateReobfJarExtensionImpl

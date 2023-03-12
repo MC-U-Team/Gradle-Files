@@ -1,11 +1,10 @@
 package info.u_team.gradle_files_plugin.extension
 
-import org.apache.commons.lang3.StringUtils
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFile
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.jvm.tasks.Jar
-
+import codechicken.repack.org.apache.commons.lang3.StringUtils
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.util.DependencyUtil
 import net.minecraftforge.gradle.common.tasks.SignJar

@@ -3,7 +3,6 @@ package info.u_team.gradle_files_plugin.tool
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
 import info.u_team.gradle_files_plugin.extension.VersionExtensionImpl
-import info.u_team.gradle_files_plugin.task.UpdateGitBuildNumberTask
 import info.u_team.gradle_files_plugin.util.GitUtil
 
 class FetchGitBuildNumber {
