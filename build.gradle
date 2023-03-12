@@ -8,7 +8,7 @@ plugins {
 
 group = "info.u-team.gradle_files"
 archivesBaseName = "gradle_files"
-version = "1.2.2"
+version = "2.0.0"
 description = "Gradle plugin for special gradle files used for mods by u-team"
 
 java {
@@ -100,12 +100,15 @@ task runPluginTest(type: JavaExec) {
 
 publishing {
 	repositories {
+		/*maven {
+		 url "https://repo.u-team.info"
+		 credentials {
+		 username = "maven"
+		 password = getValue("maven.password")
+		 }
+		 }*/
 		maven {
-			url "https://repo.u-team.info"
-			credentials {
-				username = "maven"
-				password = getValue("maven.password")
-			}
+			url layout.buildDirectory.dir("mavenRepo")
 		}
 	}
 	publications {
