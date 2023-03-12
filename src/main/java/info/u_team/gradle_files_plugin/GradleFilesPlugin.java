@@ -21,8 +21,6 @@ import info.u_team.gradle_files_plugin.util.GradleFilesUtil;
 
 public class GradleFilesPlugin implements Plugin<Project> {
 	
-	private static GradleFilesPlugin INSTANCE;
-	
 	private final JvmPluginServices jvmPluginServices;
 	private Project project;
 	private Logger logger;
@@ -31,7 +29,6 @@ public class GradleFilesPlugin implements Plugin<Project> {
 	@Inject
 	public GradleFilesPlugin(JvmPluginServices jvmPluginServices) {
 		this.jvmPluginServices = jvmPluginServices;
-		INSTANCE = this;
 	}
 	
 	@Override
@@ -41,7 +38,7 @@ public class GradleFilesPlugin implements Plugin<Project> {
 		this.extension = project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class, this);
 		
 		logger.lifecycle("--------------------------------------------------------------------------------------------------");
-		logger.lifecycle("isRootProject:" + GradleFilesUtil.isRootProject());
+		logger.lifecycle("isRootProject:" + GradleFilesUtil.isRootProject(project));
 		logger.lifecycle("--------------------------------------------------------------------------------------------------");
 		
 		new GradleException("ERROR!!");
@@ -59,10 +56,6 @@ public class GradleFilesPlugin implements Plugin<Project> {
 			RemovedMappedDependenciesTool.remove(this);
 		});
 		
-	}
-	
-	public static GradleFilesPlugin getInstance() {
-		return INSTANCE;
 	}
 	
 	public JvmPluginServices getJvmPluginServices() {

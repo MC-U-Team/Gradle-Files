@@ -7,8 +7,8 @@ import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 class LoadConfigTool {
 	
 	static void load(final GradleFilesPlugin plugin) {
-		plugin.logger.lifecycle(GradleFilesUtil.getRootProject().toString())
-		if(!GradleFilesUtil.isRootProject()) {
+		plugin.logger.lifecycle(GradleFilesUtil.getRootProject(plugin.project).toString())
+		if(!GradleFilesUtil.isRootProject(plugin.project)) {
 			return
 		}
 		
