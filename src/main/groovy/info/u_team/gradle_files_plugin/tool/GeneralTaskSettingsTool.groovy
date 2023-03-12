@@ -1,11 +1,11 @@
 package info.u_team.gradle_files_plugin.tool
 
+import org.apache.commons.lang3.StringUtils
 import org.gradle.api.GradleException
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.javadoc.Javadoc
 
-import codechicken.repack.org.apache.commons.lang3.StringUtils
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
 import info.u_team.gradle_files_plugin.util.DependencyUtil
