@@ -1,0 +1,135 @@
+buildscript {
+	repositories {
+		maven {
+			url = "https://maven.fabricmc.net"
+		}
+		maven {
+			url = "https://maven.minecraftforge.net"
+		}
+		maven {
+			url = "https://repo.u-team.info"
+		}
+		maven {
+			url = "file:///${projectDir}/../../../build/mavenRepo"
+		}
+		mavenCentral()
+	}
+	dependencies {
+		classpath group: "fabric-loom", name: "fabric-loom.gradle.plugin", version: "1.1.+", changing: true
+		classpath group: "info.u-team.gradle_files", name: "gradle_files", version: "2.+", changing: true
+		classpath group: "info.u-team.curse_gradle_uploader", name: "curse_gradle_uploader", version: "1.5.0"
+	}
+}
+
+apply plugin: "fabric-loom"
+apply plugin: "info.u_team.gradle_files"
+apply plugin: "info.u_team.curse_gradle_uploader"
+apply plugin: "maven-publish"
+
+group = "info.u-team"
+archivesBaseName = gradlefiles.archivesBaseName()
+version = gradlefiles.version()
+
+gradlefiles {
+	vendor "Team UTeam"
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+	withSourcesJar()
+	withJavadocJar()
+}
+
+tasks.withType(Jar) { task ->
+	gradlefiles.defaultJar(task)
+}
+
+gradlefiles.signDefaultFabricJar()
+gradlefiles.signJar("remapSourcesJar")
+
+repositories {
+	maven {
+		url = "https://maven.parchmentmc.org"
+	}
+}
+
+dependencies {
+	minecraft gradlefiles.fabricMinecraftDependency()
+	mappings loom.layered() {
+		officialMojangMappings()
+		parchment(config.fabric.mapping_layer)
+	}
+	
+	modImplementation gradlefiles.fabricLoaderDependency()
+	modImplementation gradlefiles.fabricApiDependency()
+}
+
+curseforge {
+	apiKey = defaultPropertyValue("curseforge.token")
+	options {
+		debug = true
+	}
+	project {
+		id = "70690"
+		changelog = "Changelog"
+		releaseType = "beta"
+		
+		addGameVersion "Forge"
+		addGameVersion "1.18.2"
+		addGameVersion "Java 17"
+		
+		mainArtifact(tasks.getByName("jar")) {
+			displayName = "Main Artifact"
+			changelogType = "text"
+			changelog = gradlefiles.changelogUrl()
+		}
+		
+		addArtifact(tasks.getByName("sourcesJar")) {
+			displayName = "Second Artifact"
+		}
+	}
+}
+
+publishing {
+	repositories {
+		maven {
+			url layout.buildDirectory.dir("mavenRepo")
+		}
+	}
+	publications {
+		mavenJava(MavenPublication) {
+			artifactId archivesBaseName
+			
+			from components.java
+			
+			pom {
+				name = project.archivesBaseName
+				description = "${config.github.name}"
+				url = "https://github.com/MC-U-Team/${config.github.name}"
+				scm {
+					url = "https://github.com/MC-U-Team/${config.github.name}"
+					connection = "scm:git:git://github.com/MC-U-Team/${config.github.name}.git"
+					developerConnection = "scm:git:git@github.com:MC-U-Team/${config.github.name}.git"
+				}
+				issueManagement {
+					system = "github"
+					url = "https://github.com/MC-U-Team/${config.github.name}/issues"
+				}
+				licenses {
+					license {
+						name = "Apache License 2.0"
+						url = "https://github.com/MC-U-Team/${config.github.name}/blob/${config.github.branch}/LICENSE"
+						distribution = "repo"
+					}
+				}
+				developers {
+					developer {
+						name = "HyCraftHD"
+					}
+				}
+			}
+		}
+	}
+}
