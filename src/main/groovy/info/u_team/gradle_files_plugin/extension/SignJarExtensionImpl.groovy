@@ -8,7 +8,6 @@ import org.gradle.jvm.tasks.Jar
 
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.util.DependencyUtil
-import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 import net.minecraftforge.gradle.common.tasks.SignJar
 import net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace
 

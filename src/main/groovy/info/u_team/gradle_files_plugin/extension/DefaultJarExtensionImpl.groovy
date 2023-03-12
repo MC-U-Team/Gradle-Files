@@ -3,6 +3,7 @@ package info.u_team.gradle_files_plugin.extension
 import org.gradle.api.Project
 import org.gradle.jvm.tasks.Jar
 
+import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.GradleFilesExtension
 
 class DefaultJarExtensionImpl {
