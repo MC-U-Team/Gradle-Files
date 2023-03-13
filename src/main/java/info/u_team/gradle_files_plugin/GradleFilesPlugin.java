@@ -31,7 +31,9 @@ public class GradleFilesPlugin implements Plugin<Project> {
 		logger.lifecycle("--------------------------------------------------------------------------------------------------");
 		logger.lifecycle("isRootProject:" + GradleFilesUtil.isRootProject(project));
 		logger.lifecycle("--------------------------------------------------------------------------------------------------");
-		
+		logger.lifecycle(project.getExtensions().getExtraProperties().get("mainProject").toString());
+		logger.lifecycle(project.getExtensions().getExtraProperties().get("loaderProjects").toString());
+		logger.lifecycle("Main Project: " + GradleFilesUtil.isMainProject(project));
 		new GradleException("ERROR!!");
 		
 		SetupPluginEnvironmentTool.setup(this);

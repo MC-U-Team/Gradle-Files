@@ -2,6 +2,12 @@ rootProject.name = "Gradle-Files-Plugin-Test"
 
 include("forge", "fabric")
 
-gradle.rootProject {
-	extensions.extraProperties.loaderProjects = ["forge", "fabric"]
+gradle.allprojects {
+	def properties = extensions.extraProperties
+	
+	properties.mainProject = gradle.rootProject.getPath()
+	properties.loaderProjects = [
+		project(":forge").getPath(),
+		project(":fabric").getPath()
+	]
 }
