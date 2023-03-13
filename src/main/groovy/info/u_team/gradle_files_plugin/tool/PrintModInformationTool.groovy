@@ -1,10 +1,15 @@
 package info.u_team.gradle_files_plugin.tool
 
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
+import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 
 class PrintModInformationTool {
 	
 	static void print(final GradleFilesPlugin plugin) {
+		if(!GradleFilesUtil.isRootProject(plugin.project)) {
+			return
+		}
+		
 		final def logger = plugin.logger
 		final def config = plugin.project.extensions.extraProperties.config
 		

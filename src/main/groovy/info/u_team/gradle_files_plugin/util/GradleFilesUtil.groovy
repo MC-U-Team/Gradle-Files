@@ -3,6 +3,7 @@ package info.u_team.gradle_files_plugin.util
 import org.gradle.api.Project
 
 import groovy.transform.CompileStatic
+import groovy.transform.Memoized
 
 @CompileStatic
 class GradleFilesUtil {
@@ -11,11 +12,12 @@ class GradleFilesUtil {
 		return project.extensions.extraProperties.get("config")
 	}
 	
-	// TODO move
+	@Memoized
 	static boolean isRootProject(final Project project) {
-		return project.rootProject.is(project)
+		return project.is(getRootProject(project))
 	}
 	
+	@Memoized
 	static Project getRootProject(final Project project) {
 		def rootProject = project.rootProject
 		while(!rootProject.is(rootProject.rootProject)) {

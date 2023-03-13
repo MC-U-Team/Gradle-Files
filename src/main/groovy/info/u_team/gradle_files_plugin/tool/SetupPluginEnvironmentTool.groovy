@@ -10,23 +10,25 @@ import info.u_team.gradle_files_plugin.GradleFilesPlugin
 class SetupPluginEnvironmentTool {
 	
 	static void setup(final GradleFilesPlugin plugin) {
+		final def project = plugin.project
+		
 		// Add uteam maven repository
-		plugin.project.repositories.maven { maven ->
+		project.repositories.maven { maven ->
 			maven.name = Constants.U_TEAM_MAVEN_NAME
 			maven.url = Constants.U_TEAM_MAVEN_URL
 		}
 		
 		// Apply java gradle plugin
-		plugin.project.pluginManager.apply(JavaPlugin)
+		project.pluginManager.apply(JavaPlugin)
 		
 		// Apply eclipse gradle plugin
-		plugin.project.pluginManager.apply(EclipsePlugin)
+		project.pluginManager.apply(EclipsePlugin)
 		
 		// Apply intellij gradle plugin
-		plugin.project.pluginManager.apply(IdeaPlugin)
+		project.pluginManager.apply(IdeaPlugin)
 		
 		// Add value methods
-		final def extraProperties = plugin.project.extensions.extraProperties
+		final def extraProperties = project.extensions.extraProperties
 		
 		extraProperties.defaultPropertyValue = { name ->
 			final def property = extraProperties.propertyValue(name)
@@ -34,7 +36,7 @@ class SetupPluginEnvironmentTool {
 		}
 		extraProperties.propertyValue = { name ->
 			final def env = System.getenv(name)
-			return env != null ? env : plugin.project.findProperty(name)
+			return env != null ? env : project.findProperty(name)
 		}
 	}
 }
