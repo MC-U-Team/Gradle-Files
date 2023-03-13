@@ -1,6 +1,5 @@
 package info.u_team.gradle_files_plugin;
 
-import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
@@ -29,12 +28,10 @@ public class GradleFilesPlugin implements Plugin<Project> {
 		this.extension = project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class, this);
 		
 		logger.lifecycle("--------------------------------------------------------------------------------------------------");
-		logger.lifecycle("isRootProject:" + GradleFilesUtil.isRootProject(project));
-		logger.lifecycle("--------------------------------------------------------------------------------------------------");
-		logger.lifecycle(project.getExtensions().getExtraProperties().get("mainProject").toString());
+		logger.lifecycle(project.getExtensions().getExtraProperties().get("multiLoaderMainProject").toString());
 		logger.lifecycle(project.getExtensions().getExtraProperties().get("loaderProjects").toString());
 		logger.lifecycle("Main Project: " + GradleFilesUtil.isMainProject(project));
-		new GradleException("ERROR!!");
+		logger.lifecycle("--------------------------------------------------------------------------------------------------");
 		
 		SetupPluginEnvironmentTool.setup(this);
 		PrintJVMInformationTool.print(this);

@@ -15,6 +15,8 @@ public class Constants {
 	public static final String KEYSTORE_KEY_PASSWORD = KEYSTORE + ".password_key";
 	public static final String KEYSTORE_FINGERPRINT = KEYSTORE + ".fingerprint";
 	
+	public static final String MULTILOADER_MAIN_PROJECT_SETTING = "multiLoaderMainProject";
+	
 	public static final String BUILD_PROPERTY = "createBuild";
 	public static final String HEADLESS_BUILD_PROPERTY = "headlessBuild";
 	public static final String GIT_REPOSITORY_NAME = "patchVersion/gitRepository";
