@@ -13,7 +13,6 @@ import info.u_team.gradle_files_plugin.tool.RegisterReleaseTasks;
 import info.u_team.gradle_files_plugin.tool.RemovedMappedDependenciesTool;
 import info.u_team.gradle_files_plugin.tool.RenameRunConfigurationTool;
 import info.u_team.gradle_files_plugin.tool.SetupPluginEnvironmentTool;
-import info.u_team.gradle_files_plugin.util.GradleFilesUtil;
 
 public class GradleFilesPlugin implements Plugin<Project> {
 	
@@ -26,12 +25,6 @@ public class GradleFilesPlugin implements Plugin<Project> {
 		this.project = project;
 		this.logger = project.getLogger();
 		this.extension = project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class, this);
-		
-		logger.lifecycle("--------------------------------------------------------------------------------------------------");
-		logger.lifecycle(project.getExtensions().getExtraProperties().get("multiLoaderMainProject").toString());
-		logger.lifecycle(project.getExtensions().getExtraProperties().get("loaderProjects").toString());
-		logger.lifecycle("Main Project: " + GradleFilesUtil.isMainProject(project));
-		logger.lifecycle("--------------------------------------------------------------------------------------------------");
 		
 		SetupPluginEnvironmentTool.setup(this);
 		PrintJVMInformationTool.print(this);

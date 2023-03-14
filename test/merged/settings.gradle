@@ -3,11 +3,5 @@ rootProject.name = "Gradle-Files-Plugin-Test"
 include("forge", "fabric")
 
 gradle.allprojects {
-	def properties = extensions.extraProperties
-	
-	properties.multiLoaderMainProject = gradle.rootProject.getPath()
-	properties.loaderProjects = [
-		project(":forge").getPath(),
-		project(":fabric").getPath()
-	]
+	extensions.extraProperties.multiLoaderMainProject = gradle.rootProject.path
 }
