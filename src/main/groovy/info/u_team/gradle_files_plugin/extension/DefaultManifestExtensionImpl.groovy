@@ -20,7 +20,7 @@ class DefaultManifestExtensionImpl {
 					"Specification-Vendor": extension.vendor,
 					"Specification-Version": config.mod.version,
 					
-					"Implementation-Title": "${config.mod.name} (${StringUtils.capitalize(extension.loaderSuffix)})",
+					"Implementation-Title": extension.displayName(),
 					"Implementation-Version": project.version,
 					"Implementation-Vendor": extension.vendor,
 					"Implementation-Timestamp": timestamp,
