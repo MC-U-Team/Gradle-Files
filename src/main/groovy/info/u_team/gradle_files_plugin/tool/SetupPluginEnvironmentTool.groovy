@@ -1,5 +1,6 @@
 package info.u_team.gradle_files_plugin.tool
 
+import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.plugins.ide.eclipse.EclipsePlugin
 import org.gradle.plugins.ide.idea.IdeaPlugin
@@ -19,11 +20,14 @@ class SetupPluginEnvironmentTool {
 			maven.url = Constants.U_TEAM_MAVEN_URL
 		}
 		
-		// Apply java gradle plugin
-		project.pluginManager.apply(JavaPlugin)
+		// Apply base gradle plugin
+		project.pluginManager.apply(BasePlugin)
 		
 		// Apply eclipse and idea plugin only for subprojects or non multi loader projects
 		if(!GradleFilesUtil.isMultiLoaderProject(project) || !GradleFilesUtil.isMainProject(project)) {
+			// Apply java gradle plugin
+			project.pluginManager.apply(JavaPlugin)
+			
 			// Apply eclipse gradle plugin
 			project.pluginManager.apply(EclipsePlugin)
 			
