@@ -32,10 +32,6 @@ group = rootProject.group
 archivesBaseName = rootProject.archivesBaseName + "-forge"
 version = rootProject.version
 
-gradlefiles {
-	vendor "Team UTeam"
-}
-
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)

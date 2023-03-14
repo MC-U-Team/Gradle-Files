@@ -37,6 +37,15 @@ class GradleFilesExtension {
 	boolean stripMappedDependencies = true
 	
 	/**
+	 * Apply values from the extension to this extension
+	 * @param extension Extension
+	 */
+	void apply(GradleFilesExtension extension) {
+		this.vendor = extension.vendor
+		this.stripMappedDependencies = stripMappedDependencies
+	}
+	
+	/**
 	 * Returns a manifest default file
 	 * @return Manifest
 	 */
