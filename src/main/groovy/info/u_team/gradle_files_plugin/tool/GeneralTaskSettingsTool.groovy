@@ -9,6 +9,7 @@ import org.gradle.api.tasks.javadoc.Javadoc
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
 import info.u_team.gradle_files_plugin.util.DependencyUtil
+import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 
 class GeneralTaskSettingsTool {
 	
@@ -33,15 +34,16 @@ class GeneralTaskSettingsTool {
 		}
 		
 		// Check when artifact is published if build property is set
-		project.gradle.taskGraph.whenReady { graph ->
-			final def hasPublish = graph.hasTask(":publish")
-			final def hasCurseForge = graph.allTasks.any { task ->
-				task.name.startsWith("curseforge")
-			}
-			
-			if(hasPublish || hasCurseForge) {
-				if(!project.hasProperty(Constants.BUILD_PROPERTY)) {
-					throw new GradleException("Publishing artifacts is only allowed when property ${Constants.BUILD_PROPERTY} is supplied")
+		if(GradleFilesUtil.isMainProject(project)) {
+			project.gradle.taskGraph.whenReady { graph ->
+				final def hasPublishTask = graph.allTasks.any { task ->
+					task.name.startsWith("curseforge") || task.name.startsWith("publish")
+				}
+				
+				if(hasPublishTask) {
+					if(!project.hasProperty(Constants.BUILD_PROPERTY)) {
+						throw new GradleException("Publishing artifacts is only allowed when property ${Constants.BUILD_PROPERTY} is supplied.")
+					}
 				}
 			}
 		}
