@@ -4,6 +4,7 @@ import org.gradle.api.tasks.TaskAction
 
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.util.GitUtil
+import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 
 class CreateGitTagTask extends ReleaseTask {
 	
@@ -13,7 +14,7 @@ class CreateGitTagTask extends ReleaseTask {
 	
 	@TaskAction
 	void create() {
-		final def config = project.extensions.extraProperties.config
+		final def config = GradleFilesUtil.getProjectConfig(project)
 		final def tagName = "${config.minecraft.version}-${project.version}"
 		
 		GitUtil.executeGitCommandException(project, project.rootDir, "tag", tagName)

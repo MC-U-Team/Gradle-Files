@@ -7,6 +7,7 @@ import org.gradle.api.tasks.TaskAction
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.util.DependencyUtil
 import info.u_team.gradle_files_plugin.util.GitUtil
+import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 
 class CheckGitTask extends DefaultTask {
 	
@@ -20,7 +21,7 @@ class CheckGitTask extends DefaultTask {
 	
 	@TaskAction
 	void create() {
-		final def config = project.extensions.extraProperties.config
+		final def config = GradleFilesUtil.getProjectConfig(project)
 		
 		// Get main branch and check if branch match expected one
 		final def expectedBranch = config.github.branch
