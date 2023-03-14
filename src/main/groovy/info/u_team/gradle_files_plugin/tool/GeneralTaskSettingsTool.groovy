@@ -37,7 +37,7 @@ class GeneralTaskSettingsTool {
 		if(GradleFilesUtil.isMainProject(project)) {
 			project.gradle.taskGraph.whenReady { graph ->
 				final def hasPublishTask = graph.allTasks.any { task ->
-					task.name.startsWith("curseforge") || task.name.startsWith("publish")
+					task.name.startsWith(Constants.PUBLISH_EXTERNAL_TASK) || task.name.startsWith(Constants.CURSEFORGE_EXTERNAL_TASK)
 				}
 				
 				if(hasPublishTask) {

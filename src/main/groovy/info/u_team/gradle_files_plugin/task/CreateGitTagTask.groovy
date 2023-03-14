@@ -1,15 +1,18 @@
 package info.u_team.gradle_files_plugin.task
 
+import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.util.GitUtil
 import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 
-class CreateGitTagTask extends ReleaseTask {
+class CreateGitTagTask extends DefaultTask {
 	
 	CreateGitTagTask() {
-		dependsOn(Constants.CHECK_GIT_TASK)
+		onlyIf {
+			project.hasProperty(Constants.BUILD_PROPERTY)
+		}
 	}
 	
 	@TaskAction

@@ -27,4 +27,8 @@ public class Constants {
 	public static final String CHECK_GIT_TASK = "checkGit";
 	public static final String CREATE_GIT_TAG_TASK = "createGitTag";
 	public static final String RELEASE_MOD_TASK = "releaseMod";
+	
+	public static final String CURSEFORGE_EXTERNAL_TASK = "curseforge";
+	public static final String PUBLISH_EXTERNAL_TASK = "publish";
+	
 }

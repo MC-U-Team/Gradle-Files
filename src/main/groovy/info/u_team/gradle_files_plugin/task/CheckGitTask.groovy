@@ -15,8 +15,6 @@ class CheckGitTask extends DefaultTask {
 		onlyIf {
 			project.hasProperty(Constants.BUILD_PROPERTY)
 		}
-		DependencyUtil.allPublishingDependOn(project, this)
-		DependencyUtil.allUploadDependOn(project, this)
 	}
 	
 	@TaskAction
