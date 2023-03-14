@@ -35,25 +35,25 @@ class RegisterReleaseTasks {
 		
 		// Register updateBuildNumber task
 		tasks.register(Constants.UPDATE_BUILD_NUMBER_TASK, UpdateGitBuildNumberTask).configure { task ->
-			task.mustRunAfter(Constants.PUBLISH_EXTERNAL_TASK)
-			task.mustRunAfter(Constants.CURSEFORGE_EXTERNAL_TASK)
+			task.mustRunAfter(tasks.named(Constants.PUBLISH_EXTERNAL_TASK))
+			task.mustRunAfter(tasks.named(Constants.CURSEFORGE_EXTERNAL_TASK))
 		}
 		
 		// Register createGitTag task
 		tasks.register(Constants.CREATE_GIT_TAG_TASK, CreateGitTagTask).configure { task ->
-			task.mustRunAfter(Constants.PUBLISH_EXTERNAL_TASK)
-			task.mustRunAfter(Constants.CURSEFORGE_EXTERNAL_TASK)
-			task.dependsOn(Constants.CHECK_GIT_TASK)
+			task.mustRunAfter(tasks.named(Constants.PUBLISH_EXTERNAL_TASK))
+			task.mustRunAfter(tasks.named(Constants.CURSEFORGE_EXTERNAL_TASK))
+			task.dependsOn(tasks.named(Constants.CHECK_GIT_TASK))
 		}
 		
 		// Register releaseMod task
 		tasks.register(Constants.RELEASE_MOD_TASK, ReleaseModTask).configure { task ->
 			task.group = "release"
 			
-			task.dependsOn(Constants.PUBLISH_EXTERNAL_TASK)
-			task.dependsOn(Constants.CURSEFORGE_EXTERNAL_TASK)
-			task.dependsOn(Constants.CREATE_GIT_TAG_TASK)
-			task.dependsOn(Constants.UPDATE_BUILD_NUMBER_TASK)
+			task.dependsOn(tasks.named(Constants.PUBLISH_EXTERNAL_TASK))
+			task.dependsOn(tasks.named(Constants.CURSEFORGE_EXTERNAL_TASK))
+			task.dependsOn(tasks.named(Constants.CREATE_GIT_TAG_TASK))
+			task.dependsOn(tasks.named(Constants.UPDATE_BUILD_NUMBER_TASK))
 		}
 	}
 	
@@ -69,15 +69,15 @@ class RegisterReleaseTasks {
 		
 		// Register createGitTag task
 		tasks.register(Constants.CREATE_GIT_TAG_TASK, CreateGitTagTask).configure { task ->
-			task.dependsOn(Constants.CHECK_GIT_TASK)
+			task.dependsOn(tasks.named(Constants.CHECK_GIT_TASK))
 		}
 		
 		// Register releaseMod task
 		tasks.register(Constants.RELEASE_MOD_TASK, ReleaseModTask).configure { task ->
 			task.group = "release"
 			
-			task.dependsOn(Constants.CREATE_GIT_TAG_TASK)
-			task.dependsOn(Constants.UPDATE_BUILD_NUMBER_TASK)
+			task.dependsOn(tasks.named(Constants.CREATE_GIT_TAG_TASK))
+			task.dependsOn(tasks.named(Constants.UPDATE_BUILD_NUMBER_TASK))
 		}
 	}
 	
