@@ -28,9 +28,11 @@ apply plugin: "info.u_team.gradle_files"
 apply plugin: "info.u_team.curse_gradle_uploader"
 apply plugin: "maven-publish"
 
+gradlefiles.loaderSuffix = "fabric"
+
 group = rootProject.group
-archivesBaseName = rootProject.archivesBaseName + "-forge"
-version = rootProject.version
+archivesBaseName = gradlefiles.archivesBaseName()
+version = gradlefiles.version()
 
 java {
 	toolchain {

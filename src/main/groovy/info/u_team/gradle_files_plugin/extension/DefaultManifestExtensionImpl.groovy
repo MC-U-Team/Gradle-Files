@@ -1,5 +1,6 @@
 package info.u_team.gradle_files_plugin.extension
 
+import org.apache.commons.lang3.StringUtils
 import org.gradle.api.Project
 
 import info.u_team.gradle_files_plugin.Constants
@@ -19,7 +20,7 @@ class DefaultManifestExtensionImpl {
 					"Specification-Vendor": extension.vendor,
 					"Specification-Version": config.mod.version,
 					
-					"Implementation-Title": config.mod.name,
+					"Implementation-Title": "${config.mod.name} (${StringUtils.capitalize(extension.loaderSuffix)})",
 					"Implementation-Version": project.version,
 					"Implementation-Vendor": extension.vendor,
 					"Implementation-Timestamp": timestamp,

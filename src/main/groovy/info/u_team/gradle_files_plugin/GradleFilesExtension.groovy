@@ -37,12 +37,18 @@ class GradleFilesExtension {
 	boolean stripMappedDependencies = true
 	
 	/**
+	 * Mod loader suffix
+	 */
+	String loaderSuffix = ""
+	
+	/**
 	 * Apply values from the extension to this extension
 	 * @param extension Extension
 	 */
 	void apply(GradleFilesExtension extension) {
 		this.vendor = extension.vendor
-		this.stripMappedDependencies = stripMappedDependencies
+		this.stripMappedDependencies = extension.stripMappedDependencies
+		this.loaderSuffix = extension.loaderSuffix
 	}
 	
 	/**
@@ -134,7 +140,7 @@ class GradleFilesExtension {
 	 * @return Archive base name
 	 */
 	def archivesBaseName() {
-		ArchiveBaseNameExtensionImpl.archivesBaseName(project)
+		ArchiveBaseNameExtensionImpl.archivesBaseName(project, this)
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 rootProject.name = "Gradle-Files-Plugin-Test"
 
+//include("common", "forge", "fabric")
 include("forge", "fabric")
 
 gradle.allprojects {

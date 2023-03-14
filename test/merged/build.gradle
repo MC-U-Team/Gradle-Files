@@ -25,5 +25,3 @@ version = gradlefiles.version()
 gradlefiles {
 	vendor "Team UTeam"
 }
-
-println defaultPropertyValue("rofl")
