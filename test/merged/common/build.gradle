@@ -10,8 +10,17 @@ buildscript {
 	}
 }
 
+apply plugin: "java"
 apply plugin: "org.spongepowered.gradle.vanilla"
 
 minecraft {
 	version(rootProject.config.minecraft.version)
+	accessWideners(project(":fabric").file("src/main/resources/test.accesswidener"))
+}
+
+sourceSets {
+	common {
+		java
+		resources
+	}
 }

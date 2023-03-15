@@ -45,6 +45,8 @@ java {
 minecraft {
 	mappings channel: config.forge.mapping_channel, version: config.forge.mapping
 	
+	accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
+	
 	runs {
 		client {
 			workingDirectory file("run/client")
@@ -82,6 +84,17 @@ minecraft {
 	}
 }
 
+sourceSets {
+	main {
+		java {
+			srcDirs += project(":common").file("src/common/java")
+		}
+		resources {
+			srcDirs += project(":common").file("src/common/resources")
+		}
+	}
+}
+
 tasks.create("testJar", Jar) { task ->
 	archiveClassifier = "test"
 	
@@ -102,7 +115,7 @@ dependencies {
 	minecraft gradlefiles.forgeDependency()
 	
 	implementation group: "net.harawata", name: "appdirs", version: "1.0.0"
-	implementation fg.deobf(group: "info.u-team", name: "u_team_core-1.18.1", version: "4.0.0.201-SNAPSHOT")
+	//implementation fg.deobf(group: "info.u-team", name: "u_team_core-1.18.1", version: "4.0.0.201-SNAPSHOT")
 }
 
 curseforge {

@@ -40,6 +40,25 @@ java {
 	withJavadocJar()
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/test.accesswidener")
+	
+	runConfigs.configureEach {
+		ideConfigGenerated = true
+	}
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs += project(":common").file("src/common/java")
+		}
+		resources {
+			srcDirs += project(":common").file("src/common/resources")
+		}
+	}
+}
+
 tasks.withType(Jar) { task ->
 	gradlefiles.defaultJar(task)
 }

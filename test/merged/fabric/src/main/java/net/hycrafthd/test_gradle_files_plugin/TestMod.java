@@ -12,6 +12,8 @@ public class TestMod implements ModInitializer {
 		
 		final net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
 		minecraft.getWindow().getGuiScaledHeight();
+		
+		TestCommonFile.test();
 	}
 	
 }
