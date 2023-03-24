@@ -1,16 +1,16 @@
 package info.u_team.gradle_files_plugin.task
 
+import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 import info.u_team.gradle_files_plugin.Constants
 
-class ReleaseModTask extends ReleaseTask {
+class ReleaseModTask extends DefaultTask {
 	
 	ReleaseModTask() {
-		dependsOn("publish")
-		dependsOn("curseforge")
-		dependsOn(Constants.CREATE_GIT_TAG_TASK)
-		dependsOn(Constants.UPDATE_BUILD_NUMBER_TASK)
+		onlyIf {
+			project.hasProperty(Constants.BUILD_PROPERTY)
+		}
 	}
 	
 	@TaskAction

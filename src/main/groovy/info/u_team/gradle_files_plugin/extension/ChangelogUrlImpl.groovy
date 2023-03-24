@@ -6,8 +6,8 @@ import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 
 class ChangelogUrlImpl {
 	
-	static def changelogUrl() {
-		final def (Project project, config) = GradleFilesUtil.getProjectProperties()
+	static def changelogUrl(final Project project) {
+		final def config = GradleFilesUtil.getProjectConfig(project)
 		
 		// TODO change hardcoded path to extension in gradlefiles?
 		final def url = "https://github.com/MC-U-Team/${config.github.name}/blob/${config.github.branch}/CHANGELOG.md"

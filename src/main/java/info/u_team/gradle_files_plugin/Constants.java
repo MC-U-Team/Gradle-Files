@@ -15,6 +15,8 @@ public class Constants {
 	public static final String KEYSTORE_KEY_PASSWORD = KEYSTORE + ".password_key";
 	public static final String KEYSTORE_FINGERPRINT = KEYSTORE + ".fingerprint";
 	
+	public static final String MULTILOADER_MAIN_PROJECT_SETTING = "multiLoaderMainProject";
+	
 	public static final String BUILD_PROPERTY = "createBuild";
 	public static final String HEADLESS_BUILD_PROPERTY = "headlessBuild";
 	public static final String GIT_REPOSITORY_NAME = "patchVersion/gitRepository";
@@ -25,4 +27,8 @@ public class Constants {
 	public static final String CHECK_GIT_TASK = "checkGit";
 	public static final String CREATE_GIT_TAG_TASK = "createGitTag";
 	public static final String RELEASE_MOD_TASK = "releaseMod";
+	
+	public static final String CURSEFORGE_EXTERNAL_TASK = "curseforge";
+	public static final String PUBLISH_EXTERNAL_TASK = "publish";
+	
 }

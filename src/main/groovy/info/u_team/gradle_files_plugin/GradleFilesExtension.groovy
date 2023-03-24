@@ -1,5 +1,6 @@
 package info.u_team.gradle_files_plugin
 
+import org.gradle.api.Project
 import org.gradle.jvm.tasks.Jar
 
 import groovy.transform.CompileStatic
@@ -9,6 +10,7 @@ import info.u_team.gradle_files_plugin.extension.CreateReobfJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DefaultJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DefaultManifestExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DependsOnImpl
+import info.u_team.gradle_files_plugin.extension.DisplayNameExtensionImpl
 import info.u_team.gradle_files_plugin.extension.FabricDependenciesExtensionImpl
 import info.u_team.gradle_files_plugin.extension.ForgeDependencyExtensionImpl
 import info.u_team.gradle_files_plugin.extension.SignJarExtensionImpl
@@ -16,6 +18,14 @@ import info.u_team.gradle_files_plugin.extension.VersionExtensionImpl
 
 @CompileStatic
 class GradleFilesExtension {
+	
+	private final GradleFilesPlugin plugin
+	private final Project project
+	
+	GradleFilesExtension(GradleFilesPlugin plugin) {
+		this.plugin = plugin
+		this.project = plugin.project
+	}
 	
 	/**
 	 * Should be set to configure the vendor of the build
@@ -28,11 +38,26 @@ class GradleFilesExtension {
 	boolean stripMappedDependencies = true
 	
 	/**
+	 * Mod loader suffix
+	 */
+	String loaderSuffix = ""
+	
+	/**
+	 * Apply values from the extension to this extension
+	 * @param extension Extension
+	 */
+	void apply(GradleFilesExtension extension) {
+		this.vendor = extension.vendor
+		this.stripMappedDependencies = extension.stripMappedDependencies
+		this.loaderSuffix = extension.loaderSuffix
+	}
+	
+	/**
 	 * Returns a manifest default file
 	 * @return Manifest
 	 */
 	def defaultManifest() {
-		DefaultManifestExtensionImpl.defaultManifest()
+		DefaultManifestExtensionImpl.defaultManifest(project, this)
 	}
 	
 	/**
@@ -42,7 +67,7 @@ class GradleFilesExtension {
 	 * @param task Jar task
 	 */
 	void defaultJar(Jar task) {
-		DefaultJarExtensionImpl.defaultJar(task)
+		DefaultJarExtensionImpl.defaultJar(project, this, task)
 	}
 	
 	/**
@@ -51,7 +76,7 @@ class GradleFilesExtension {
 	 * @return The sign task name
 	 */
 	def signJar(String taskName) {
-		SignJarExtensionImpl.signJar(taskName)
+		SignJarExtensionImpl.signJar(project, taskName)
 	}
 	
 	/**
@@ -59,7 +84,7 @@ class GradleFilesExtension {
 	 * @return The sign task name
 	 */
 	def signDefaultForgeJar() {
-		SignJarExtensionImpl.signDefaultForgeJar()
+		SignJarExtensionImpl.signDefaultForgeJar(project)
 	}
 	
 	/**
@@ -67,7 +92,7 @@ class GradleFilesExtension {
 	 * @return The sign task name
 	 */
 	def signDefaultFabricJar() {
-		SignJarExtensionImpl.signDefaultFabricJar()
+		SignJarExtensionImpl.signDefaultFabricJar(project)
 	}
 	
 	/**
@@ -75,7 +100,7 @@ class GradleFilesExtension {
 	 * @return Forge dependency
 	 */
 	def forgeDependency() {
-		ForgeDependencyExtensionImpl.forgeDependency()
+		ForgeDependencyExtensionImpl.forgeDependency(project)
 	}
 	
 	/**
@@ -83,7 +108,7 @@ class GradleFilesExtension {
 	 * @return Fabric minecraft dependency
 	 */
 	def fabricMinecraftDependency() {
-		FabricDependenciesExtensionImpl.fabricMinecraftDependency()
+		FabricDependenciesExtensionImpl.fabricMinecraftDependency(project)
 	}
 	
 	/**
@@ -91,7 +116,7 @@ class GradleFilesExtension {
 	 * @return Fabric loader dependency
 	 */
 	def fabricLoaderDependency() {
-		FabricDependenciesExtensionImpl.fabricLoaderDependency()
+		FabricDependenciesExtensionImpl.fabricLoaderDependency(project)
 	}
 	
 	/**
@@ -99,7 +124,7 @@ class GradleFilesExtension {
 	 * @return Fabric api dependency
 	 */
 	def fabricApiDependency() {
-		FabricDependenciesExtensionImpl.fabricApiDependency()
+		FabricDependenciesExtensionImpl.fabricApiDependency(project)
 	}
 	
 	/**
@@ -107,8 +132,8 @@ class GradleFilesExtension {
 	 * @param task Jar task
 	 * @return Reobf task
 	 */
-	def createReobfJar(Jar task) {
-		CreateReobfJarExtensionImpl.createReobfJar(task)
+	def createReobfJar(final Jar task) {
+		CreateReobfJarExtensionImpl.createReobfJar(project, task)
 	}
 	
 	/**
@@ -116,7 +141,7 @@ class GradleFilesExtension {
 	 * @return Archive base name
 	 */
 	def archivesBaseName() {
-		ArchiveBaseNameExtensionImpl.archivesBaseName()
+		ArchiveBaseNameExtensionImpl.archivesBaseName(project, this)
 	}
 	
 	/**
@@ -124,7 +149,15 @@ class GradleFilesExtension {
 	 * @return Version
 	 */
 	def version() {
-		VersionExtensionImpl.version()
+		VersionExtensionImpl.version(project)
+	}
+	
+	/**
+	 * Return the display version
+	 * @return Display name
+	 */
+	def displayName() {
+		DisplayNameExtensionImpl.displayName(project, this)
 	}
 	
 	/**
@@ -132,7 +165,7 @@ class GradleFilesExtension {
 	 * @return Changelog url
 	 */
 	def changelogUrl() {
-		ChangelogUrlImpl.changelogUrl()
+		ChangelogUrlImpl.changelogUrl(project)
 	}
 	
 	/**
@@ -140,7 +173,7 @@ class GradleFilesExtension {
 	 * @param dependTask Tasks
 	 */
 	void assembleDependOn(final Object... dependTask) {
-		DependsOnImpl.assembleDependOn(dependTask)
+		DependsOnImpl.assembleDependOn(project, dependTask)
 	}
 	
 	/**
@@ -148,6 +181,6 @@ class GradleFilesExtension {
 	 * @param dependTask
 	 */
 	void allPublishingDependOn(final Object... dependTask) {
-		DependsOnImpl.allPublishingDependOn(dependTask)
+		DependsOnImpl.allPublishingDependOn(project, dependTask)
 	}
 }

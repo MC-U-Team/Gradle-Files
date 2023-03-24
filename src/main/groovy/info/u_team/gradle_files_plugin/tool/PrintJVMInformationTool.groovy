@@ -1,10 +1,19 @@
 package info.u_team.gradle_files_plugin.tool
 
+import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
+import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 
 class PrintJVMInformationTool {
 	
+	@CompileStatic
 	static void print(final GradleFilesPlugin plugin) {
+		if(GradleFilesUtil.isMainProject(plugin.project)) {
+			handleMainProject(plugin)
+		}
+	}
+	
+	private static void handleMainProject(final GradleFilesPlugin plugin) {
 		final def logger = plugin.logger
 		
 		final def javaVersion = System.properties."java.version"

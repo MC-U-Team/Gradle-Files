@@ -1,16 +1,16 @@
 package info.u_team.gradle_files_plugin.extension
 
+import org.apache.commons.lang3.StringUtils
 import org.gradle.api.Project
-import org.gradle.api.plugins.JavaPluginExtension
-import org.gradle.api.tasks.compile.JavaCompile
 
 import info.u_team.gradle_files_plugin.Constants
+import info.u_team.gradle_files_plugin.GradleFilesExtension
 import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 
 class DefaultManifestExtensionImpl {
 	
-	static def defaultManifest() {
-		final def (Project project, config, extension) = GradleFilesUtil.getProjectProperties()
+	static def defaultManifest(final Project project, final GradleFilesExtension extension) {
+		final def config = GradleFilesUtil.getProjectConfig(project)
 		
 		final def timestamp = new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
 		
@@ -20,7 +20,7 @@ class DefaultManifestExtensionImpl {
 					"Specification-Vendor": extension.vendor,
 					"Specification-Version": config.mod.version,
 					
-					"Implementation-Title": config.mod.name,
+					"Implementation-Title": extension.displayName(),
 					"Implementation-Version": project.version,
 					"Implementation-Vendor": extension.vendor,
 					"Implementation-Timestamp": timestamp,

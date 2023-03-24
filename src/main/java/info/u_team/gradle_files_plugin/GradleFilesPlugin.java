@@ -1,11 +1,8 @@
 package info.u_team.gradle_files_plugin;
 
-import javax.inject.Inject;
-
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
-import org.gradle.api.plugins.jvm.internal.JvmPluginServices;
 
 import info.u_team.gradle_files_plugin.tool.FetchGitBuildNumber;
 import info.u_team.gradle_files_plugin.tool.GeneralTaskSettingsTool;
@@ -19,24 +16,15 @@ import info.u_team.gradle_files_plugin.tool.SetupPluginEnvironmentTool;
 
 public class GradleFilesPlugin implements Plugin<Project> {
 	
-	private static GradleFilesPlugin INSTANCE;
-	
-	private final JvmPluginServices jvmPluginServices;
 	private Project project;
 	private Logger logger;
 	private GradleFilesExtension extension;
-	
-	@Inject
-	public GradleFilesPlugin(JvmPluginServices jvmPluginServices) {
-		this.jvmPluginServices = jvmPluginServices;
-		INSTANCE = this;
-	}
 	
 	@Override
 	public void apply(Project project) {
 		this.project = project;
 		this.logger = project.getLogger();
-		this.extension = project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class);
+		this.extension = project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class, this);
 		
 		SetupPluginEnvironmentTool.setup(this);
 		PrintJVMInformationTool.print(this);
@@ -51,14 +39,6 @@ public class GradleFilesPlugin implements Plugin<Project> {
 			RemovedMappedDependenciesTool.remove(this);
 		});
 		
-	}
-	
-	public static GradleFilesPlugin getInstance() {
-		return INSTANCE;
-	}
-	
-	public JvmPluginServices getJvmPluginServices() {
-		return jvmPluginServices;
 	}
 	
 	public Project getProject() {

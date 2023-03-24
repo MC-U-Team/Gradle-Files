@@ -1,6 +1,5 @@
 package info.u_team.gradle_files_plugin.util
 
-import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.publish.plugins.PublishingPlugin
 import org.gradle.language.base.plugins.LifecycleBasePlugin

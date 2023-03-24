@@ -1,16 +1,24 @@
 package info.u_team.gradle_files_plugin.tool
 
+import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
 import info.u_team.gradle_files_plugin.extension.VersionExtensionImpl
-import info.u_team.gradle_files_plugin.task.UpdateGitBuildNumberTask
 import info.u_team.gradle_files_plugin.util.GitUtil
+import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 
 class FetchGitBuildNumber {
 	
+	@CompileStatic
 	static void fetch(final GradleFilesPlugin plugin) {
+		if(GradleFilesUtil.isMainProject(plugin.project)) {
+			handleMainProject(plugin)
+		}
+	}
+	
+	private static void handleMainProject(final GradleFilesPlugin plugin) {
 		final def project = plugin.project
-		final def config = project.extensions.extraProperties.config
+		final def config = GradleFilesUtil.getProjectConfig(project)
 		
 		def buildNumber = "DEV"
 		
@@ -74,6 +82,6 @@ class FetchGitBuildNumber {
 		
 		config.mod.buildnumber = buildNumber
 		
-		project.logger.quiet("Buildversion is {}", VersionExtensionImpl.version())
+		project.logger.quiet("Buildversion is {}", VersionExtensionImpl.version(project))
 	}
 }

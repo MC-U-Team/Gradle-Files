@@ -6,8 +6,8 @@ import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 
 class VersionExtensionImpl {
 	
-	static def version() {
-		final def (Project project, config) = GradleFilesUtil.getProjectProperties()
+	static def version(final Project project) {
+		final def config = GradleFilesUtil.getProjectConfig(project)
 		
 		final def appendix
 		if(Boolean.valueOf(config.mod.snapshot)) {

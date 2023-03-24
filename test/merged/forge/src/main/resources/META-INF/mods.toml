@@ -1,0 +1,20 @@
+modLoader="javafml"
+loaderVersion="[44,)"
+issueTrackerURL="https://github.com/MC-U-Team/Gradle-Files"
+license="ARR"
+
+[[mods]]
+	modId="test_mod"
+	version="${file.jarVersion}"
+	displayName="Gradle Test Files"
+	displayURL="https://u-team.info/mods"
+	credits="Team"
+	authors="HyCraftHD"
+	description="Description"
+		
+	[[dependencies.uteamcore]]
+	    modId="minecraft"
+	    mandatory=true
+	    versionRange="[1.19.3]"
+	    ordering="NONE"
+	    side="BOTH"
