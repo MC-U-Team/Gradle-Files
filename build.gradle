@@ -100,15 +100,12 @@ task runPluginTest(type: JavaExec) {
 
 publishing {
 	repositories {
-		/*maven {
-		 url "https://repo.u-team.info"
-		 credentials {
-		 username = "maven"
-		 password = getValue("maven.password")
-		 }
-		 }*/
 		maven {
-			url layout.buildDirectory.dir("mavenRepo")
+			url "https://repo.u-team.info"
+			credentials {
+				username = "maven"
+				password = getValue("maven.password")
+			}
 		}
 	}
 	publications {
