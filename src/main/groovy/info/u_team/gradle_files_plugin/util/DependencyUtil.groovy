@@ -1,6 +1,8 @@
 package info.u_team.gradle_files_plugin.util
 
+import org.gradle.api.Action
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.publish.plugins.PublishingPlugin
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
@@ -23,6 +25,13 @@ class DependencyUtil {
 			task.group == "upload"
 		}.each { task ->
 			task.dependsOn(dependTask)
+		}
+	}
+	
+	static def findTaskByName(final Project project, final String name, final Action<Task> action) {
+		final def task = project.tasks.findByName(name)
+		if(task) {
+			action.execute(task)
 		}
 	}
 }

@@ -35,14 +35,14 @@ class RegisterReleaseTasks {
 		
 		// Register updateBuildNumber task
 		tasks.register(Constants.UPDATE_BUILD_NUMBER_TASK, UpdateGitBuildNumberTask).configure { task ->
-			task.mustRunAfter(tasks.named(Constants.PUBLISH_EXTERNAL_TASK))
-			task.mustRunAfter(tasks.named(Constants.CURSEFORGE_EXTERNAL_TASK))
+			DependencyUtil.findTaskByName(project, Constants.PUBLISH_EXTERNAL_TASK, task.&mustRunAfter)
+			DependencyUtil.findTaskByName(project, Constants.CURSEFORGE_EXTERNAL_TASK, task.&mustRunAfter)
 		}
 		
 		// Register createGitTag task
 		tasks.register(Constants.CREATE_GIT_TAG_TASK, CreateGitTagTask).configure { task ->
-			task.mustRunAfter(tasks.named(Constants.PUBLISH_EXTERNAL_TASK))
-			task.mustRunAfter(tasks.named(Constants.CURSEFORGE_EXTERNAL_TASK))
+			DependencyUtil.findTaskByName(project, Constants.PUBLISH_EXTERNAL_TASK, task.&mustRunAfter)
+			DependencyUtil.findTaskByName(project, Constants.CURSEFORGE_EXTERNAL_TASK, task.&mustRunAfter)
 			task.dependsOn(tasks.named(Constants.CHECK_GIT_TASK))
 		}
 		
@@ -50,8 +50,8 @@ class RegisterReleaseTasks {
 		tasks.register(Constants.RELEASE_MOD_TASK, ReleaseModTask).configure { task ->
 			task.group = "release"
 			
-			task.dependsOn(tasks.named(Constants.PUBLISH_EXTERNAL_TASK))
-			task.dependsOn(tasks.named(Constants.CURSEFORGE_EXTERNAL_TASK))
+			DependencyUtil.findTaskByName(project, Constants.PUBLISH_EXTERNAL_TASK, task.&dependsOn)
+			DependencyUtil.findTaskByName(project, Constants.CURSEFORGE_EXTERNAL_TASK, task.&dependsOn)
 			task.dependsOn(tasks.named(Constants.CREATE_GIT_TAG_TASK))
 			task.dependsOn(tasks.named(Constants.UPDATE_BUILD_NUMBER_TASK))
 		}
@@ -83,7 +83,6 @@ class RegisterReleaseTasks {
 	
 	private static void handleMultiLoaderLoaderProject(final GradleFilesPlugin plugin) {
 		final def project = plugin.project
-		final def tasks = project.tasks
 		
 		final def mainProject = GradleFilesUtil.getMainProject(plugin.project)
 		final def mainTasks = mainProject.tasks
@@ -96,20 +95,20 @@ class RegisterReleaseTasks {
 		
 		// Register dependencies for updateBuildNumber in main project
 		mainTasks.named(Constants.UPDATE_BUILD_NUMBER_TASK).configure { task ->
-			task.mustRunAfter(tasks.named(Constants.PUBLISH_EXTERNAL_TASK))
-			task.mustRunAfter(tasks.named(Constants.CURSEFORGE_EXTERNAL_TASK))
+			DependencyUtil.findTaskByName(project, Constants.PUBLISH_EXTERNAL_TASK, task.&mustRunAfter)
+			DependencyUtil.findTaskByName(project, Constants.CURSEFORGE_EXTERNAL_TASK, task.&mustRunAfter)
 		}
 		
 		// Register dependencies for createGitTag in main project
 		mainTasks.named(Constants.CREATE_GIT_TAG_TASK).configure { task ->
-			task.mustRunAfter(tasks.named(Constants.PUBLISH_EXTERNAL_TASK))
-			task.mustRunAfter(tasks.named(Constants.CURSEFORGE_EXTERNAL_TASK))
+			DependencyUtil.findTaskByName(project, Constants.PUBLISH_EXTERNAL_TASK, task.&mustRunAfter)
+			DependencyUtil.findTaskByName(project, Constants.CURSEFORGE_EXTERNAL_TASK, task.&mustRunAfter)
 		}
 		
 		// Register dependencies for releaseMod in main project
 		mainTasks.named(Constants.RELEASE_MOD_TASK).configure { task ->
-			task.dependsOn(tasks.named(Constants.PUBLISH_EXTERNAL_TASK))
-			task.dependsOn(tasks.named(Constants.CURSEFORGE_EXTERNAL_TASK))
+			DependencyUtil.findTaskByName(project, Constants.PUBLISH_EXTERNAL_TASK, task.&dependsOn)
+			DependencyUtil.findTaskByName(project, Constants.CURSEFORGE_EXTERNAL_TASK, task.&dependsOn)
 		}
 	}
 }
