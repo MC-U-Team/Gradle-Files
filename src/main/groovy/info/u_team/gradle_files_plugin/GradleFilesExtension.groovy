@@ -177,10 +177,18 @@ class GradleFilesExtension {
 	}
 	
 	/**
-	 * Mark the tasks as a dependency for all publishing task
+	 * Mark the tasks as a dependency for all publishing tasks
 	 * @param dependTask
 	 */
 	void allPublishingDependOn(final Object... dependTask) {
 		DependsOnImpl.allPublishingDependOn(project, dependTask)
+	}
+	
+	/**
+	 * Mark the tasks as a dependency for all upload tasks
+	 * @param dependTask
+	 */
+	void allUploadDependOn(final Object... dependTask) {
+		DependsOnImpl.allUploadDependOn(project, dependTask)
 	}
 }

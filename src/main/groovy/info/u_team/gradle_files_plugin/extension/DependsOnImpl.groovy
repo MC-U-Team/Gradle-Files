@@ -15,4 +15,8 @@ class DependsOnImpl {
 	static def allPublishingDependOn(final Project project, final Object... dependTask) {
 		DependencyUtil.allPublishingDependOn(project, dependTask)
 	}
+	
+	static def allUploadDependOn(final Project project, final Object... dependTask) {
+		DependencyUtil.allUploadDependOn(project, dependTask)
+	}
 }
