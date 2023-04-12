@@ -7,6 +7,8 @@ import org.gradle.api.publish.maven.internal.publication.MavenPublicationInterna
 import org.gradle.api.publish.maven.tasks.GenerateMavenPom
 import org.gradle.api.publish.tasks.GenerateModuleMetadata
 
+import com.google.common.base.Predicates
+
 import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
 import info.u_team.gradle_files_plugin.util.DependencyFilteredMavenPomInternal
@@ -15,11 +17,11 @@ import info.u_team.gradle_files_plugin.util.DependencyFilteredMavenPublicationIn
 @CompileStatic
 class RemovedMappedDependenciesTool {
 	
-	private static Predicate<Dependency> filterPublishingDependencies = {false}
+	private static Predicate<Dependency> filterPublishingDependencies = Predicates.alwaysFalse();
 	
 	static void remove(final GradleFilesPlugin plugin) {
 		if(plugin.extension.stripMappedDependencies) {
-			filterPublishingDependency { dependency ->
+			filterPublishingDependency { Dependency dependency ->
 				dependency.version.contains("_mapped_")
 			}
 		}
@@ -46,7 +48,7 @@ class RemovedMappedDependenciesTool {
 		}
 	}
 	
-	static void filterPublishingDependency(Predicate<Dependency> predicate) {
+	static void filterPublishingDependency(@DelegatesTo(Predicate.class) Closure predicate) {
 		filterPublishingDependencies = filterPublishingDependencies.or(predicate)
 	}
 	
@@ -57,12 +59,12 @@ class RemovedMappedDependenciesTool {
 	
 	static class Dependency {
 		String group
-		String artifact
+		String name
 		String version
 		
-		Dependency(String group, String artifact, String version) {
+		Dependency(String group, String name, String version) {
 			this.group = group;
-			this.artifact = artifact;
+			this.name = name;
 			this.version = version;
 		}
 	}

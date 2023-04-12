@@ -107,6 +107,10 @@ dependencies {
 	implementation fg.deobf(group: "info.u-team", name: "u_team_core-1.18.1", version: "4.0.0.201-SNAPSHOT")
 }
 
+gradlefiles.removePublishingDependency { dependency ->
+	"appdirs".equals(dependency.name)
+}
+
 curseforge {
 	apiKey = defaultPropertyValue("curseforge.token")
 	options {

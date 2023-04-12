@@ -62,7 +62,7 @@ class GradleFilesExtension {
 	 * Return true to remove the dependency, else false
 	 * @param predicate Filter
 	 */
-	void removePublishingDependency(Predicate<Dependency> predicate) {
+	void removePublishingDependency(final @DelegatesTo(Predicate.class) Closure predicate) {
 		FilterPublishingDependency.removePublishingDependency(predicate)
 	}
 	

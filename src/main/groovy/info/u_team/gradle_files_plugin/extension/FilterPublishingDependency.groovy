@@ -9,7 +9,7 @@ import info.u_team.gradle_files_plugin.tool.RemovedMappedDependenciesTool.Depend
 @CompileStatic
 class FilterPublishingDependency {
 	
-	static void removePublishingDependency(Predicate<Dependency> predicate) {
+	static void removePublishingDependency(@DelegatesTo(Predicate.class) Closure predicate) {
 		RemovedMappedDependenciesTool.filterPublishingDependency(predicate)
 	}
 }
