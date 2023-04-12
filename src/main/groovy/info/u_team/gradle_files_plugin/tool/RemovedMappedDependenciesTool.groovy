@@ -9,7 +9,6 @@ import org.gradle.api.publish.tasks.GenerateModuleMetadata
 
 import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.GradleFilesPlugin
-import info.u_team.gradle_files_plugin.tool.RemovedMappedDependenciesTool.Dependency
 import info.u_team.gradle_files_plugin.util.DependencyFilteredMavenPomInternal
 import info.u_team.gradle_files_plugin.util.DependencyFilteredMavenPublicationInternal
 
