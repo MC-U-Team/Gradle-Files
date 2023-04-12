@@ -1,5 +1,7 @@
 package info.u_team.gradle_files_plugin
 
+import java.util.function.Predicate
+
 import org.gradle.api.Project
 import org.gradle.jvm.tasks.Jar
 
@@ -12,10 +14,12 @@ import info.u_team.gradle_files_plugin.extension.DefaultManifestExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DependsOnImpl
 import info.u_team.gradle_files_plugin.extension.DisplayNameExtensionImpl
 import info.u_team.gradle_files_plugin.extension.FabricDependenciesExtensionImpl
+import info.u_team.gradle_files_plugin.extension.FilterPublishingDependency
 import info.u_team.gradle_files_plugin.extension.ForgeDependencyExtensionImpl
 import info.u_team.gradle_files_plugin.extension.OrderCurseforgeTasksImpl
 import info.u_team.gradle_files_plugin.extension.SignJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.VersionExtensionImpl
+import info.u_team.gradle_files_plugin.tool.RemovedMappedDependenciesTool.Dependency
 
 @CompileStatic
 class GradleFilesExtension {
@@ -51,6 +55,15 @@ class GradleFilesExtension {
 		this.vendor = extension.vendor
 		this.stripMappedDependencies = extension.stripMappedDependencies
 		this.loaderSuffix = extension.loaderSuffix
+	}
+	
+	/**
+	 * Add a filter for dependencies that should not be published in pom and gradle metadata.
+	 * Return true to remove the dependency, else false
+	 * @param predicate Filter
+	 */
+	void removePublishingDependency(Predicate<Dependency> predicate) {
+		FilterPublishingDependency.removePublishingDependency(predicate)
 	}
 	
 	/**

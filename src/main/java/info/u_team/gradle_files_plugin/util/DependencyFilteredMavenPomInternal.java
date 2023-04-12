@@ -29,6 +29,8 @@ import org.gradle.api.publish.maven.internal.publication.MavenPomDistributionMan
 import org.gradle.api.publish.maven.internal.publication.MavenPomInternal;
 import org.gradle.api.publish.maven.internal.publisher.MavenProjectIdentity;
 
+import info.u_team.gradle_files_plugin.tool.RemovedMappedDependenciesTool;
+
 public class DependencyFilteredMavenPomInternal implements MavenPomInternal {
 	
 	private final MavenPomInternal pom;
@@ -39,7 +41,10 @@ public class DependencyFilteredMavenPomInternal implements MavenPomInternal {
 	
 	@SuppressWarnings("unchecked")
 	private <E extends Set<? extends MavenDependency>, V> E filterDependencies(E set) {
-		return (E) set.stream().filter(dependency -> !dependency.getVersion().contains("_mapped_")).collect(Collectors.toCollection(LinkedHashSet::new));
+		return (E) set.stream().filter(dependency -> {
+			final RemovedMappedDependenciesTool.Dependency convertedDependency = new RemovedMappedDependenciesTool.Dependency(dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersion());
+			return RemovedMappedDependenciesTool.getFilterPublishingDependencies().negate().test(convertedDependency);
+		}).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	@Override

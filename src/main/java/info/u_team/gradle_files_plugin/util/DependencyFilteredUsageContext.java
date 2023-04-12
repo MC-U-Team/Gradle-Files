@@ -12,6 +12,8 @@ import org.gradle.api.attributes.Usage;
 import org.gradle.api.capabilities.Capability;
 import org.gradle.api.internal.component.UsageContext;
 
+import info.u_team.gradle_files_plugin.tool.RemovedMappedDependenciesTool;
+
 public class DependencyFilteredUsageContext implements UsageContext {
 	
 	private final UsageContext context;
@@ -48,7 +50,8 @@ public class DependencyFilteredUsageContext implements UsageContext {
 		if (dependencies instanceof DomainObjectSet) {
 			final DomainObjectSet<? extends ModuleDependency> domainDependencies = (DomainObjectSet<? extends ModuleDependency>) dependencies;
 			return domainDependencies.matching(dependency -> {
-				return !dependency.getVersion().contains("_mapped_");
+				final RemovedMappedDependenciesTool.Dependency convertedDependency = new RemovedMappedDependenciesTool.Dependency(dependency.getGroup(), dependency.getName(), dependency.getVersion());
+				return RemovedMappedDependenciesTool.getFilterPublishingDependencies().negate().test(convertedDependency);
 			});
 		}
 		return dependencies;
