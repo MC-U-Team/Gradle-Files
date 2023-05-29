@@ -74,7 +74,7 @@ repositories {
 dependencies {
 	implementation group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true
 	implementation group: "org.apache.commons", name: "commons-lang3", version: "3.12.0"
-	implementation group: "com.google.guava", name: "guava", version: "31.1-jre"
+	implementation group: "com.google.guava", name: "guava", version: "32.0.0-jre"
 }
 
 jar.manifest.mainAttributes([
