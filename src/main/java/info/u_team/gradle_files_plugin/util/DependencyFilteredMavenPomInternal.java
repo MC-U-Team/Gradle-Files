@@ -73,8 +73,13 @@ public class DependencyFilteredMavenPomInternal implements MavenPomInternal {
 	}
 	
 	@Override
-	public Set<MavenDependencyInternal> getOptionalDependencies() {
-		return filterDependencies(pom.getOptionalDependencies());
+	public Set<MavenDependencyInternal> getOptionalApiDependencies() {
+		return filterDependencies(pom.getOptionalApiDependencies());
+	}
+	
+	@Override
+	public Set<MavenDependencyInternal> getOptionalRuntimeDependencies() {
+		return filterDependencies(pom.getOptionalRuntimeDependencies());
 	}
 	
 	@Override

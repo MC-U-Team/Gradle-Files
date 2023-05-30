@@ -158,8 +158,13 @@ public class DependencyFilteredMavenPublicationInternal implements MavenPublicat
 	}
 	
 	@Override
-	public Set<MavenDependencyInternal> getOptionalDependencies() {
-		return publication.getOptionalDependencies();
+	public Set<MavenDependencyInternal> getOptionalApiDependencies() {
+		return publication.getOptionalApiDependencies();
+	}
+	
+	@Override
+	public Set<MavenDependencyInternal> getOptionalRuntimeDependencies() {
+		return publication.getOptionalRuntimeDependencies();
 	}
 	
 	@Override
