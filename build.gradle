@@ -42,6 +42,10 @@ gradlePlugin {
 	}
 }
 
+tasks.named("wrapper") {
+	distributionType = Wrapper.DistributionType.ALL
+}
+
 // Fix no sources for gradle api (https://stackoverflow.com/questions/22694199/gradle-api-sources-and-doc-when-writing-gradle-plugins)
 plugins.withType(EclipsePlugin) {
 	plugins.withType(JavaBasePlugin) {
