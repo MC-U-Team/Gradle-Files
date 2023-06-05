@@ -27,7 +27,7 @@ class SignJarExtensionImpl {
 			project.logger.warn("Signing of jars was requested, but required properties are missing")
 		}
 		
-		final def signJarTaskName = "sign" + StringUtils.capitalize(taskName)
+		final def signJarTask = project.tasks.register("sign" + StringUtils.capitalize(taskName), SignJar)
 		
 		project.afterEvaluate {
 			final tasks = project.tasks
@@ -43,7 +43,7 @@ class SignJarExtensionImpl {
 				throw new IllegalArgumentException("Task for signing must be a jar or remap / reobf task")
 			}
 			
-			final def signJarTask = project.tasks.register(signJarTaskName, SignJar) { task ->
+			signJarTask.configure { task ->
 				task.description = "Sign the jar ${jarTask.name}"
 				task.group = BasePlugin.BUILD_GROUP
 				task.keyStore = project.findProperty(Constants.KEYSTORE)
@@ -57,12 +57,12 @@ class SignJarExtensionImpl {
 				task.dependsOn(jarTask)
 				task.mustRunAfter(jarTask)
 			}
-			
-			DependencyUtil.assembleDependOn(project, signJarTask)
-			DependencyUtil.allPublishingDependOn(project, signJarTask)
 		}
 		
-		return signJarTaskName
+		DependencyUtil.assembleDependOn(project, signJarTask)
+		DependencyUtil.allPublishingDependOn(project, signJarTask)
+		
+		return signJarTask
 	}
 	
 	static def signDefaultForgeJar(final Project project) {

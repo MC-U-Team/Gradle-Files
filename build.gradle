@@ -91,16 +91,6 @@ jar.manifest.mainAttributes([
 	it.options.fork = true
 }
 
-task runPluginTest(type: JavaExec) {
-	def run = file("${rootDir}/test")
-	
-	workingDir  run
-	main "info.u_team.gradle_files_plugin.test.GradleFilesPluginTest"
-	systemProperties = [
-		"gradle.project_dir": "\"${run}\""
-	]
-}
-
 publishing {
 	repositories {
 		maven {
