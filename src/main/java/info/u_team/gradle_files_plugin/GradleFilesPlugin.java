@@ -1,0 +1,17 @@
+package info.u_team.gradle_files_plugin;
+
+import org.gradle.api.Plugin;
+import org.gradle.api.Project;
+
+import info.u_team.gradle_files_plugin.tool.SetupPluginEnvironmentTool;
+
+public class GradleFilesPlugin implements Plugin<Project> {
+
+	@Override
+	public void apply(Project project) {
+		project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class, project);
+
+		SetupPluginEnvironmentTool.setup(project);
+	}
+
+}
