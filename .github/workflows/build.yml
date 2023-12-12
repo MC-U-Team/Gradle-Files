@@ -5,15 +5,13 @@ jobs:
   build:
     strategy:
       matrix:
-        java: [8]
+        java: [8, 17]
         os: [ubuntu-latest]
     name: Build - Java ${{ matrix.java }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: checkout repository
         uses: actions/checkout@v3
-        with:
-          submodules: true
       - name: validate gradle wrapper
         uses: gradle/wrapper-validation-action@v1
       - name: setup jdk ${{ matrix.java }}

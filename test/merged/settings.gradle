@@ -1,7 +1,0 @@
-rootProject.name = "Gradle-Files-Plugin-Test"
-
-include("common", "forge", "fabric")
-
-gradle.allprojects {
-	extensions.extraProperties.multiLoaderMainProject = gradle.rootProject.path
-}
