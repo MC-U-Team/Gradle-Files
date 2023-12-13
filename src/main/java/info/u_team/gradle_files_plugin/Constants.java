@@ -18,4 +18,10 @@ public class Constants {
 	public static final String PATCH_FILE = "patch";
 	public static final String COMMIT_FORCE_MESSAGE = "Commit forced, because of new build";
 	public static final String UPDATE_BUILD_NUMBER_TASK = "updateBuildNumber";
+
+	public static final String KEYSTORE = "keystore";
+	public static final String KEYSTORE_ALIAS = KEYSTORE + ".alias";
+	public static final String KEYSTORE_PASSWORD = KEYSTORE + ".password";
+	public static final String KEYSTORE_KEY_PASSWORD = KEYSTORE + ".password_key";
+	public static final String KEYSTORE_FINGERPRINT = KEYSTORE + ".fingerprint";
 }

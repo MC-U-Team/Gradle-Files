@@ -89,6 +89,6 @@ class FetchGitBuildNumber {
 	@CompileDynamic
 	private static void setBuildNumber(final Project project, final String buildNumber) {
 		final def config = GradleFilesUtil.getProjectConfig(project)
-		config."mod"."buildnumber" = buildNumber
+		config.mod.buildnumber = buildNumber
 	}
 }

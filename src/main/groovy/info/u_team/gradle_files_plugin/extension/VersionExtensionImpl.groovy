@@ -11,12 +11,12 @@ class VersionExtensionImpl {
 		final def config = GradleFilesUtil.getProjectConfig(project)
 
 		final def appendix
-		if(Boolean.valueOf(config."mod"."snapshot")) {
+		if(Boolean.valueOf(config.mod.snapshot)) {
 			appendix = "-SNAPSHOT"
 		} else {
 			appendix = ""
 		}
 
-		return "${config."mod"."version"}.${config."mod"."buildnumber"}${appendix}"
+		return "${config.mod.version}.${config.mod.buildnumber}${appendix}"
 	}
 }
