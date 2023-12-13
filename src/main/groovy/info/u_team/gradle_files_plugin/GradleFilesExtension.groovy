@@ -15,6 +15,7 @@ import info.u_team.gradle_files_plugin.extension.DisplayNameExtensionImpl
 import info.u_team.gradle_files_plugin.extension.FabricDependenciesExtensionImpl
 import info.u_team.gradle_files_plugin.extension.ForgeDependencyExtensionImpl
 import info.u_team.gradle_files_plugin.extension.NeoForgeDependencyExtensionImpl
+import info.u_team.gradle_files_plugin.extension.OrderCurseforgeTasksImpl
 import info.u_team.gradle_files_plugin.extension.VersionExtensionImpl
 
 @CompileStatic
@@ -172,5 +173,24 @@ abstract class GradleFilesExtension {
 	 */
 	void allBuildingDependOn(final Object... dependTask) {
 		DependsOnImpl.allBuildingDependOn(project, dependTask)
+	}
+
+	/**
+	 * Mark all curseforge tasks in the last project to run after the first project
+	 * @param runLastProject Project
+	 * @param runFirstProject Project
+	 */
+	void orderCurseforgeTasks(final Project runLastProject, final Project runFirstProject) {
+		OrderCurseforgeTasksImpl.orderCurseforgeTasks(project, runLastProject, runFirstProject)
+	}
+
+	/**
+	 * Mark all tasks that start with the name in the last project to run after the first project
+	 * @param runLastProject Project
+	 * @param runFirstProject Project
+	 * @param taskStartName Tasks start name
+	 */
+	void orderTasks(final Project runLastProject, final Project runFirstProject, String taskStartName) {
+		OrderCurseforgeTasksImpl.orderTasks(project, runLastProject, runFirstProject, taskStartName)
 	}
 }
