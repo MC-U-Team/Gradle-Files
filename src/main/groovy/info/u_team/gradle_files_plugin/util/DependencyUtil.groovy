@@ -6,29 +6,40 @@ import org.gradle.api.Task
 import org.gradle.api.publish.plugins.PublishingPlugin
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class DependencyUtil {
-	
-	static def assembleDependOn(final Project project, final Object... dependTask) {
-		project.tasks.findByName(LifecycleBasePlugin.ASSEMBLE_TASK_NAME).dependsOn(dependTask)
+
+	static void assembleDependOn(final Project project, final Object... dependTask) {
+		project.tasks.named(LifecycleBasePlugin.ASSEMBLE_TASK_NAME) { task ->
+			task.dependsOn(dependTask)
+		}
 	}
-	
-	static def allPublishingDependOn(final Project project, final Object... dependTask) {
-		project.tasks.matching { task ->
+
+	static void allPublishingDependOn(final Project project, final Object... dependTask) {
+		project.tasks.matching { Task task ->
 			task.group == PublishingPlugin.PUBLISH_TASK_GROUP // Stupid check for publishing, but found no other way
-		}.each { task ->
+		}.configureEach { task ->
 			task.dependsOn(dependTask)
 		}
 	}
-	
-	static def allUploadDependOn(final Project project, final Object... dependTask) {
-		project.tasks.matching { task ->
+
+	static void allUploadDependOn(final Project project, final Object... dependTask) {
+		project.tasks.matching { Task task ->
 			task.group == "upload"
-		}.each { task ->
+		}.configureEach { task ->
 			task.dependsOn(dependTask)
 		}
 	}
-	
-	static def findTaskByName(final Project project, final String name, final Action<Task> action) {
+
+	static void allBuildingDependOn(final Project project, final Object... dependTask) {
+		assembleDependOn(project, dependTask)
+		allPublishingDependOn(project, dependTask)
+		allUploadDependOn(project, dependTask)
+	}
+
+	static void findTaskByName(final Project project, final String name, final Action<Task> action) {
 		final def task = project.tasks.findByName(name)
 		if(task) {
 			action.execute(task)

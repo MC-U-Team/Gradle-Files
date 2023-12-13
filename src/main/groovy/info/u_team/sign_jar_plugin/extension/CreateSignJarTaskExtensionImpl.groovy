@@ -45,9 +45,7 @@ class CreateSignJarTaskExtensionImpl {
 			}
 		}
 
-		DependencyUtil.assembleDependOn(project, signJarTask)
-		DependencyUtil.allPublishingDependOn(project, signJarTask)
-		DependencyUtil.allUploadDependOn(project, signJarTask)
+		DependencyUtil.allBuildingDependOn(project, signJarTask)
 
 		return signJarTask
 	}
