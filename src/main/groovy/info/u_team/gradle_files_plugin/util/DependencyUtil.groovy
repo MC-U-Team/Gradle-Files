@@ -11,6 +11,9 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class DependencyUtil {
 
+	static final String PUBLISH_TASK_GROUP = PublishingPlugin.PUBLISH_TASK_GROUP
+	static final String UPLOAD_TASK_GROUP = "upload"
+
 	static void assembleDependOn(final Project project, final Object... dependTask) {
 		project.tasks.named(LifecycleBasePlugin.ASSEMBLE_TASK_NAME) { task ->
 			task.dependsOn(dependTask)
@@ -19,7 +22,7 @@ class DependencyUtil {
 
 	static void allPublishingDependOn(final Project project, final Object... dependTask) {
 		project.tasks.matching { Task task ->
-			task.group == PublishingPlugin.PUBLISH_TASK_GROUP // Stupid check for publishing, but found no other way
+			task.group == PUBLISH_TASK_GROUP
 		}.configureEach { task ->
 			task.dependsOn(dependTask)
 		}
@@ -27,7 +30,7 @@ class DependencyUtil {
 
 	static void allUploadDependOn(final Project project, final Object... dependTask) {
 		project.tasks.matching { Task task ->
-			task.group == "upload"
+			task.group == UPLOAD_TASK_GROUP
 		}.configureEach { task ->
 			task.dependsOn(dependTask)
 		}
