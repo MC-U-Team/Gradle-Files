@@ -7,6 +7,7 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.tasks.Jar
 
 import groovy.transform.CompileStatic
+import info.u_team.gradle_files_plugin.util.DependencyUtil
 import info.u_team.sign_jar_plugin.SignJarExtension
 import info.u_team.sign_jar_plugin.task.SignJarTask
 
@@ -35,14 +36,18 @@ class CreateSignJarTaskExtensionImpl {
 			task.mustRunAfter(taskProvider)
 		})
 
-		taskProvider.configure { jarTask ->
-			final def archiveFile = jarTask.archiveFile
-
+		project.afterEvaluate {
 			signJarTask.configure { task ->
+				final def archiveFile = taskProvider.get().archiveFile
+
 				task.inputFile.set(archiveFile)
 				task.outputFile.set(archiveFile)
 			}
 		}
+
+		DependencyUtil.assembleDependOn(project, signJarTask)
+		DependencyUtil.allPublishingDependOn(project, signJarTask)
+		DependencyUtil.allUploadDependOn(project, signJarTask)
 
 		return signJarTask
 	}

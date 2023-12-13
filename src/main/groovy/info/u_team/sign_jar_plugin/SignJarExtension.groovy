@@ -18,10 +18,10 @@ abstract class SignJarExtension {
 
 	SignJarExtension(final Project project) {
 		this.project = project
-		getKeyStore().convention(project.findProperty(Constants.KEYSTORE) as String);
-		getAlias().convention(project.findProperty(Constants.KEYSTORE_ALIAS) as String);
-		getStorePass().convention(project.findProperty(Constants.KEYSTORE_PASSWORD) as String);
-		getStorePass().convention(project.findProperty(Constants.KEYSTORE_KEY_PASSWORD) as String);
+		keyStore.convention(project.findProperty(Constants.KEYSTORE) as String);
+		alias.convention(project.findProperty(Constants.KEYSTORE_ALIAS) as String);
+		storePass.convention(project.findProperty(Constants.KEYSTORE_PASSWORD) as String);
+		keyPass.convention(project.findProperty(Constants.KEYSTORE_KEY_PASSWORD) as String);
 	}
 
 	abstract Property<String> getKeyStore()
