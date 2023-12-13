@@ -14,8 +14,8 @@ class GradleFilesUtil {
 		return project.extensions.extraProperties
 	}
 
-	static def getProjectConfig(final Project project) {
-		return getExtraProperties(project).get("config")
+	static ConfigObject getProjectConfig(final Project project) {
+		return getExtraProperties(project).get("config") as ConfigObject
 	}
 
 	/**
