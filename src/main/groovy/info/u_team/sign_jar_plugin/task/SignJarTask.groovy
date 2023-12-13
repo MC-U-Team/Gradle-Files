@@ -15,12 +15,12 @@ abstract class SignJarTask extends DefaultTask {
 	@TaskAction
 	void sign() {
 		final def properties = [
-			keyStore: getKeyStore().getOrElse(""),
-			alias: getAlias().get(),
-			storepass: getStorePass().get(),
-			keyPass: getKeyPass().getOrElse(""),
-			jar: getInputFile().get().getAsFile(),
-			signedJar: getOutputFile().get().getAsFile()
+			keyStore: keyStore.getOrNull(),
+			alias: alias.get(),
+			storepass: storePass.get(),
+			keyPass: keyPass.getOrNull(),
+			jar: inputFile.get().asFile,
+			signedJar: outputFile.get().asFile
 		]
 		ant.invokeMethod("signjar", properties)
 	}

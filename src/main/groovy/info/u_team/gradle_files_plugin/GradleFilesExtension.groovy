@@ -2,6 +2,7 @@ package info.u_team.gradle_files_plugin
 
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.tasks.Jar
 
 import groovy.transform.CompileStatic
@@ -90,10 +91,10 @@ abstract class GradleFilesExtension {
 	 * Include license file to build
 	 * Exclude .cache file
 	 * Also add the defaultManifest to the jar
-	 * @param task Jar task
+	 * @param taskProvider Jar task
 	 */ 
-	void defaultJar(Jar task) {
-		DefaultJarExtensionImpl.defaultJar(project, this, task)
+	void defaultJar(final TaskProvider<? extends Jar> taskProvider) {
+		DefaultJarExtensionImpl.defaultJar(project, this, taskProvider)
 	}
 
 	/**
