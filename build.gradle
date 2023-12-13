@@ -38,6 +38,10 @@ gradlePlugin {
 			id = "info.u_team.gradle_files"
 			implementationClass = "info.u_team.gradle_files_plugin.GradleFilesPlugin"
 		}
+		signJarPlugin {
+			id = "info.u_team.sign_jar"
+			implementationClass = "info.u_team.sign_jar_plugin.SignJarPlugin"
+		}
 	}
 }
 
@@ -87,6 +91,10 @@ jar.manifest.mainAttributes([
 	it.options.encoding = "UTF-8"
 	it.options.deprecation = true
 	it.options.fork = true
+}
+
+compileGroovy {
+	groovyOptions.optimizationOptions.indy = true
 }
 
 publishing {
