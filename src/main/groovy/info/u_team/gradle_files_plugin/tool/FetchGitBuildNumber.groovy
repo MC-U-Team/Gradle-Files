@@ -24,7 +24,7 @@ class FetchGitBuildNumber {
 		def buildNumber = "DEV"
 
 		if(project.hasProperty(Constants.BUILD_PROPERTY)) {
-			final def gitRepo = new File(project.buildDir, Constants.GIT_REPOSITORY_NAME)
+			final def gitRepo = new File(project.layout.buildDirectory.asFile.get(), Constants.GIT_REPOSITORY_NAME)
 			gitRepo.mkdirs()
 
 			final def repositoryPath = GitUtil.repositoryPath(project, gitRepo)
