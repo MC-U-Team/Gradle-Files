@@ -10,7 +10,7 @@ import info.u_team.gradle_files_plugin.util.DependencyUtil
 class OrderCurseforgeTasksImpl {
 
 	static void orderCurseforgeTasks(final Project project, final Project runLastProject, final Project runFirstProject) {
-		orderTasks(runLastProject, runLastProject, runFirstProject, Constants.CURSEFORGE_EXTERNAL_TASK)
+		orderTasks(project, runLastProject, runFirstProject, Constants.CURSEFORGE_EXTERNAL_TASK)
 	}
 
 	static void orderTasks(final Project project, final Project runLastProject, final Project runFirstProject, String taskStartName) {
