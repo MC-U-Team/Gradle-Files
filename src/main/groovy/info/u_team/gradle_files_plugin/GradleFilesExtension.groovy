@@ -10,6 +10,7 @@ import info.u_team.gradle_files_plugin.extension.ArchiveNameExtensionImpl
 import info.u_team.gradle_files_plugin.extension.ChangelogUrlImpl
 import info.u_team.gradle_files_plugin.extension.DefaultJarExtensionImpl
 import info.u_team.gradle_files_plugin.extension.DefaultManifestExtensionImpl
+import info.u_team.gradle_files_plugin.extension.DependsOnImpl
 import info.u_team.gradle_files_plugin.extension.DisplayNameExtensionImpl
 import info.u_team.gradle_files_plugin.extension.FabricDependenciesExtensionImpl
 import info.u_team.gradle_files_plugin.extension.ForgeDependencyExtensionImpl
@@ -135,5 +136,41 @@ abstract class GradleFilesExtension {
 	 */
 	def fabricApiDependency() {
 		FabricDependenciesExtensionImpl.fabricApiDependency(project)
+	}
+
+	/**
+	 * Mark the tasks as a dependency for the assemble task
+	 * @param dependTask Tasks
+	 */
+	void assembleDependOn(final Object... dependTask) {
+		DependsOnImpl.assembleDependOn(project, dependTask)
+	}
+
+	/**
+	 * Mark the tasks as a dependency for all publishing tasks
+	 * @param dependTask Tasks
+	 */
+	void allPublishingDependOn(final Object... dependTask) {
+		DependsOnImpl.allPublishingDependOn(project, dependTask)
+	}
+
+	/**
+	 * Mark the tasks as a dependency for all upload tasks
+	 * @param dependTask Tasks
+	 */
+	void allUploadDependOn(final Object... dependTask) {
+		DependsOnImpl.allUploadDependOn(project, dependTask)
+	}
+
+	/**
+	 * Mark the tasks as a dependency for all building tasks
+	 * Has the same effect as calling the following methods individually with the same values
+	 * @see GradleFilesExtension#assembleDependOn
+	 * @see GradleFilesExtension#allPublishingDependOn
+	 * @see GradleFilesExtension#allUploadDependOn
+	 * @param dependTask Tasks
+	 */
+	void allBuildingDependOn(final Object... dependTask) {
+		DependsOnImpl.allBuildingDependOn(project, dependTask)
 	}
 }
