@@ -21,18 +21,22 @@ class DependencyUtil {
 	}
 
 	static void allPublishingDependOn(final Project project, final Object... dependTask) {
-		project.tasks.matching { Task task ->
-			task.group == PUBLISH_TASK_GROUP
-		}.configureEach { task ->
-			task.dependsOn(dependTask)
+		project.afterEvaluate {
+			project.tasks.matching { Task task ->
+				task.group == PUBLISH_TASK_GROUP
+			}.configureEach { task ->
+				task.dependsOn(dependTask)
+			}
 		}
 	}
 
 	static void allUploadDependOn(final Project project, final Object... dependTask) {
-		project.tasks.matching { Task task ->
-			task.group == UPLOAD_TASK_GROUP
-		}.configureEach { task ->
-			task.dependsOn(dependTask)
+		project.afterEvaluate {
+			project.tasks.matching { Task task ->
+				task.group == UPLOAD_TASK_GROUP
+			}.configureEach { task ->
+				task.dependsOn(dependTask)
+			}
 		}
 	}
 
