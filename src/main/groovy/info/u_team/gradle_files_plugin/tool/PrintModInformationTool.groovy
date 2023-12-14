@@ -45,7 +45,7 @@ class PrintModInformationTool {
 			logger.lifecycle(minecraftVersionString)
 		}
 		if(!StringUtils.isEmpty(neoForgeVersion)) {
-			logger.lifecycle(neoForgeVersion)
+			logger.lifecycle(neoForgeVersionString)
 		}
 		if(!StringUtils.isEmpty(forgeVersion)) {
 			logger.lifecycle(forgeVersionString)
