@@ -176,21 +176,19 @@ abstract class GradleFilesExtension {
 	}
 
 	/**
-	 * Mark all curseforge tasks in the last project to run after the first project
-	 * @param runLastProject Project
-	 * @param runFirstProject Project
+	 * Mark all curseforge tasks that start with the specified name to run in the reversed order the projects are supplied.
+	 * @param orderProjects Projects
 	 */
 	void orderCurseforgeTasks(final Project runLastProject, final Project runFirstProject) {
 		OrderCurseforgeTasksImpl.orderCurseforgeTasks(project, runLastProject, runFirstProject)
 	}
 
 	/**
-	 * Mark all tasks that start with the name in the last project to run after the first project
-	 * @param runLastProject Project
-	 * @param runFirstProject Project
+	 * Mark all tasks that start with the specified name to run in the reversed order the projects are supplied.
 	 * @param taskStartName Tasks start name
+	 * @param orderProjects Projects
 	 */
-	void orderTasks(final Project runLastProject, final Project runFirstProject, String taskStartName) {
-		OrderCurseforgeTasksImpl.orderTasks(project, runLastProject, runFirstProject, taskStartName)
+	void orderTasks(String taskStartName, final Project ... orderProjects) {
+		OrderCurseforgeTasksImpl.orderTasks(project, taskStartName, orderProjects)
 	}
 }

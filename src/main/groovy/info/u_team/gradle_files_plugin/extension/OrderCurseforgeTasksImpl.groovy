@@ -9,21 +9,28 @@ import info.u_team.gradle_files_plugin.Constants
 @CompileStatic
 class OrderCurseforgeTasksImpl {
 
-	static void orderCurseforgeTasks(final Project project, final Project runLastProject, final Project runFirstProject) {
-		orderTasks(project, runLastProject, runFirstProject, Constants.CURSEFORGE_EXTERNAL_TASK)
+	static void orderCurseforgeTasks(final Project project, final Project ... orderProjects) {
+		orderTasks(project, Constants.CURSEFORGE_EXTERNAL_TASK, orderProjects)
 	}
 
-	static void orderTasks(final Project project, final Project runLastProject, final Project runFirstProject, String taskStartName) {
+	static void orderTasks(final Project project, String taskStartName, final Project ... orderProjects) {
 		project.gradle.projectsEvaluated {
-			final def runLast = runLastProject.tasks.findAll { Task task ->
-				task.name.startsWith(taskStartName)
+			final def tasksInProjects = orderProjects.collect { orderProject ->
+				orderProject.tasks.matching { Task task ->
+					task.name.startsWith(taskStartName)
+				}
 			}
-			final def runFirst = runFirstProject.tasks.findAll { Task task ->
-				task.name.startsWith(taskStartName)
-			}
-			runLast.each { lastTask ->
-				runFirst.each { firstTask ->
-					lastTask.mustRunAfter(firstTask)
+
+			for(int index = 0; index < tasksInProjects.size(); index ++) {
+				if(index + 1 < tasksInProjects.size()) {
+					final def runAfter = tasksInProjects.get(index);
+					final def runBefore = tasksInProjects.get(index + 1);
+
+					runAfter.configureEach { runAfterTask ->
+						runBefore.configureEach { runBeforeTask ->
+							runAfterTask.mustRunAfter(runBeforeTask)
+						}
+					}
 				}
 			}
 		}
