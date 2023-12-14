@@ -13,6 +13,7 @@ import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesExtension
 import info.u_team.gradle_files_plugin.util.GradleFilesUtil
+import info.u_team.sign_jar_plugin.SignJarPlugin
 
 @CompileStatic
 class SetupPluginEnvironmentTool {
@@ -33,6 +34,7 @@ class SetupPluginEnvironmentTool {
 			pluginManager.apply(JavaPlugin)
 			pluginManager.apply(EclipsePlugin)
 			pluginManager.apply(IdeaPlugin)
+			pluginManager.apply(SignJarPlugin)
 		}
 
 		// Add value methods

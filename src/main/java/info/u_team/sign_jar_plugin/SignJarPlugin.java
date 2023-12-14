@@ -5,7 +5,7 @@ import org.gradle.api.Project;
 
 import info.u_team.gradle_files_plugin.Constants;
 
-public class SignJarPlugin implements Plugin<Project> {
+public abstract class SignJarPlugin implements Plugin<Project> {
 
 	@Override
 	public void apply(Project project) {

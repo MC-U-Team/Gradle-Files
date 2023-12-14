@@ -8,7 +8,7 @@ import info.u_team.gradle_files_plugin.tool.LoadConfigTool;
 import info.u_team.gradle_files_plugin.tool.PrintModInformationTool;
 import info.u_team.gradle_files_plugin.tool.SetupPluginEnvironmentTool;
 
-public class GradleFilesPlugin implements Plugin<Project> {
+public abstract class GradleFilesPlugin implements Plugin<Project> {
 
 	@Override
 	public void apply(Project project) {
