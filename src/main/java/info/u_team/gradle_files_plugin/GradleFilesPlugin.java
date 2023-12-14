@@ -4,6 +4,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
 import info.u_team.gradle_files_plugin.tool.FetchGitBuildNumber;
+import info.u_team.gradle_files_plugin.tool.GeneralTaskSettingsTool;
 import info.u_team.gradle_files_plugin.tool.LoadConfigTool;
 import info.u_team.gradle_files_plugin.tool.PrintModInformationTool;
 import info.u_team.gradle_files_plugin.tool.RegisterReleaseTasks;
@@ -20,6 +21,7 @@ public abstract class GradleFilesPlugin implements Plugin<Project> {
 		PrintModInformationTool.print(project);
 		FetchGitBuildNumber.fetch(project);
 		RegisterReleaseTasks.register(project);
+		GeneralTaskSettingsTool.setup(project);
 	}
 
 }
