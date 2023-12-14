@@ -7,6 +7,7 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.tasks.Jar
 
 import groovy.transform.CompileStatic
+import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.util.DependencyUtil
 import info.u_team.sign_jar_plugin.SignJarExtension
 import info.u_team.sign_jar_plugin.task.SignJarTask
@@ -30,7 +31,7 @@ class CreateSignJarTaskExtensionImpl {
 			task.storePass.convention(extension.storePass)
 			task.keyPass.convention(extension.keyPass)
 
-			task.enabled = canSign
+			task.enabled = canSign && project.hasProperty(Constants.BUILD_PROPERTY)
 
 			task.dependsOn(taskProvider)
 			task.mustRunAfter(taskProvider)
