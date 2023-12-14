@@ -93,10 +93,10 @@ abstract class GradleFilesExtension {
 	 * Include license file to build
 	 * Exclude .cache file
 	 * Also add the defaultManifest to the jar
-	 * @param taskProvider Jar task
+	 * @param task Jar task
 	 */ 
-	void defaultJar(final TaskProvider<? extends Jar> taskProvider) {
-		DefaultJarExtensionImpl.defaultJar(project, this, taskProvider)
+	void defaultJar(final Jar task) {
+		DefaultJarExtensionImpl.defaultJar(project, this, task)
 	}
 
 	/**

@@ -11,14 +11,12 @@ import info.u_team.gradle_files_plugin.util.GradleFilesUtil
 @CompileStatic
 class DefaultJarExtensionImpl {
 
-	static void defaultJar(final Project project, final GradleFilesExtension extension, final TaskProvider<? extends Jar> taskProvider) {
+	static void defaultJar(final Project project, final GradleFilesExtension extension, Jar task) {
 		final def mainProject = GradleFilesUtil.getMainProject(project)
 
-		taskProvider.configure { task ->
-			task.from(mainProject.file("LICENSE"))
-			task.exclude(".cache")
+		task.from(mainProject.file("LICENSE"))
+		task.exclude(".cache")
 
-			task.manifest(DefaultManifestExtensionImpl.defaultManifest(project, extension))
-		}
+		task.manifest(DefaultManifestExtensionImpl.defaultManifest(project, extension))
 	}
 }
