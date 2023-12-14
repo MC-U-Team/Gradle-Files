@@ -1,0 +1,120 @@
+plugins {
+	id "net.minecraftforge.gradle"
+	id "org.parchmentmc.librarian.forgegradle"
+	id "org.spongepowered.mixin"
+	id "info.u_team.gradle_files"
+	id "info.u_team.curse_gradle_uploader"
+	id "maven-publish"
+}
+
+gradlefiles.loaderSuffix = "forge"
+
+group = rootProject.group
+base.archivesName = gradlefiles.archivesName()
+version = gradlefiles.version()
+
+sourceSets {
+	main {
+		java {
+			srcDirs += project(":common").sourceSets.common.java.srcDirs
+		}
+		resources {
+			srcDirs += project(":common").sourceSets.common.resources.srcDirs
+		}
+	}
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+	withSourcesJar()
+	withJavadocJar()
+}
+
+minecraft {
+	mappings channel: config.forge.mapping_channel, version: config.forge.mapping
+	
+	runs {
+		client {
+			workingDirectory file("run/client")
+			
+			mods {
+				"${config.mod.modid}" {
+					source sourceSets.main
+				}
+			}
+		}
+		server {
+			workingDirectory file("run/server")
+			
+			mods {
+				"${config.mod.modid}" {
+					source sourceSets.main
+				}
+			}
+		}
+	}
+}
+
+tasks.withType(Jar).configureEach { task ->
+	gradlefiles.defaultJar(task)
+}
+
+tasks.withType(Javadoc).configureEach { task ->
+	task.options.addStringOption("Xdoclint:none", "-quiet")
+}
+
+processResources {
+	doLast {
+		fileTree(dir: outputs.files.asPath, include: "**/*.json").each { File file ->
+			file.text = groovy.json.JsonOutput.toJson(new groovy.json.JsonSlurper().parse(file))
+		}
+	}
+}
+
+dependencies {
+	minecraft gradlefiles.forgeDependency()
+}
+
+curseforge {
+	apiKey = defaultPropertyValue("curseforge.token")
+	
+	options {
+		debug = true
+	}
+	
+	project {
+		id = config.curse.id
+		releaseType = config.curse.type
+		
+		addGameVersion config.minecraft.version
+		addGameVersion "Forge"
+		addGameVersion "Java 17"
+		
+		relations {
+			requiredDependency "u-team-core"
+		}
+		
+		mainArtifact(tasks.getByName("jar")) {
+			displayName = "${config.curse.display}-Forge-${config.minecraft.version}-${project.version}"
+			changelogType = "html"
+			changelog = "<a href=\"${gradlefiles.changelogUrl()}\">Changelog of ${project.version}</a>"
+		}
+	}
+}
+
+publishing {
+	repositories {
+		maven {
+			url rootProject.layout.buildDirectory.dir("mavenRepo")
+		}
+	}
+	publications {
+		mavenJava(MavenPublication) {
+			artifactId project.base.archivesName.get()
+			
+			from components.java
+		}
+	}
+}
