@@ -2,9 +2,9 @@ package info.u_team.gradle_files_plugin.extension
 
 import org.gradle.api.Project
 import org.gradle.api.Task
+
 import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.Constants
-import info.u_team.gradle_files_plugin.util.DependencyUtil
 
 @CompileStatic
 class OrderCurseforgeTasksImpl {

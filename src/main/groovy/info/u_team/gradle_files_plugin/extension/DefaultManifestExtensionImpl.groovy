@@ -2,6 +2,7 @@ package info.u_team.gradle_files_plugin.extension
 
 import org.gradle.api.Project
 import org.gradle.api.java.archives.Manifest
+
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.GradleFilesExtension
 import info.u_team.gradle_files_plugin.util.GradleFilesUtil

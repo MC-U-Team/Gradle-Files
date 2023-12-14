@@ -2,7 +2,6 @@ package info.u_team.sign_jar_plugin
 
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.tasks.Jar
 
