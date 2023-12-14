@@ -31,9 +31,7 @@ class RegisterReleaseTasks {
 		final def tasks = project.tasks
 
 		// Register checkGit task
-		tasks.register(Constants.CHECK_GIT_TASK, CheckGitTask).configure { task ->
-			DependencyUtil.allBuildingDependOn(project, task)
-		}
+		DependencyUtil.allBuildingDependOn(project, tasks.register(Constants.CHECK_GIT_TASK, CheckGitTask))
 
 		// Register updateBuildNumber task
 		tasks.register(Constants.UPDATE_BUILD_NUMBER_TASK, UpdateGitBuildNumberTask).configure { task ->
@@ -87,9 +85,7 @@ class RegisterReleaseTasks {
 		final def mainTasks = mainProject.tasks
 
 		// Register dependencies for checkGitTask in main project
-		mainTasks.named(Constants.CHECK_GIT_TASK).configure { task ->
-			DependencyUtil.allBuildingDependOn(project, task)
-		}
+		DependencyUtil.allBuildingDependOn(project, mainTasks.named(Constants.CHECK_GIT_TASK))
 
 		// Register dependencies for updateBuildNumber in main project
 		mainTasks.named(Constants.UPDATE_BUILD_NUMBER_TASK).configure { task ->
