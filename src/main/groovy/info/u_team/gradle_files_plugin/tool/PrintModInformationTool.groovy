@@ -20,17 +20,20 @@ class PrintModInformationTool {
 		final def config = GradleFilesUtil.getProjectConfig(project).flatten()
 
 		final String minecraftVersion = config.getOrDefault("minecraft.version", "");
+		final String neoForgeVersion = config.getOrDefault("neoforge.version", "");
 		final String forgeVersion = config.getOrDefault("forge.version", "");
 		final String fabricLoaderVersion = config.getOrDefault("fabric.loader.version", "");
 		final String fabricApiVersion = config.getOrDefault("fabric.api.version", "");
 
 		final def minecraftVersionString = "Minecraft Version: ${minecraftVersion}"
+		final def neoForgeVersionString = "NeoForge Version: ${neoForgeVersion}"
 		final def forgeVersionString = "Forge Version: ${forgeVersion}"
 		final def fabricLoaderVersionString = "Fabric Loader Version: ${fabricLoaderVersion}"
 		final def fabricApiVersionString = "Fabric API Version: ${fabricApiVersion}"
 
 		final int length = [
 			minecraftVersionString,
+			neoForgeVersionString,
 			forgeVersionString,
 			fabricLoaderVersionString,
 			fabricApiVersionString
@@ -40,6 +43,9 @@ class PrintModInformationTool {
 		logger.lifecycle("-"*length)
 		if(!StringUtils.isEmpty(minecraftVersion)) {
 			logger.lifecycle(minecraftVersionString)
+		}
+		if(!StringUtils.isEmpty(neoForgeVersion)) {
+			logger.lifecycle(neoForgeVersion)
 		}
 		if(!StringUtils.isEmpty(forgeVersion)) {
 			logger.lifecycle(forgeVersionString)
