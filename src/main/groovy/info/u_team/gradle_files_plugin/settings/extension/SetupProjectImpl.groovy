@@ -15,7 +15,8 @@ class SetupProjectImpl {
 		subProjects.each { subProject ->
 			settings.include(subProject)
 
-			settings.project(":${subProject}").name = "${rootName}_${StringUtils.capitalize(subProject)}"
+			final def project = settings.project(":${subProject}")
+			project.name = "${settings.rootProject.name}_${StringUtils.capitalize(project.name)}"
 		}
 
 		if(subProjects.length > 0) {

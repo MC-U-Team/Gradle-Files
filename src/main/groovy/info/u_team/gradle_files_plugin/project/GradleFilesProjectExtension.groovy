@@ -17,6 +17,7 @@ import info.u_team.gradle_files_plugin.project.extension.FabricDependenciesExten
 import info.u_team.gradle_files_plugin.project.extension.ForgeDependencyExtensionImpl
 import info.u_team.gradle_files_plugin.project.extension.NeoForgeDependencyExtensionImpl
 import info.u_team.gradle_files_plugin.project.extension.OrderCurseforgeTasksImpl
+import info.u_team.gradle_files_plugin.project.extension.ProjectExtensionImpl
 import info.u_team.gradle_files_plugin.project.extension.VersionExtensionImpl
 
 @CompileStatic
@@ -48,6 +49,15 @@ abstract class GradleFilesProjectExtension {
 	void apply(final GradleFilesProjectExtension extension) {
 		this.vendor.convention(extension.vendor)
 		this.loaderSuffix.convention(extension.loaderSuffix)
+	}
+
+	/**
+	 * Retrieve sub project that is named with the gradle files settings plugin
+	 * @param name Original name
+	 * @return Project
+	 */
+	Project project(final String name) {
+		ProjectExtensionImpl.project(project, name)
 	}
 
 	/**

@@ -14,10 +14,10 @@ version = gradlefiles.version()
 sourceSets {
 	main {
 		java {
-			srcDirs += project(":common").sourceSets.common.java.srcDirs
+			srcDirs += gradlefiles.project("common").sourceSets.common.java.srcDirs
 		}
 		resources {
-			srcDirs += project(":common").sourceSets.common.resources.srcDirs
+			srcDirs += gradlefiles.project("common").sourceSets.common.resources.srcDirs
 		}
 	}
 }
