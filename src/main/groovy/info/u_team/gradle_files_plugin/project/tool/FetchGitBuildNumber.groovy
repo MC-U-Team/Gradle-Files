@@ -4,7 +4,7 @@ import org.gradle.api.Project
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
-import info.u_team.gradle_files_plugin.project.Constants
+import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.project.extension.VersionExtensionImpl
 import info.u_team.gradle_files_plugin.project.util.GitUtil
 import info.u_team.gradle_files_plugin.project.util.GradleFilesUtil

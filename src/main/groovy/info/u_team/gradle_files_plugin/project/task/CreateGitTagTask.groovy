@@ -3,7 +3,7 @@ package info.u_team.gradle_files_plugin.project.task
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-import info.u_team.gradle_files_plugin.project.Constants
+import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.project.util.GitUtil
 import info.u_team.gradle_files_plugin.project.util.GradleFilesUtil
 

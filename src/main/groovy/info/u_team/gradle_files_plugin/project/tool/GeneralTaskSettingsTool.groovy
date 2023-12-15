@@ -7,7 +7,7 @@ import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.javadoc.Javadoc
 
 import groovy.transform.CompileStatic
-import info.u_team.gradle_files_plugin.project.Constants
+import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.project.util.GradleFilesUtil
 
 @CompileStatic

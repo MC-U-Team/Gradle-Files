@@ -5,6 +5,7 @@ import org.gradle.api.Project;
 import org.gradle.api.initialization.Settings;
 
 import info.u_team.gradle_files_plugin.project.GradleFilesProjectPlugin;
+import info.u_team.gradle_files_plugin.settings.GradleFilesSettingsPlugin;
 
 public abstract class GradleFilesPlugin implements Plugin<Object> {
 

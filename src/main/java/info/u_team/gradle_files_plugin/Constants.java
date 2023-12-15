@@ -1,4 +1,4 @@
-package info.u_team.gradle_files_plugin.project;
+package info.u_team.gradle_files_plugin;
 
 public class Constants {
 

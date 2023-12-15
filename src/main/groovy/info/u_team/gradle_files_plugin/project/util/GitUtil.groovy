@@ -3,7 +3,7 @@ package info.u_team.gradle_files_plugin.project.util
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 
-import info.u_team.gradle_files_plugin.project.Constants
+import info.u_team.gradle_files_plugin.Constants
 
 class GitUtil {
 

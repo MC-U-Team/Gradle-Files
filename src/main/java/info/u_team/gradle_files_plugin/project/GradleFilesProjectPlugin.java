@@ -3,6 +3,7 @@ package info.u_team.gradle_files_plugin.project;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
+import info.u_team.gradle_files_plugin.Constants;
 import info.u_team.gradle_files_plugin.project.tool.FetchGitBuildNumber;
 import info.u_team.gradle_files_plugin.project.tool.GeneralTaskSettingsTool;
 import info.u_team.gradle_files_plugin.project.tool.LoadConfigTool;
@@ -15,7 +16,7 @@ public abstract class GradleFilesProjectPlugin implements Plugin<Project> {
 
 	@Override
 	public void apply(Project project) {
-		project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesExtension.class, project);
+		project.getExtensions().create(Constants.EXTENSION_NAME, GradleFilesProjectExtension.class, project);
 
 		SetupPluginEnvironmentTool.setup(project);
 		LoadConfigTool.load(project);

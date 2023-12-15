@@ -6,7 +6,7 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.tasks.Jar
 
 import groovy.transform.CompileStatic
-import info.u_team.gradle_files_plugin.project.GradleFilesExtension
+import info.u_team.gradle_files_plugin.project.GradleFilesProjectExtension
 import info.u_team.gradle_files_plugin.project.extension.ArchiveNameExtensionImpl
 import info.u_team.gradle_files_plugin.project.extension.ChangelogUrlImpl
 import info.u_team.gradle_files_plugin.project.extension.DefaultJarExtensionImpl
@@ -20,11 +20,11 @@ import info.u_team.gradle_files_plugin.project.extension.OrderCurseforgeTasksImp
 import info.u_team.gradle_files_plugin.project.extension.VersionExtensionImpl
 
 @CompileStatic
-abstract class GradleFilesExtension {
+abstract class GradleFilesProjectExtension {
 
 	private final Project project
 
-	GradleFilesExtension(final Project project) {
+	GradleFilesProjectExtension(final Project project) {
 		this.project = project;
 		getVendor().convention("No Vendor");
 		getLoaderSuffix().convention("");
@@ -45,7 +45,7 @@ abstract class GradleFilesExtension {
 	 * Apply values from the extension to this extension as convention
 	 * @param extension Extension
 	 */
-	void apply(final GradleFilesExtension extension) {
+	void apply(final GradleFilesProjectExtension extension) {
 		this.vendor.convention(extension.vendor)
 		this.loaderSuffix.convention(extension.loaderSuffix)
 	}

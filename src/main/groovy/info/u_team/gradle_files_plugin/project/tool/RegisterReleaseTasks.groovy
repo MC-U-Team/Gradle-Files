@@ -3,7 +3,7 @@ package info.u_team.gradle_files_plugin.project.tool
 import org.gradle.api.Project
 
 import groovy.transform.CompileStatic
-import info.u_team.gradle_files_plugin.project.Constants
+import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.project.task.CheckGitTask
 import info.u_team.gradle_files_plugin.project.task.CreateGitTagTask
 import info.u_team.gradle_files_plugin.project.task.ReleaseModTask

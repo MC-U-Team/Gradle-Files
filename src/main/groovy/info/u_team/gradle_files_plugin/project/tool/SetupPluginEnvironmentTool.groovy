@@ -10,8 +10,8 @@ import org.gradle.plugins.ide.eclipse.model.EclipseModel
 import org.gradle.plugins.ide.idea.IdeaPlugin
 
 import groovy.transform.CompileStatic
-import info.u_team.gradle_files_plugin.project.Constants
-import info.u_team.gradle_files_plugin.project.GradleFilesExtension
+import info.u_team.gradle_files_plugin.Constants
+import info.u_team.gradle_files_plugin.project.GradleFilesProjectExtension
 import info.u_team.gradle_files_plugin.project.util.GradleFilesUtil
 import info.u_team.sign_jar_plugin.SignJarPlugin
 
@@ -51,7 +51,7 @@ class SetupPluginEnvironmentTool {
 		// Copy extension values from main project
 		if(!GradleFilesUtil.isMainProject(project)) {
 			final def mainProject = GradleFilesUtil.getMainProject(project)
-			project.extensions.getByType(GradleFilesExtension).apply(mainProject.extensions.getByType(GradleFilesExtension))
+			project.extensions.getByType(GradleFilesProjectExtension).apply(mainProject.extensions.getByType(GradleFilesProjectExtension))
 		}
 
 		// Set eclipse project name for sub projects to avoid collision

@@ -5,7 +5,7 @@ import org.gradle.api.plugins.ExtraPropertiesExtension
 
 import groovy.transform.CompileStatic
 import groovy.transform.Memoized
-import info.u_team.gradle_files_plugin.project.Constants
+import info.u_team.gradle_files_plugin.Constants
 
 @CompileStatic
 class GradleFilesUtil {

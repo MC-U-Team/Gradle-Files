@@ -4,7 +4,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 import groovy.transform.CompileStatic
-import info.u_team.gradle_files_plugin.project.Constants
+import info.u_team.gradle_files_plugin.Constants
 
 @CompileStatic
 abstract class ReleaseModTask extends DefaultTask {

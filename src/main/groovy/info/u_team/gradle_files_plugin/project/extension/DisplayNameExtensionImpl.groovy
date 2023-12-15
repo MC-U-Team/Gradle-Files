@@ -3,12 +3,12 @@ package info.u_team.gradle_files_plugin.project.extension
 import org.apache.commons.lang3.StringUtils
 import org.gradle.api.Project
 
-import info.u_team.gradle_files_plugin.project.GradleFilesExtension
+import info.u_team.gradle_files_plugin.project.GradleFilesProjectExtension
 import info.u_team.gradle_files_plugin.project.util.GradleFilesUtil
 
 class DisplayNameExtensionImpl {
 
-	static def displayName(final Project project, final GradleFilesExtension extension) {
+	static def displayName(final Project project, final GradleFilesProjectExtension extension) {
 		final def config = GradleFilesUtil.getProjectConfig(project)
 
 		final def builder = new StringBuilder()
