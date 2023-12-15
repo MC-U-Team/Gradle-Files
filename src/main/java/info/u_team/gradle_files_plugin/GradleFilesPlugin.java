@@ -9,6 +9,7 @@ import info.u_team.gradle_files_plugin.tool.LoadConfigTool;
 import info.u_team.gradle_files_plugin.tool.PrintModInformationTool;
 import info.u_team.gradle_files_plugin.tool.RegisterReleaseTasks;
 import info.u_team.gradle_files_plugin.tool.SetupPluginEnvironmentTool;
+import info.u_team.gradle_files_plugin.tool.SetupSpecialModLoaderSettingsTool;
 
 public abstract class GradleFilesPlugin implements Plugin<Project> {
 
@@ -22,6 +23,8 @@ public abstract class GradleFilesPlugin implements Plugin<Project> {
 		FetchGitBuildNumber.fetch(project);
 		RegisterReleaseTasks.register(project);
 		GeneralTaskSettingsTool.setup(project);
+
+		SetupSpecialModLoaderSettingsTool.setup(project);
 	}
 
 }
