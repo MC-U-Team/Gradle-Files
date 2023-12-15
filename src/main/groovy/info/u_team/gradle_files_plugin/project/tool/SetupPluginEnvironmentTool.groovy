@@ -53,13 +53,5 @@ class SetupPluginEnvironmentTool {
 			final def mainProject = GradleFilesUtil.getMainProject(project)
 			project.extensions.getByType(GradleFilesProjectExtension).apply(mainProject.extensions.getByType(GradleFilesProjectExtension))
 		}
-
-		// Set eclipse project name for sub projects to avoid collision
-		if(!GradleFilesUtil.isMainProject(project)) {
-			final def mainProject = GradleFilesUtil.getMainProject(project)
-
-			final def eclipse = project.extensions.getByType(EclipseModel)
-			eclipse.project.name = "${mainProject.name}_${StringUtils.capitalize(project.name)}"
-		}
 	}
 }
