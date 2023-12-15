@@ -37,10 +37,4 @@ plugins {
 	id "info.u_team.gradle_files"
 }
 
-rootProject.name = "Gradle-Files-Plugin-Multiloader-Test"
-
-include("common", "neoforge", "forge", "fabric")
-
-gradle.allprojects {
-	extensions.extraProperties.multiLoaderMainProject = gradle.rootProject.path
-}
+gradlefiles.setupProject("Gradle-Files-Plugin-Multiloader-Test", "common", "neoforge", "forge", "fabric")

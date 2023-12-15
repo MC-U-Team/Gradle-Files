@@ -3,6 +3,7 @@ package info.u_team.gradle_files_plugin.settings
 import org.gradle.api.initialization.Settings
 
 import groovy.transform.CompileStatic
+import info.u_team.gradle_files_plugin.settings.extension.SetupProjectImpl
 
 @CompileStatic
 abstract class GradleFilesSettingsExtension {
@@ -11,5 +12,14 @@ abstract class GradleFilesSettingsExtension {
 
 	GradleFilesSettingsExtension(final Settings settings) {
 		this.settings = settings;
+	}
+
+	/**
+	 * Include subproject and setup for multiloader project when subprojects are supplied
+	 * @param rootName The name of the root project
+	 * @param subProjects The projects to be included
+	 */
+	void setupProject(final String rootName, final String ... subProjects) {
+		SetupProjectImpl.setupProject(settings, rootName, subProjects)
 	}
 }
