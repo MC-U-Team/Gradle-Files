@@ -3,7 +3,7 @@ package info.u_team.sign_jar_plugin;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
-import info.u_team.gradle_files_plugin.Constants;
+import info.u_team.gradle_files_plugin.project.Constants;
 
 public abstract class SignJarPlugin implements Plugin<Project> {
 
