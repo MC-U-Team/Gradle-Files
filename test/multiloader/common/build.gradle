@@ -32,6 +32,10 @@ java {
 
 tasks.withType(Jar).configureEach { task ->
 	gradlefiles.defaultJar(task)
+
+	manifest {
+		attributes ("Fabric-Loom-Remap": "true")
+	}
 }
 
 tasks.withType(Javadoc).configureEach { task ->
@@ -58,7 +62,7 @@ dependencies {
 		officialMojangMappings()
 		parchment(config.fabric.mapping_layer)
 	}
-	
+
 	modImplementation gradlefiles.fabricLoaderDependency()
 	modRuntimeOnly gradlefiles.fabricApiDependency()
 }
@@ -72,7 +76,7 @@ publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			artifactId project.base.archivesName.get()
-			
+
 			from components.java
 		}
 	}

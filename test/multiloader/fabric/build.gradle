@@ -36,7 +36,7 @@ loom {
 			runDir "run/client"
 			ideConfigGenerated true
 		}
-		
+
 		server {
 			runDir "run/server"
 			ideConfigGenerated true
@@ -62,7 +62,7 @@ processResources {
 
 processResources {
 	inputs.property "version", project.version
-	
+
 	filesMatching("fabric.mod.json") {
 		expand "version": project.version
 	}
@@ -80,31 +80,31 @@ dependencies {
 		officialMojangMappings()
 		parchment(config.fabric.mapping_layer)
 	}
-	
+
 	modImplementation gradlefiles.fabricLoaderDependency()
 	modImplementation gradlefiles.fabricApiDependency()
 }
 
 curseforge {
 	apiKey = defaultPropertyValue("curseforge.token")
-	
+
 	options {
 		debug = true
 	}
-	
+
 	project {
 		id = config.curse.id
 		releaseType = config.curse.type
-		
+
 		addGameVersion config.minecraft.version
 		addGameVersion "Fabric"
 		addGameVersion "Java 17"
-		
+
 		relations {
 			requiredDependency "fabric-api"
 			requiredDependency "u-team-core"
 		}
-		
+
 		mainArtifact(tasks.getByName("remapJar")) {
 			displayName = "${config.curse.display}-Fabric-${config.minecraft.version}-${project.version}"
 			changelogType = "html"
@@ -122,7 +122,7 @@ publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			artifactId project.base.archivesName.get()
-			
+
 			from components.java
 		}
 	}
