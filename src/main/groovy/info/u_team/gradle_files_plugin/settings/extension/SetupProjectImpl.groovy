@@ -5,6 +5,7 @@ import org.gradle.api.initialization.Settings
 
 import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.Constants
+import info.u_team.gradle_files_plugin.util.NamingUtil
 
 @CompileStatic
 class SetupProjectImpl {
@@ -16,7 +17,7 @@ class SetupProjectImpl {
 			settings.include(subProject)
 
 			final def project = settings.project(":${subProject}")
-			project.name = "${settings.rootProject.name}_${StringUtils.capitalize(project.name)}"
+			project.name = NamingUtil.subProjectName(settings.rootProject.name, project.name)
 		}
 
 		if(subProjects.length > 0) {
