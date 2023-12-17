@@ -42,6 +42,8 @@ tasks.withType(Javadoc).configureEach { task ->
 	task.options.addStringOption("Xdoclint:none", "-quiet")
 }
 
+signjar.sign(tasks.named("remapJar"))
+
 processResources {
 	doLast {
 		fileTree(dir: outputs.files.asPath, include: "**/*.json").each { File file ->

@@ -1,6 +1,7 @@
 package info.u_team.gradle_files_plugin.project.tool
 
 import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPlugin
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
@@ -14,18 +15,28 @@ class SetupSpecialModLoaderSettingsTool {
 	}
 
 	private static void setupForge(final Project project) {
-		project.afterEvaluate {
-			setupForgeReobf(project)
-			setupForgeRenameRuns(project)
+		setupForgeReobf(project)
+		setupForgeReobfDependencies(project)
+		setupForgeRenameRuns(project)
+	}
+
+	@CompileDynamic
+	private static void setupForgeReobf(final Project project) {
+		// Eagerly create reobfJar task
+		final def reobfExtension = project.extensions.findByName("reobf")
+		if(reobfExtension) {
+			reobfExtension.create(JavaPlugin.JAR_TASK_NAME);
 		}
 	}
 
-	private static void setupForgeReobf(final Project project) {
+	private static void setupForgeReobfDependencies(final Project project) {
 		// Set all publish tasks depend on reobfJar. This is necessary for correct metadata generation
-		final def reobfClass = findClass(project, "net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace")
-		if(reobfClass) {
-			project.tasks.withType(reobfClass).each { task ->
-				DependencyUtil.allBuildingDependOn(project, task)
+		project.afterEvaluate {
+			final def reobfClass = findClass(project, "net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace")
+			if(reobfClass) {
+				project.tasks.withType(reobfClass).each { task ->
+					DependencyUtil.allBuildingDependOn(project, task)
+				}
 			}
 		}
 	}
@@ -33,12 +44,14 @@ class SetupSpecialModLoaderSettingsTool {
 	@CompileDynamic
 	private static void setupForgeRenameRuns(final Project project) {
 		// Rename run configurations to include project name
-		final def minecraftExtensionClass = findClass(project, "net.minecraftforge.gradle.common.util.MinecraftExtension")
-		if(minecraftExtensionClass) {
-			final def minecraftExtension = project.extensions.findByType(minecraftExtensionClass)
+		project.afterEvaluate {
+			final def minecraftExtensionClass = findClass(project, "net.minecraftforge.gradle.common.util.MinecraftExtension")
+			if(minecraftExtensionClass) {
+				final def minecraftExtension = project.extensions.findByType(minecraftExtensionClass)
 
-			minecraftExtension?.runs?.each { run ->
-				run.taskName = "${project.name}_${run.taskName}"
+				minecraftExtension?.runs?.each { run ->
+					run.taskName = "${project.name}_${run.taskName}"
+				}
 			}
 		}
 	}

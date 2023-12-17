@@ -65,6 +65,8 @@ tasks.withType(Javadoc).configureEach { task ->
 	task.options.addStringOption("Xdoclint:none", "-quiet")
 }
 
+signjar.sign(tasks.named("reobfJar"))
+
 processResources {
 	doLast {
 		fileTree(dir: outputs.files.asPath, include: "**/*.json").each { File file ->
@@ -96,7 +98,7 @@ curseforge {
 			requiredDependency "u-team-core"
 		}
 
-		mainArtifact(tasks.getByName("jar")) {
+		mainArtifact(tasks.getByName("reobfJar")) {
 			displayName = "${config.curse.display}-Forge-${config.minecraft.version}-${project.version}"
 			changelogType = "html"
 			changelog = "<a href=\"${gradlefiles.changelogUrl()}\">Changelog of ${project.version}</a>"
