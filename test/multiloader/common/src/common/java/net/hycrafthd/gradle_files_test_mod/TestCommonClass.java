@@ -8,8 +8,8 @@ public class TestCommonClass {
 
 	public static void test() {
 		minecraft.getCameraEntity();
-		// Thread thread = minecraft.gameThread;
-		// System.out.println(thread);
+		final Thread thread = minecraft.gameThread;
+		System.out.println(thread);
 	}
 
 }

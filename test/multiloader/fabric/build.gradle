@@ -31,6 +31,8 @@ java {
 }
 
 loom {
+	accessWidenerPath = file("src/main/resources/test.accesswidener")
+
 	runs {
 		client {
 			runDir "run/client"

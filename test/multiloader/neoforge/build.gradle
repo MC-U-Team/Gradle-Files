@@ -30,6 +30,12 @@ java {
 	withJavadocJar()
 }
 
+minecraft {
+	accessTransformers {
+		file("src/main/resources/META-INF/accesstransformer.cfg")
+	}
+}
+
 runs {
 	client {
 		workingDirectory file("run/client")

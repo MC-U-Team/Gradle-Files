@@ -30,6 +30,10 @@ java {
 	withJavadocJar()
 }
 
+loom {
+	accessWidenerPath = gradlefiles.project("fabric").file("src/main/resources/test.accesswidener")
+}
+
 tasks.withType(Jar).configureEach { task ->
 	gradlefiles.defaultJar(task)
 
