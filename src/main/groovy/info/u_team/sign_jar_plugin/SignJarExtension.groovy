@@ -1,9 +1,13 @@
 package info.u_team.sign_jar_plugin
 
+import java.util.function.Function
+
 import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.TaskProvider
-import org.gradle.jvm.tasks.Jar
 
 import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.Constants
@@ -31,7 +35,11 @@ abstract class SignJarExtension {
 
 	abstract Property<String> getKeyPass()
 
-	TaskProvider<SignJarTask> sign(final TaskProvider<? extends Jar> taskProvider) {
+	TaskProvider<SignJarTask> sign(final TaskProvider<?> taskProvider) {
 		CreateSignJarTaskExtensionImpl.sign(project, this, taskProvider)
+	}
+
+	TaskProvider<SignJarTask> sign(final TaskProvider<?> taskProvider, @DelegatesTo(Task.class) final Closure<Provider<RegularFile>> fileFunction) {
+		CreateSignJarTaskExtensionImpl.sign(project, this, taskProvider, fileFunction)
 	}
 }

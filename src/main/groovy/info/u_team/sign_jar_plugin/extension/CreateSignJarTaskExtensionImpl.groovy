@@ -2,20 +2,41 @@ package info.u_team.sign_jar_plugin.extension
 
 import org.apache.commons.lang3.StringUtils
 import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.file.RegularFile
 import org.gradle.api.plugins.BasePlugin
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.TaskProvider
-import org.gradle.jvm.tasks.Jar
+import org.gradle.api.tasks.bundling.AbstractArchiveTask
 
 import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.project.util.DependencyUtil
+import info.u_team.gradle_files_plugin.util.ClassUtil
 import info.u_team.sign_jar_plugin.SignJarExtension
 import info.u_team.sign_jar_plugin.task.SignJarTask
 
 @CompileStatic
 class CreateSignJarTaskExtensionImpl {
 
-	static TaskProvider<SignJarTask> sign(final Project project, final SignJarExtension extension, final TaskProvider<? extends Jar> taskProvider) {
+	static final List<Closure<Provider<RegularFile>>> CUSTOM_ARCHIVE_MAPPING = new ArrayList()
+
+	static TaskProvider<SignJarTask> sign(final Project project, final SignJarExtension extension, final TaskProvider<?> taskProvider) {
+		sign(project, extension, taskProvider) { task ->
+			if(task instanceof AbstractArchiveTask) {
+				return task.archiveFile
+			}
+			for(archiveMapping in CUSTOM_ARCHIVE_MAPPING) {
+				final def archive = archiveMapping.call(task)
+				if(archive) {
+					return archive
+				}
+			}
+			throw new IllegalStateException("Task cannot be used as input for signing jars")
+		}
+	}
+
+	static TaskProvider<SignJarTask> sign(final Project project, final SignJarExtension extension, final TaskProvider<?> taskProvider, @DelegatesTo(Task.class) final Closure<Provider<RegularFile>> fileFunction) {
 		final boolean canSign = extension.alias.isPresent() && extension.storePass.isPresent();
 
 		if(!canSign) {
@@ -39,7 +60,7 @@ class CreateSignJarTaskExtensionImpl {
 
 		project.afterEvaluate {
 			signJarTask.configure { task ->
-				final def archiveFile = taskProvider.get().archiveFile
+				final Provider<RegularFile> archiveFile = fileFunction.call(taskProvider.get());
 
 				task.inputFile.set(archiveFile)
 				task.outputFile.set(archiveFile)
