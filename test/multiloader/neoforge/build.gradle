@@ -85,7 +85,7 @@ curseforge {
 			requiredDependency "u-team-core"
 		}
 
-		mainArtifact(tasks.getByName("jar")) {
+		mainArtifact(tasks.named("jar")) {
 			displayName = "${config.curse.display}-NeoForge-${config.minecraft.version}-${project.version}"
 			changelogType = "html"
 			changelog = "<a href=\"${gradlefiles.changelogUrl()}\">Changelog of ${project.version}</a>"
