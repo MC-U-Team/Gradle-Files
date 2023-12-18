@@ -6,10 +6,10 @@ import org.gradle.api.Project;
 import info.u_team.gradle_files_plugin.Constants;
 
 public abstract class SignJarPlugin implements Plugin<Project> {
-
+	
 	@Override
 	public void apply(Project project) {
 		project.getExtensions().create(Constants.SIGN_JAR_EXTENSION_NAME, SignJarExtension.class, project);
 	}
-
+	
 }

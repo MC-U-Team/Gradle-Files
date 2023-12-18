@@ -39,12 +39,12 @@ minecraft {
 runs {
 	client {
 		workingDirectory file("run/client")
-
+		
 		modSource sourceSets.main
 	}
 	server {
 		workingDirectory file("run/server")
-
+		
 		modSource sourceSets.main
 	}
 }
@@ -74,23 +74,23 @@ dependencies {
 
 curseforge {
 	apiKey = defaultPropertyValue("curseforge.token")
-
+	
 	options {
 		debug = true
 	}
-
+	
 	project {
 		id = config.curse.id
 		releaseType = config.curse.type
-
+		
 		addGameVersion config.minecraft.version
 		addGameVersion "NeoForge"
 		addGameVersion "Java 17"
-
+		
 		relations {
 			requiredDependency "u-team-core"
 		}
-
+		
 		mainArtifact(tasks.named("jar")) {
 			displayName = "${config.curse.display}-NeoForge-${config.minecraft.version}-${project.version}"
 			changelogType = "html"
@@ -108,7 +108,7 @@ publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			artifactId project.base.archivesName.get()
-
+			
 			from components.java
 		}
 	}

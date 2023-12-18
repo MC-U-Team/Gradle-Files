@@ -8,7 +8,7 @@ import info.u_team.gradle_files_plugin.project.GradleFilesProjectPlugin;
 import info.u_team.gradle_files_plugin.settings.GradleFilesSettingsPlugin;
 
 public abstract class GradleFilesPlugin implements Plugin<Object> {
-
+	
 	@Override
 	public void apply(Object object) {
 		if (object instanceof Project) {
@@ -19,5 +19,5 @@ public abstract class GradleFilesPlugin implements Plugin<Object> {
 			settings.getPluginManager().apply(GradleFilesSettingsPlugin.class);
 		}
 	}
-
+	
 }
