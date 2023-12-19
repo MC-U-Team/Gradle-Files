@@ -9,7 +9,6 @@ import info.u_team.gradle_files_plugin.project.tool.GeneralTaskSettingsTool;
 import info.u_team.gradle_files_plugin.project.tool.LoadConfigTool;
 import info.u_team.gradle_files_plugin.project.tool.PrintModInformationTool;
 import info.u_team.gradle_files_plugin.project.tool.RegisterReleaseTasks;
-import info.u_team.gradle_files_plugin.project.tool.RemovedMappedDependenciesTool;
 import info.u_team.gradle_files_plugin.project.tool.SetupPluginEnvironmentTool;
 import info.u_team.gradle_files_plugin.project.tool.SetupSpecialModLoaderSettingsTool;
 
@@ -25,7 +24,6 @@ public abstract class GradleFilesProjectPlugin implements Plugin<Project> {
 		FetchGitBuildNumber.fetch(project);
 		RegisterReleaseTasks.register(project);
 		GeneralTaskSettingsTool.setup(project);
-		RemovedMappedDependenciesTool.remove(project);
 		
 		SetupSpecialModLoaderSettingsTool.setup(project);
 	}
