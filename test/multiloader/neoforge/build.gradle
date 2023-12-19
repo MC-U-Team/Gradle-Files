@@ -109,7 +109,7 @@ publishing {
 		mavenJava(MavenPublication) {
 			artifactId project.base.archivesName.get()
 			
-			from components.java
+			from gradlefiles.filteredJavaComponent()
 		}
 	}
 }

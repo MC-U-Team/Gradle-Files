@@ -19,6 +19,7 @@ class FilteredComponentExtensionImpl {
 	static GradleFilesSoftwareComponent filteredComponent(final SoftwareComponent component, final @DelegatesTo(GradleFilesSoftwareComponent.class) Closure configureClosure) {
 		if(component instanceof SoftwareComponentInternal) {
 			final def filteredComponent = new GradleFilesSoftwareComponent(component)
+			configureClosure.delegate = filteredComponent
 			configureClosure.call(filteredComponent)
 			return filteredComponent
 		} else {

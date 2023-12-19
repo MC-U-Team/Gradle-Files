@@ -206,8 +206,16 @@ abstract class GradleFilesProjectExtension {
 	
 	/**
 	 * Wraps the java component with a filter for dependencies that should not be published in pom and gradle metadata.
-	 * Return true to remove the dependency, else false
-	 * @param predicate Filter
+	 * Return true in filterDependency predicate to remove the dependency, else false
+	 */
+	GradleFilesSoftwareComponent filteredJavaComponent() {
+		FilteredComponentExtensionImpl.filteredJavaComponent(project) {}
+	}
+	
+	/**
+	 * Wraps the java component with a filter for dependencies that should not be published in pom and gradle metadata.
+	 * Return true in filterDependency predicate to remove the dependency, else false
+	 * @param configureClosure Closure
 	 */
 	GradleFilesSoftwareComponent filteredJavaComponent(final @DelegatesTo(GradleFilesSoftwareComponent.class) Closure configureClosure) {
 		FilteredComponentExtensionImpl.filteredJavaComponent(project, configureClosure)
@@ -215,8 +223,18 @@ abstract class GradleFilesProjectExtension {
 	
 	/**
 	 * Wraps a software component with a filter for dependencies that should not be published in pom and gradle metadata.
-	 * Return true to remove the dependency, else false
-	 * @param predicate Filter
+	 * Return true in filterDependency predicate to remove the dependency, else false
+	 * @param component SoftwareComponent
+	 */
+	GradleFilesSoftwareComponent filteredComponent(final SoftwareComponent component) {
+		FilteredComponentExtensionImpl.filteredComponent(component) {}
+	}
+	
+	/**
+	 * Wraps a software component with a filter for dependencies that should not be published in pom and gradle metadata.
+	 * Return true in filterDependency predicate to remove the dependency, else false
+	 * @param component SoftwareComponent
+	 * @param configureClosure Closure
 	 */
 	GradleFilesSoftwareComponent filteredComponent(final SoftwareComponent component, final @DelegatesTo(GradleFilesSoftwareComponent.class) Closure configureClosure) {
 		FilteredComponentExtensionImpl.filteredComponent(component, configureClosure)
