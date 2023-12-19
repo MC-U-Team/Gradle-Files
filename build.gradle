@@ -71,9 +71,6 @@ plugins.withType(EclipsePlugin) {
 }
 
 repositories {
-	maven {
-		url = "https://maven.minecraftforge.net"
-	}
 	mavenCentral()
 }
 
