@@ -27,6 +27,11 @@ public class GradleFilesSoftwareComponent implements SoftwareComponentInternal {
 	
 	public GradleFilesSoftwareComponent(SoftwareComponentInternal javaComponent) {
 		this.javaComponent = javaComponent;
+		// TODO Remove forged mapped dependencies. maybe move somewhere else
+		filterDependency(dependency -> {
+			final String version = dependency.getDependency().getVersion();
+			return (version != null && version.contains("_mapped_"));
+		});
 	}
 	
 	/**
