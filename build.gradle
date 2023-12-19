@@ -7,7 +7,7 @@ plugins {
 
 group = "info.u-team.gradle_files"
 base.archivesName = "gradle_files"
-version = "4.0.0-SNAPSHOT"
+version = "4.0.0"
 description = "Gradle plugin for special gradle files used for mods by u-team"
 
 java {
@@ -35,11 +35,11 @@ sourceSets {
 gradlePlugin {
 	plugins {
 		gradleFilesPlugin {
-			id = "info.u_team.gradle_files"
+			id = "info.u-team.gradle-files"
 			implementationClass = "info.u_team.gradle_files_plugin.GradleFilesPlugin"
 		}
 		signJarPlugin {
-			id = "info.u_team.sign_jar"
+			id = "info.u-team.sign-jar"
 			implementationClass = "info.u_team.sign_jar_plugin.SignJarPlugin"
 		}
 	}
