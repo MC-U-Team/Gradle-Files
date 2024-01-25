@@ -3,7 +3,7 @@ plugins {
 	id "org.parchmentmc.librarian.forgegradle"
 	id "org.spongepowered.mixin"
 	id "info.u_team.gradle_files"
-	id "info.u_team.curse_gradle_uploader"
+	id "me.modmuss50.mod-publish-plugin"
 	id "maven-publish"
 }
 
@@ -81,30 +81,33 @@ dependencies {
 	minecraft gradlefiles.forgeDependency()
 }
 
-curseforge {
-	apiKey = defaultPropertyValue("curseforge.token")
+publishMods {
+	file = tasks.named("jar").flatMap { jar -> jar.archiveFile }
+	displayName = "${config.publish.display}-Forge-${config.minecraft.version}-${project.version}"
+	changelog = "[Changelog of ${project.version}](${gradlefiles.changelogUrl()})"
+	type = me.modmuss50.mpp.ReleaseType.of(config.publish.type)
+	modLoaders.add("forge")
 	
-	options {
-		debug = true
+	dryRun = true
+	
+	curseforge {
+		accessToken = defaultPropertyValue("curseforge.token")
+		
+		projectId = config.curse.id
+		projectSlug = config.curse.slug
+		minecraftVersions.add(config.minecraft.version)
+		minecraftVersions.add("Java 17")
+		
+		requires {
+			slug = "u-team-core"
+		}
 	}
 	
-	project {
-		id = config.curse.id
-		releaseType = config.curse.type
+	modrinth {
+		accessToken = defaultPropertyValue("modrinth.token")
 		
-		addGameVersion config.minecraft.version
-		addGameVersion "Forge"
-		addGameVersion "Java 17"
-		
-		relations {
-			requiredDependency "u-team-core"
-		}
-		
-		mainArtifact(tasks.named("jar")) {
-			displayName = "${config.curse.display}-Forge-${config.minecraft.version}-${project.version}"
-			changelogType = "html"
-			changelog = "<a href=\"${gradlefiles.changelogUrl()}\">Changelog of ${project.version}</a>"
-		}
+		projectId = config.modrinth.id
+		minecraftVersions.add(config.minecraft.version)
 	}
 }
 
