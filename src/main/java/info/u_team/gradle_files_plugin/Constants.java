@@ -30,5 +30,6 @@ public class Constants {
 	public static final String KEYSTORE_FINGERPRINT = KEYSTORE + ".fingerprint";
 	
 	public static final String CURSEFORGE_EXTERNAL_TASK = "curseforge";
+	public static final String PUBLISH_MODS_EXTERNAL_TASK = "publishMods";
 	public static final String PUBLISH_EXTERNAL_TASK = "publish";
 }

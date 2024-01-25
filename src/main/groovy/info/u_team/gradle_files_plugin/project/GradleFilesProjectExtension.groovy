@@ -16,7 +16,7 @@ import info.u_team.gradle_files_plugin.project.extension.FabricDependenciesExten
 import info.u_team.gradle_files_plugin.project.extension.FilteredComponentExtensionImpl
 import info.u_team.gradle_files_plugin.project.extension.ForgeDependencyExtensionImpl
 import info.u_team.gradle_files_plugin.project.extension.NeoForgeDependencyExtensionImpl
-import info.u_team.gradle_files_plugin.project.extension.OrderCurseforgeTasksImpl
+import info.u_team.gradle_files_plugin.project.extension.OrderTasksImpl
 import info.u_team.gradle_files_plugin.project.extension.ProjectExtensionImpl
 import info.u_team.gradle_files_plugin.project.extension.VersionExtensionImpl
 import info.u_team.gradle_files_plugin.project.util.GradleFilesSoftwareComponent
@@ -168,19 +168,10 @@ abstract class GradleFilesProjectExtension {
 	}
 	
 	/**
-	 * Mark the tasks as a dependency for all upload tasks
-	 * @param dependTask Tasks
-	 */
-	void allUploadDependOn(final Object... dependTask) {
-		DependsOnImpl.allUploadDependOn(project, dependTask)
-	}
-	
-	/**
 	 * Mark the tasks as a dependency for all building tasks
 	 * Has the same effect as calling the following methods individually with the same values
 	 * @see GradleFilesExtension#assembleDependOn
 	 * @see GradleFilesExtension#allPublishingDependOn
-	 * @see GradleFilesExtension#allUploadDependOn
 	 * @param dependTask Tasks
 	 */
 	void allBuildingDependOn(final Object... dependTask) {
@@ -188,11 +179,11 @@ abstract class GradleFilesProjectExtension {
 	}
 	
 	/**
-	 * Mark all curseforge tasks that start with the specified name to run in the reversed order the projects are supplied.
+	 * Mark all mod publish tasks that start with curseforge or publish to run in the reversed order the projects are supplied.
 	 * @param orderProjects Projects
 	 */
-	void orderCurseforgeTasks(final Project ... orderProjects) {
-		OrderCurseforgeTasksImpl.orderCurseforgeTasks(project, orderProjects)
+	void orderModPublishTasks(final Project ... orderProjects) {
+		OrderTasksImpl.orderModPublishTasks(project, orderProjects)
 	}
 	
 	/**
@@ -201,7 +192,7 @@ abstract class GradleFilesProjectExtension {
 	 * @param orderProjects Projects
 	 */
 	void orderTasks(String taskStartName, final Project ... orderProjects) {
-		OrderCurseforgeTasksImpl.orderTasks(project, taskStartName, orderProjects)
+		OrderTasksImpl.orderTasks(project, taskStartName, orderProjects)
 	}
 	
 	/**
