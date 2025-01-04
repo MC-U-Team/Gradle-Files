@@ -13,6 +13,6 @@ class NamingUtil {
 		final def sanitizedString = projectName.split(INVALID_CHARACTERS).collect { namePart ->
 			StringUtils.capitalize(namePart)
 		}.join("_")
-		return "${rootProjectName}_${StringUtils.capitalize(sanitizedString)}"
+		return "${rootProjectName}_${sanitizedString}"
 	}
 }
