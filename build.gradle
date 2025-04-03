@@ -7,7 +7,7 @@ plugins {
 
 group = "info.u-team.gradle_files"
 base.archivesName = "gradle_files"
-version = "4.0.4"
+version = "4.0.5"
 description = "Gradle plugin for special gradle files used for mods by u-team"
 
 java {
