@@ -20,7 +20,7 @@ abstract class CreateGitTagTask extends DefaultTask {
 		final def config = GradleFilesUtil.getProjectConfig(project)
 		final def tagName = "${config.minecraft.version}-${project.version}"
 
-		GitUtil.executeGitCommandException(project, project.rootDir, "tag", tagName)
+		GitUtil.executeGitCommandException(project, project.rootDir, "tag", "-a", tagName, "-m", tagName)
 		GitUtil.executeGitCommandException(project, project.rootDir, "push", "origin", tagName)
 
 		project.logger.quiet("Created release tag ${tagName}")
