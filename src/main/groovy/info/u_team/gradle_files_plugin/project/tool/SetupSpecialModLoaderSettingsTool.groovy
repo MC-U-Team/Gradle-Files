@@ -2,73 +2,41 @@ package info.u_team.gradle_files_plugin.project.tool
 
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.api.plugins.JavaPlugin
-import org.gradle.api.publish.PublishingExtension
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
-import info.u_team.gradle_files_plugin.project.util.DependencyUtil
 import info.u_team.gradle_files_plugin.util.ClassUtil
 import info.u_team.sign_jar_plugin.extension.CreateSignJarTaskExtensionImpl
 
 @CompileStatic
 class SetupSpecialModLoaderSettingsTool {
-	
+
+	static final String RENAME_JAR_CLASS = "net.minecraftforge.renamer.gradle.RenameJar"
+
+	private static final Closure RENAME_JAR_ARCHIVE_MAPPING = renameJarArchiveMapping()
+
 	static void setup(final Project project) {
 		setupForge(project)
 	}
-	
+
 	private static void setupForge(final Project project) {
-		setupForgeReobf(project)
-		setupForgeReobfDependencies(project)
-		setupForgeRenameRuns(project)
 		setupForgeJarSigning(project)
 	}
-	
-	@CompileDynamic
-	private static void setupForgeReobf(final Project project) {
-		// Eagerly create reobfJar task
-		final def reobfExtension = project.extensions.findByName("reobf")
-		if(reobfExtension) {
-			reobfExtension.create(JavaPlugin.JAR_TASK_NAME);
-		}
-	}
-	
-	private static void setupForgeReobfDependencies(final Project project) {
-		// Set all publish tasks depend on reobfJar. This is necessary for correct metadata generation
-		project.afterEvaluate {
-			final def reobfClass = ClassUtil.findClass(project, "net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace")
-			if(reobfClass) {
-				project.tasks.withType(reobfClass).each { task ->
-					DependencyUtil.allBuildingDependOn(project, task)
-				}
-			}
-		}
-	}
-	
-	@CompileDynamic
-	private static void setupForgeRenameRuns(final Project project) {
-		// Rename run configurations to include project name
-		project.afterEvaluate {
-			final def minecraftExtensionClass = ClassUtil.findClass(project, "net.minecraftforge.gradle.common.util.MinecraftExtension")
-			if(minecraftExtensionClass) {
-				final def minecraftExtension = project.extensions.findByType(minecraftExtensionClass)
-				
-				minecraftExtension?.runs?.each { run ->
-					run.taskName = "${project.name}_${run.taskName}"
-				}
-			}
-		}
-	}
-	
-	@CompileDynamic
+
 	private static void setupForgeJarSigning(final Project project) {
-		// Add reobf as input option to jar signing
-		CreateSignJarTaskExtensionImpl.CUSTOM_ARCHIVE_MAPPING.add({ Task task ->
-			final def reobfClass = ClassUtil.findClass(project, "net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace")
-			if(reobfClass && reobfClass.isInstance(task)) {
-				return task.input
+		// Add renamed jar (renamer plugin) as input option to jar signing
+		if(!CreateSignJarTaskExtensionImpl.CUSTOM_ARCHIVE_MAPPING.contains(RENAME_JAR_ARCHIVE_MAPPING)) {
+			CreateSignJarTaskExtensionImpl.CUSTOM_ARCHIVE_MAPPING.add(RENAME_JAR_ARCHIVE_MAPPING)
+		}
+	}
+	
+	@CompileDynamic
+	private static Closure renameJarArchiveMapping() {
+		return { Task task ->
+			final def renameJarClass = ClassUtil.findClass(task.project, RENAME_JAR_CLASS)
+			if(renameJarClass && renameJarClass.isInstance(task)) {
+				return task.output
 			}
-		});
+		}
 	}
 }
