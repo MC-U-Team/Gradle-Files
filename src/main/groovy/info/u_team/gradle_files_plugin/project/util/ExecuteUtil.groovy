@@ -2,66 +2,99 @@ package info.u_team.gradle_files_plugin.project.util
 
 import java.nio.charset.StandardCharsets
 
-import org.gradle.api.Project
+import org.gradle.api.Action
+import org.gradle.api.GradleException
 import org.gradle.api.logging.Logger
+import org.gradle.api.provider.ProviderFactory
+import org.gradle.process.ExecOperations
 import org.gradle.process.ExecSpec
-import org.gradle.process.internal.ExecException
 
 import groovy.transform.CompileStatic
 
 @CompileStatic
 class ExecuteUtil {
-	
-	static def executeCommand(final Project project, final def workingDir, final String executable, final String... args) {
-		final def logger = project.logger
-		
-		logEdge(logger, "Start")
-		log(logger, "Exec command '${executable}' with arguments ${args}")
-		
-		try {
+
+	final Logger logger
+
+	private final Closure<List> executor
+
+	private ExecuteUtil(final Logger logger, final Closure<List> executor) {
+		this.logger = logger
+		this.executor = executor
+	}
+
+	/**
+	 * Executor for the configuration phase. The commands are tracked as configuration cache inputs
+	 */
+	static ExecuteUtil fromProviders(final Logger logger, final ProviderFactory providers) {
+		return new ExecuteUtil(logger, { Action<ExecSpec> action ->
+			final def execOutput = providers.exec(action)
+			return [execOutput.result.get().exitValue, execOutput.standardOutput.asText.get(), execOutput.standardError.asText.get()]
+		})
+	}
+
+	/**
+	 * Executor for the execution phase
+	 */
+	static ExecuteUtil fromExecOperations(final Logger logger, final ExecOperations execOperations) {
+		return new ExecuteUtil(logger, { Action<ExecSpec> action ->
 			def output = new ByteArrayOutputStream(), error = new ByteArrayOutputStream()
-			
-			final def exitValue = project.exec { ExecSpec spec ->
+
+			final def exitValue = execOperations.exec { ExecSpec spec ->
+				action.execute(spec)
+				spec.setErrorOutput(error)
+				spec.setStandardOutput(output)
+			}.exitValue
+
+			return [exitValue, output.toString(StandardCharsets.UTF_8.name()), error.toString(StandardCharsets.UTF_8.name())]
+		})
+	}
+
+	def executeCommand(final def workingDir, final String executable, final String... args) {
+		logEdge("Start")
+		log("Exec command '${executable}' with arguments ${args}")
+
+		try {
+			final def result = executor.call({ ExecSpec spec ->
 				spec.workingDir(workingDir)
 				spec.executable(executable)
 				spec.args(args)
-				spec.setErrorOutput(error)
-				spec.setStandardOutput(output)
 				spec.ignoreExitValue = true
-			}.exitValue
-			
-			final def outputString = output.toString(StandardCharsets.UTF_8.name())
-			final def errorString = error.toString(StandardCharsets.UTF_8.name())
-			
+			} as Action<ExecSpec>)
+
+			final def exitValue = result[0] as int
+			final def outputString = result[1] as String
+			final def errorString = result[2] as String
+
 			def returnString = outputString
 			if(exitValue != 0) {
 				returnString += errorString
 			}
-			
-			log(logger, "Output: ${outputString}")
-			log(logger, "Error: ${errorString}")
-			logEdge(logger, "Finished")
-			
+
+			log("Output: ${outputString}")
+			log("Error: ${errorString}")
+			logEdge("Finished")
+
 			return [exitValue == 0, returnString]
-		} catch(final ExecException ex) {
+		} catch(final GradleException ex) {
 			final def writer = new StringWriter();
 			final def printWriter = new PrintWriter(writer)
-			
+
 			ex.printStackTrace(printWriter)
-			
-			log(logger, "Error: ${writer.toString()}")
-			logEdge(logger, "Finished")
-			
+
+			log("Error: ${writer.toString()}")
+			logEdge("Finished")
+
 			return [false, writer.toString()]
 		}
 	}
-	
-	private static void logEdge(final Logger logger, final String message) {
+
+	private void logEdge(final String message) {
 		final def length = (80 - message.length()) / 2
-		log(logger, "-"*length + " " + message + " " + "-"*length)
+		log("-"*length + " " + message + " " + "-"*length)
 	}
-	
-	private static void log(final Logger logger, final String message) {
+
+	private void log(final String message) {
 		logger.info("[Execute Command]: " + message.trim())
 	}
 }

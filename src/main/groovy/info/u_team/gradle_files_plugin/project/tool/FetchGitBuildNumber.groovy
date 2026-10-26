@@ -6,6 +6,7 @@ import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.project.extension.VersionExtensionImpl
+import info.u_team.gradle_files_plugin.project.util.ExecuteUtil
 import info.u_team.gradle_files_plugin.project.util.GitUtil
 import info.u_team.gradle_files_plugin.project.util.GradleFilesUtil
 
@@ -24,40 +25,41 @@ class FetchGitBuildNumber {
 		def buildNumber = "DEV"
 
 		if(project.hasProperty(Constants.BUILD_PROPERTY)) {
+			final def executor = ExecuteUtil.fromProviders(logger, project.providers)
 			final def gitRepo = new File(project.layout.buildDirectory.asFile.get(), Constants.GIT_REPOSITORY_NAME)
 			gitRepo.mkdirs()
 
-			final def repositoryPath = GitUtil.repositoryPath(project, gitRepo)
+			final def repositoryPath = GitUtil.repositoryPath(executor, gitRepo)
 
 			if(!gitRepo.canonicalPath.equals(repositoryPath)) {
 				logger.quiet("Create local git repository here {}", gitRepo)
 
 				// Create repository
-				GitUtil.executeGitCommandException(project, gitRepo, "init")
+				GitUtil.executeGitCommandException(executor, gitRepo, "init")
 
 				// Get remote from main repository
-				final def url = GitUtil.executeGitCommandException(project, project.rootDir, "remote", "get-url", "origin")
+				final def url = GitUtil.executeGitCommandException(executor, project.rootDir, "remote", "get-url", "origin")
 
 				// Set url in new repository
-				GitUtil.executeGitCommandException(project, gitRepo, "remote", "add", "origin", url)
+				GitUtil.executeGitCommandException(executor, gitRepo, "remote", "add", "origin", url)
 			}
 
 			final def versioningBranch = Constants.VERSIONING_BRANCH
 
 			// Fetch upstream
-			GitUtil.fetch(project, gitRepo)
+			GitUtil.fetch(executor, gitRepo)
 
 			logger.quiet("Check if branch {} already exists", versioningBranch)
 
-			final def branchExists = GitUtil.branchExists(project, gitRepo, versioningBranch)
+			final def branchExists = GitUtil.branchExists(executor, gitRepo, versioningBranch)
 			if(branchExists) {
 				logger.quiet("Branch exists. Try to read patch file")
 
 				// Checkout existing versioning branch
-				GitUtil.executeGitCommandException(project, gitRepo, "checkout", "-f", versioningBranch)
+				GitUtil.executeGitCommandException(executor, gitRepo, "checkout", "-f", versioningBranch)
 
 				// Pull with merge existing
-				GitUtil.pull(project, gitRepo)
+				GitUtil.pull(executor, gitRepo)
 
 				// Read patch number and increment
 				final def patchNumber = (new File(gitRepo, Constants.PATCH_FILE).text as Integer) + 1
@@ -66,12 +68,12 @@ class FetchGitBuildNumber {
 				logger.quiet("Branch does not exist. Create new branch and patch file starting at build number 1")
 
 				// Create new orphan branch
-				GitUtil.executeGitCommandException(project, gitRepo, "checkout", "--orphan", versioningBranch)
+				GitUtil.executeGitCommandException(executor, gitRepo, "checkout", "--orphan", versioningBranch)
 
 				// Create patch file, commit and push. Set incremented patch number as start value
 				new File(gitRepo, Constants.PATCH_FILE).write("0", "UTF-8")
-				GitUtil.alwaysCommit(project, gitRepo, Constants.PATCH_FILE) { "Created ${versioningBranch} branch with build number 1" }
-				GitUtil.push(project, gitRepo, versioningBranch)
+				GitUtil.alwaysCommit(executor, gitRepo, Constants.PATCH_FILE) { "Created ${versioningBranch} branch with build number 1" }
+				GitUtil.push(executor, gitRepo, versioningBranch)
 				buildNumber = 1 as String
 			}
 		} else {
