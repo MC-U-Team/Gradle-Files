@@ -2,6 +2,7 @@ package info.u_team.gradle_files_plugin.project.util;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,8 @@ public class GradleFilesSoftwareComponent implements SoftwareComponentInternal {
 	
 	private Predicate<DependencyHolder> filterPublishingDependencies = Predicates.alwaysFalse();
 	
+	private Function<PublishArtifact, PublishArtifact> replacePublishingArtifacts = Function.identity();
+	
 	private final SoftwareComponentInternal javaComponent;
 	
 	public GradleFilesSoftwareComponent(SoftwareComponentInternal javaComponent) {
@@ -41,6 +44,15 @@ public class GradleFilesSoftwareComponent implements SoftwareComponentInternal {
 	 */
 	public void filterDependency(Predicate<DependencyHolder> predicate) {
 		filterPublishingDependencies = filterPublishingDependencies.or(predicate);
+	}
+	
+	/**
+	 * Return a replacement for the artifact, else the artifact itself
+	 * 
+	 * @param function Function for artifacts
+	 */
+	public void replaceArtifact(Function<PublishArtifact, PublishArtifact> function) {
+		replacePublishingArtifacts = replacePublishingArtifacts.andThen(function);
 	}
 	
 	@Override
@@ -88,7 +100,7 @@ public class GradleFilesSoftwareComponent implements SoftwareComponentInternal {
 				
 				@Override
 				public Set<? extends PublishArtifact> getArtifacts() {
-					return context.getArtifacts();
+					return context.getArtifacts().stream().map(replacePublishingArtifacts).collect(Collectors.toCollection(LinkedHashSet::new));
 				}
 			});
 		}
