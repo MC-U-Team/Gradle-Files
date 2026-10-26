@@ -12,7 +12,7 @@ description = "Gradle plugin for special gradle files used for mods by u-team"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(8)
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 	withSourcesJar()
 	withJavadocJar()
