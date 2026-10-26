@@ -75,8 +75,8 @@ repositories {
 }
 
 dependencies {
-	implementation group: "org.apache.commons", name: "commons-lang3", version: "3.21.0"
-	implementation group: "com.google.guava", name: "guava", version: "33.7.2-jre"
+	implementation "org.apache.commons:commons-lang3:3.21.0"
+	implementation "com.google.guava:guava:33.7.2-jre"
 }
 
 jar.manifest.mainAttributes([
