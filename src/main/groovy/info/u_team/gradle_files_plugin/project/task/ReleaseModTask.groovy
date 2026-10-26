@@ -12,13 +12,14 @@ import info.u_team.gradle_files_plugin.Constants
 abstract class ReleaseModTask extends DefaultTask {
 
 	ReleaseModTask() {
+		final def createBuild = project.hasProperty(Constants.BUILD_PROPERTY)
 		onlyIf {
-			project.hasProperty(Constants.BUILD_PROPERTY)
+			createBuild
 		}
 	}
 
 	@TaskAction
 	void create() {
-		project.logger.quiet("Released mod")
+		logger.quiet("Released mod")
 	}
 }

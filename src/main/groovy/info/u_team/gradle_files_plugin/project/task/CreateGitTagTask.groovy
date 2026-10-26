@@ -3,6 +3,10 @@ package info.u_team.gradle_files_plugin.project.task
 import javax.inject.Inject
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
 import org.gradle.work.DisableCachingByDefault
@@ -16,10 +20,21 @@ import info.u_team.gradle_files_plugin.project.util.GradleFilesUtil
 abstract class CreateGitTagTask extends DefaultTask {
 
 	CreateGitTagTask() {
+		final def createBuild = project.hasProperty(Constants.BUILD_PROPERTY)
 		onlyIf {
-			project.hasProperty(Constants.BUILD_PROPERTY)
+			createBuild
 		}
+
+		final def config = GradleFilesUtil.getProjectConfig(project)
+		tagName.convention(project.provider { "${config.minecraft.version}-${project.version}" as String })
+		repositoryDirectory.convention(project.rootProject.layout.projectDirectory)
 	}
+
+	@Input
+	abstract Property<String> getTagName()
+
+	@Internal
+	abstract DirectoryProperty getRepositoryDirectory()
 
 	@Inject
 	abstract ExecOperations getExecOperations()
@@ -27,12 +42,12 @@ abstract class CreateGitTagTask extends DefaultTask {
 	@TaskAction
 	void create() {
 		final def executor = ExecuteUtil.fromExecOperations(logger, execOperations)
-		final def config = GradleFilesUtil.getProjectConfig(project)
-		final def tagName = "${config.minecraft.version}-${project.version}"
+		final def rootDir = repositoryDirectory.get().asFile
+		final def tagName = getTagName().get()
 
-		GitUtil.executeGitCommandException(executor, project.rootDir, "tag", "-a", tagName, "-m", tagName)
-		GitUtil.executeGitCommandException(executor, project.rootDir, "push", "origin", tagName)
+		GitUtil.executeGitCommandException(executor, rootDir, "tag", "-a", tagName, "-m", tagName)
+		GitUtil.executeGitCommandException(executor, rootDir, "push", "origin", tagName)
 
-		project.logger.quiet("Created release tag ${tagName}")
+		logger.quiet("Created release tag ${tagName}")
 	}
 }

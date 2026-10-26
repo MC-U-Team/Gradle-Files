@@ -4,6 +4,10 @@ import javax.inject.Inject
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
 import org.gradle.work.DisableCachingByDefault
@@ -20,10 +24,20 @@ import info.u_team.gradle_files_plugin.project.util.GradleFilesUtil
 abstract class UpdateGitBuildNumberTask extends DefaultTask {
 
 	UpdateGitBuildNumberTask() {
+		final def createBuild = project.hasProperty(Constants.BUILD_PROPERTY)
 		onlyIf {
-			project.hasProperty(Constants.BUILD_PROPERTY)
+			createBuild
 		}
+
+		buildNumber.convention(project.provider { readBuildNumber(project) })
+		gitRepository.convention(project.layout.buildDirectory.dir(Constants.GIT_REPOSITORY_NAME))
 	}
+
+	@Input
+	abstract Property<String> getBuildNumber()
+
+	@Internal
+	abstract DirectoryProperty getGitRepository()
 
 	@Inject
 	abstract ExecOperations getExecOperations()
@@ -31,9 +45,9 @@ abstract class UpdateGitBuildNumberTask extends DefaultTask {
 	@TaskAction
 	void update() {
 		final def executor = ExecuteUtil.fromExecOperations(logger, execOperations)
-		final def gitRepo = new File(project.layout.buildDirectory.asFile.get(), Constants.GIT_REPOSITORY_NAME)
+		final def gitRepo = gitRepository.get().asFile
 		final def versioningBranch = Constants.VERSIONING_BRANCH
-		final def buildNumber = getBuildNumber(project)
+		final def buildNumber = getBuildNumber().get()
 
 		// Fetch upstream
 		GitUtil.fetch(executor, gitRepo)
@@ -42,15 +56,15 @@ abstract class UpdateGitBuildNumberTask extends DefaultTask {
 		GitUtil.executeGitCommandException(executor, gitRepo, "checkout", "-f", versioningBranch)
 
 		// Update patch file, commit and push.
-		new File(gitRepo, Constants.PATCH_FILE).write(buildNumber as String, "UTF-8")
+		new File(gitRepo, Constants.PATCH_FILE).write(buildNumber, "UTF-8")
 		GitUtil.alwaysCommit(executor, gitRepo, Constants.PATCH_FILE) { "Updated build number to ${buildNumber}" }
 		GitUtil.push(executor, gitRepo, versioningBranch)
 
-		project.logger.quiet("Updated build number to ${(buildNumber as Integer)+1}")
+		logger.quiet("Updated build number to ${(buildNumber as Integer)+1}")
 	}
 
 	@CompileDynamic
-	private String getBuildNumber(final Project project) {
+	private static String readBuildNumber(final Project project) {
 		final def config = GradleFilesUtil.getProjectConfig(project)
 		return config.mod.buildnumber
 	}

@@ -4,11 +4,14 @@ import javax.inject.Inject
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
 import org.gradle.work.DisableCachingByDefault
 
-import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.Constants
 import info.u_team.gradle_files_plugin.project.util.ExecuteUtil
 import info.u_team.gradle_files_plugin.project.util.GitUtil
@@ -18,10 +21,25 @@ import info.u_team.gradle_files_plugin.project.util.GradleFilesUtil
 abstract class CheckGitTask extends DefaultTask {
 
 	CheckGitTask() {
+		final def createBuild = project.hasProperty(Constants.BUILD_PROPERTY)
 		onlyIf {
-			project.hasProperty(Constants.BUILD_PROPERTY)
+			createBuild
 		}
+
+		final def config = GradleFilesUtil.getProjectConfig(project)
+		expectedBranch.convention(project.provider { config.github.branch as String })
+		headless.convention(project.hasProperty(Constants.HEADLESS_BUILD_PROPERTY))
+		repositoryDirectory.convention(project.rootProject.layout.projectDirectory)
 	}
+
+	@Input
+	abstract Property<String> getExpectedBranch()
+
+	@Input
+	abstract Property<Boolean> getHeadless()
+
+	@Internal
+	abstract DirectoryProperty getRepositoryDirectory()
 
 	@Inject
 	abstract ExecOperations getExecOperations()
@@ -29,22 +47,21 @@ abstract class CheckGitTask extends DefaultTask {
 	@TaskAction
 	void create() {
 		final def executor = ExecuteUtil.fromExecOperations(logger, execOperations)
-		final def config = GradleFilesUtil.getProjectConfig(project)
+		final def rootDir = repositoryDirectory.get().asFile
 
 		// Get main branch and check if branch match expected one
-		final def expectedBranch = config.github.branch
-		final def mainBranch = GitUtil.executeGitCommandException(executor, project.rootDir, "rev-parse", "--abbrev-ref", "HEAD")
+		final def mainBranch = GitUtil.executeGitCommandException(executor, rootDir, "rev-parse", "--abbrev-ref", "HEAD")
 
-		if(expectedBranch != mainBranch) {
-			throw new GradleException("Expected git branch to be ${expectedBranch} but its ${mainBranch}")
+		if(expectedBranch.get() != mainBranch) {
+			throw new GradleException("Expected git branch to be ${expectedBranch.get()} but its ${mainBranch}")
 		}
 
 		// Commit changes if there are some
-		if(GitUtil.commit(executor, project.rootDir, ".", mainBranch, project.hasProperty(Constants.HEADLESS_BUILD_PROPERTY))) {
-			project.logger.quiet("Committed to branch ${mainBranch}")
+		if(GitUtil.commit(executor, rootDir, ".", mainBranch, headless.get())) {
+			logger.quiet("Committed to branch ${mainBranch}")
 		}
 
 		// Pull push all changes
-		GitUtil.pullAndPush(executor, project.rootDir, mainBranch)
+		GitUtil.pullAndPush(executor, rootDir, mainBranch)
 	}
 }
