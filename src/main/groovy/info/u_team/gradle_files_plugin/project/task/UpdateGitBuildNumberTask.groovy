@@ -6,6 +6,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
+import org.gradle.work.DisableCachingByDefault
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
@@ -15,6 +16,7 @@ import info.u_team.gradle_files_plugin.project.util.GitUtil
 import info.u_team.gradle_files_plugin.project.util.GradleFilesUtil
 
 @CompileStatic
+@DisableCachingByDefault(because = "Interacts with git")
 abstract class UpdateGitBuildNumberTask extends DefaultTask {
 
 	UpdateGitBuildNumberTask() {

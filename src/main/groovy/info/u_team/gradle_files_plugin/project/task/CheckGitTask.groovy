@@ -6,6 +6,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
+import org.gradle.work.DisableCachingByDefault
 
 import groovy.transform.CompileStatic
 import info.u_team.gradle_files_plugin.Constants
@@ -13,6 +14,7 @@ import info.u_team.gradle_files_plugin.project.util.ExecuteUtil
 import info.u_team.gradle_files_plugin.project.util.GitUtil
 import info.u_team.gradle_files_plugin.project.util.GradleFilesUtil
 
+@DisableCachingByDefault(because = "Interacts with git")
 abstract class CheckGitTask extends DefaultTask {
 
 	CheckGitTask() {
