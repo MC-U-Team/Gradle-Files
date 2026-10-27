@@ -28,7 +28,7 @@ class CreateSignJarTaskExtensionImpl {
 			}
 			for(archiveMapping in CUSTOM_ARCHIVE_MAPPING) {
 				final def archive = archiveMapping.call(task)
-				if(archive) {
+				if(archive != null) {
 					return archive
 				}
 			}
