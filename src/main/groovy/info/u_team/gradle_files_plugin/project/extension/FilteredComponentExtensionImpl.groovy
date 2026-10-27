@@ -40,7 +40,10 @@ class FilteredComponentExtensionImpl {
 		component.replaceArtifact { PublishArtifact artifact ->
 			final def renameJarClass = ClassUtil.findClass(project, SetupSpecialModLoaderSettingsTool.RENAME_JAR_CLASS)
 			if(renameJarClass) {
-				final def renameJar = project.tasks.withType(renameJarClass).find { task ->
+				// Iterate over a copy of the names, as realizing a task can register new tasks
+				final def renameJar = project.tasks.withType(renameJarClass).names.toList().collect { name ->
+					project.tasks.named(name).get()
+				}.find { task ->
 					task.input.getOrNull()?.asFile == artifact.file
 				}
 				if(renameJar) {
