@@ -6,12 +6,15 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.gradle.api.Named;
 import org.gradle.api.artifacts.DependencyConstraint;
 import org.gradle.api.artifacts.ExcludeRule;
 import org.gradle.api.artifacts.ModuleDependency;
 import org.gradle.api.artifacts.PublishArtifact;
 import org.gradle.api.attributes.AttributeContainer;
+import org.gradle.api.attributes.Category;
 import org.gradle.api.capabilities.Capability;
+import org.gradle.api.component.SoftwareComponentVariant;
 import org.gradle.api.internal.component.SoftwareComponentInternal;
 import org.gradle.api.internal.component.UsageContext;
 
@@ -24,6 +27,8 @@ public class GradleFilesSoftwareComponent implements SoftwareComponentInternal {
 	
 	private Predicate<DependencyHolder> filterPublishingDependencies = Predicates.alwaysFalse();
 	
+	private Predicate<SoftwareComponentVariant> filterPublishingVariants = Predicates.alwaysFalse();
+	
 	private Function<PublishArtifact, PublishArtifact> replacePublishingArtifacts = Function.identity();
 	
 	private final SoftwareComponentInternal javaComponent;
@@ -35,6 +40,12 @@ public class GradleFilesSoftwareComponent implements SoftwareComponentInternal {
 			final ModuleDependency dependency = holder.getDependency();
 			return "net.minecraftforge".equals(dependency.getGroup()) && "forge".equals(dependency.getName());
 		});
+		// NeoGradle publishes the access transformer as an extra variant, which is not needed by consumers
+		filterVariant(variant -> {
+			return variant.getAttributes().keySet().stream().anyMatch(attribute -> {
+				return Category.CATEGORY_ATTRIBUTE.getName().equals(attribute.getName()) && "accesstransformer".equals(attributeName(variant.getAttributes().getAttribute(attribute)));
+			});
+		});
 	}
 	
 	/**
@@ -44,6 +55,15 @@ public class GradleFilesSoftwareComponent implements SoftwareComponentInternal {
 	 */
 	public void filterDependency(Predicate<DependencyHolder> predicate) {
 		filterPublishingDependencies = filterPublishingDependencies.or(predicate);
+	}
+	
+	/**
+	 * Return true to remove the variant, else false
+	 * 
+	 * @param predicate Predicate for variants
+	 */
+	public void filterVariant(Predicate<SoftwareComponentVariant> predicate) {
+		filterPublishingVariants = filterPublishingVariants.or(predicate);
 	}
 	
 	/**
@@ -64,6 +84,9 @@ public class GradleFilesSoftwareComponent implements SoftwareComponentInternal {
 	public Set<? extends UsageContext> getUsages() {
 		final ImmutableSet.Builder<UsageContext> builder = new ImmutableSet.Builder<>();
 		for (final UsageContext context : javaComponent.getUsages()) {
+			if (filterPublishingVariants.test(context)) {
+				continue;
+			}
 			builder.add(new UsageContext() {
 				
 				@Override
@@ -105,5 +128,9 @@ public class GradleFilesSoftwareComponent implements SoftwareComponentInternal {
 			});
 		}
 		return builder.build();
+	}
+	
+	private static String attributeName(Object value) {
+		return value instanceof Named ? ((Named) value).getName() : String.valueOf(value);
 	}
 }
