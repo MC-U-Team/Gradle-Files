@@ -10,19 +10,19 @@ import info.u_team.sign_jar_plugin.extension.CreateSignJarTaskExtensionImpl
 
 @CompileStatic
 class SetupSpecialModLoaderSettingsTool {
-
+	
 	static final String RENAME_JAR_CLASS = "net.minecraftforge.renamer.gradle.RenameJar"
-
+	
 	private static final Closure RENAME_JAR_ARCHIVE_MAPPING = renameJarArchiveMapping()
-
+	
 	static void setup(final Project project) {
 		setupForge(project)
 	}
-
+	
 	private static void setupForge(final Project project) {
 		setupForgeJarSigning(project)
 	}
-
+	
 	private static void setupForgeJarSigning(final Project project) {
 		// Add renamed jar (renamer plugin) as input option to jar signing
 		if(!CreateSignJarTaskExtensionImpl.CUSTOM_ARCHIVE_MAPPING.contains(RENAME_JAR_ARCHIVE_MAPPING)) {
