@@ -51,6 +51,15 @@ class GitUtil {
 		executeGitCommandException(executor, workingDir, "commit", "-m", closure.call())
 	}
 
+	static void setOrigin(final ExecuteUtil executor, final def workingDir, final String url) {
+		final def (success, output) = executeGitCommand(executor, workingDir, "remote", "get-url", "origin")
+		if(!success) {
+			executeGitCommandException(executor, workingDir, "remote", "add", "origin", url)
+		} else if(output != url) {
+			executeGitCommandException(executor, workingDir, "remote", "set-url", "origin", url)
+		}
+	}
+
 	static void fetch(final ExecuteUtil executor, final def workingDir) {
 		executeGitCommandException(executor, workingDir, "fetch")
 	}

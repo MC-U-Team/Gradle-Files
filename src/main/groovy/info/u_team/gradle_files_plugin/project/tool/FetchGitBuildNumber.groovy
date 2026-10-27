@@ -29,6 +29,9 @@ class FetchGitBuildNumber {
 			final def gitRepo = new File(project.layout.buildDirectory.asFile.get(), Constants.GIT_REPOSITORY_NAME)
 			gitRepo.mkdirs()
 
+			// Get remote from main repository
+			final def url = GitUtil.executeGitCommandException(executor, project.rootDir, "remote", "get-url", "origin")
+
 			final def repositoryPath = GitUtil.repositoryPath(executor, gitRepo)
 
 			if(!gitRepo.canonicalPath.equals(repositoryPath)) {
@@ -36,13 +39,10 @@ class FetchGitBuildNumber {
 
 				// Create repository
 				GitUtil.executeGitCommandException(executor, gitRepo, "init")
-
-				// Get remote from main repository
-				final def url = GitUtil.executeGitCommandException(executor, project.rootDir, "remote", "get-url", "origin")
-
-				// Set url in new repository
-				GitUtil.executeGitCommandException(executor, gitRepo, "remote", "add", "origin", url)
 			}
+
+			// Set url in repository, also repairs a repository from a previously failed setup
+			GitUtil.setOrigin(executor, gitRepo, url)
 
 			final def versioningBranch = Constants.VERSIONING_BRANCH
 
