@@ -4,6 +4,8 @@ import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.Task
+import org.gradle.api.artifacts.PublishArtifact
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.CacheableTask
@@ -15,9 +17,10 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.TaskDependency
 
 @CacheableTask
-abstract class SignJarTask extends DefaultTask {
+abstract class SignJarTask extends DefaultTask implements PublishArtifact {
 
 	@TaskAction
 	void sign() {
@@ -69,4 +72,46 @@ abstract class SignJarTask extends DefaultTask {
 
 	@Internal
 	abstract Property<String> getKeyPass()
+
+	@Internal
+	abstract Property<String> getArchiveClassifier()
+
+	@Internal
+	abstract Property<String> getArchiveExtension()
+
+	@Internal
+	@Override
+	String getClassifier() {
+		return archiveClassifier.getOrNull()
+	}
+
+	@Internal
+	@Override
+	String getExtension() {
+		return archiveExtension.get()
+	}
+
+	@Internal
+	@Override
+	String getType() {
+		return archiveExtension.get()
+	}
+
+	@Internal
+	@Override
+	File getFile() {
+		return outputFile.get().asFile
+	}
+
+	@Internal
+	@Override
+	Date getDate() {
+		return null
+	}
+
+	@Internal
+	@Override
+	TaskDependency getBuildDependencies() {
+		return { Task task -> [this] as Set<Task> } as TaskDependency
+	}
 }

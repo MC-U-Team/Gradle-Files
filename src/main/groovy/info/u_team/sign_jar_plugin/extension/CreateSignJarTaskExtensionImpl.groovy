@@ -55,6 +55,17 @@ class CreateSignJarTaskExtensionImpl {
 				directory.file(file.asFile.name)
 			})
 
+			task.archiveClassifier.convention(taskProvider.map { Task archiveTask ->
+				if(archiveTask instanceof AbstractArchiveTask) {
+					return archiveTask.archiveClassifier.getOrNull()
+				}
+				if(archiveTask instanceof PublishArtifact) {
+					return archiveTask.classifier
+				}
+				return null
+			})
+			task.archiveExtension.convention(task.inputFile.map { file -> StringUtils.substringAfterLast(file.asFile.name, ".") })
+
 			task.signing.convention(canSign && project.hasProperty(Constants.BUILD_PROPERTY))
 			task.keyStore.convention(extension.keyStore)
 			task.alias.convention(extension.alias)
