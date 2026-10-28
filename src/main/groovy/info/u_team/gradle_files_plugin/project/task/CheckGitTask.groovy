@@ -4,7 +4,6 @@ import javax.inject.Inject
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
@@ -29,8 +28,7 @@ abstract class CheckGitTask extends DefaultTask {
 		final def config = GradleFilesUtil.getProjectConfig(project)
 		expectedBranch.convention(project.provider { config.github.branch as String })
 		headless.convention(project.hasProperty(Constants.HEADLESS_BUILD_PROPERTY))
-		final def rootDir = project.rootDir
-		rootProjectDirectory.convention(project.layout.dir(project.provider { rootDir }))
+		rootProjectDirectory.convention(project.rootDir)
 	}
 
 	@Input
@@ -40,7 +38,7 @@ abstract class CheckGitTask extends DefaultTask {
 	abstract Property<Boolean> getHeadless()
 
 	@Internal
-	abstract DirectoryProperty getRootProjectDirectory()
+	abstract Property<File> getRootProjectDirectory()
 
 	@Inject
 	abstract ExecOperations getExecOperations()
@@ -48,7 +46,7 @@ abstract class CheckGitTask extends DefaultTask {
 	@TaskAction
 	void create() {
 		final def executor = ExecuteUtil.fromExecOperations(logger, execOperations)
-		final def rootDir = rootProjectDirectory.get().asFile
+		final def rootDir = rootProjectDirectory.get()
 
 		// Get main branch and check if branch match expected one
 		final def mainBranch = GitUtil.executeGitCommandException(executor, rootDir, "rev-parse", "--abbrev-ref", "HEAD")

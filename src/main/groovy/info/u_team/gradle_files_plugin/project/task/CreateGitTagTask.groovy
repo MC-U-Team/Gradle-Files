@@ -3,7 +3,6 @@ package info.u_team.gradle_files_plugin.project.task
 import javax.inject.Inject
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
@@ -27,15 +26,14 @@ abstract class CreateGitTagTask extends DefaultTask {
 
 		final def config = GradleFilesUtil.getProjectConfig(project)
 		tagName.convention(project.provider { "${config.minecraft.version}-${project.version}" as String })
-		final def rootDir = project.rootDir
-		rootProjectDirectory.convention(project.layout.dir(project.provider { rootDir }))
+		rootProjectDirectory.convention(project.rootDir)
 	}
 
 	@Input
 	abstract Property<String> getTagName()
 
 	@Internal
-	abstract DirectoryProperty getRootProjectDirectory()
+	abstract Property<File> getRootProjectDirectory()
 
 	@Inject
 	abstract ExecOperations getExecOperations()
@@ -43,7 +41,7 @@ abstract class CreateGitTagTask extends DefaultTask {
 	@TaskAction
 	void create() {
 		final def executor = ExecuteUtil.fromExecOperations(logger, execOperations)
-		final def rootDir = rootProjectDirectory.get().asFile
+		final def rootDir = rootProjectDirectory.get()
 		final def tagName = getTagName().get()
 
 		GitUtil.executeGitCommandException(executor, rootDir, "tag", "-a", tagName, "-m", tagName)
