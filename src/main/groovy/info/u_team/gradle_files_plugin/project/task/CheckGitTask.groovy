@@ -28,7 +28,7 @@ abstract class CheckGitTask extends DefaultTask {
 		final def config = GradleFilesUtil.getProjectConfig(project)
 		expectedBranch.convention(project.provider { config.github.branch as String })
 		headless.convention(project.hasProperty(Constants.HEADLESS_BUILD_PROPERTY))
-		rootProjectDirectory.convention(project.rootDir)
+		rootDir.convention(project.rootDir)
 	}
 
 	@Input
@@ -38,7 +38,7 @@ abstract class CheckGitTask extends DefaultTask {
 	abstract Property<Boolean> getHeadless()
 
 	@Internal
-	abstract Property<File> getRootProjectDirectory()
+	abstract Property<File> getRootDir()
 
 	@Inject
 	abstract ExecOperations getExecOperations()
@@ -46,7 +46,7 @@ abstract class CheckGitTask extends DefaultTask {
 	@TaskAction
 	void create() {
 		final def executor = ExecuteUtil.fromExecOperations(logger, execOperations)
-		final def rootDir = rootProjectDirectory.get()
+		final def rootDir = getRootDir().get()
 		final def expectedBranch = getExpectedBranch().get()
 		final def headless = getHeadless().get()
 

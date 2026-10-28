@@ -26,14 +26,14 @@ abstract class CreateGitTagTask extends DefaultTask {
 
 		final def config = GradleFilesUtil.getProjectConfig(project)
 		tagName.convention(project.provider { "${config.minecraft.version}-${project.version}" as String })
-		rootProjectDirectory.convention(project.rootDir)
+		rootDir.convention(project.rootDir)
 	}
 
 	@Input
 	abstract Property<String> getTagName()
 
 	@Internal
-	abstract Property<File> getRootProjectDirectory()
+	abstract Property<File> getRootDir()
 
 	@Inject
 	abstract ExecOperations getExecOperations()
@@ -41,7 +41,7 @@ abstract class CreateGitTagTask extends DefaultTask {
 	@TaskAction
 	void create() {
 		final def executor = ExecuteUtil.fromExecOperations(logger, execOperations)
-		final def rootDir = rootProjectDirectory.get()
+		final def rootDir = getRootDir().get()
 		final def tagName = getTagName().get()
 
 		GitUtil.executeGitCommandException(executor, rootDir, "tag", "-a", tagName, "-m", tagName)
