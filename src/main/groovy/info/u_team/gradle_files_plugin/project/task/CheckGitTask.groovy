@@ -30,7 +30,7 @@ abstract class CheckGitTask extends DefaultTask {
 		expectedBranch.convention(project.provider { config.github.branch as String })
 		headless.convention(project.hasProperty(Constants.HEADLESS_BUILD_PROPERTY))
 		final def rootDir = project.rootDir
-		repositoryDirectory.convention(project.layout.dir(project.provider { rootDir }))
+		rootProjectDirectory.convention(project.layout.dir(project.provider { rootDir }))
 	}
 
 	@Input
@@ -40,7 +40,7 @@ abstract class CheckGitTask extends DefaultTask {
 	abstract Property<Boolean> getHeadless()
 
 	@Internal
-	abstract DirectoryProperty getRepositoryDirectory()
+	abstract DirectoryProperty getRootProjectDirectory()
 
 	@Inject
 	abstract ExecOperations getExecOperations()
@@ -48,7 +48,7 @@ abstract class CheckGitTask extends DefaultTask {
 	@TaskAction
 	void create() {
 		final def executor = ExecuteUtil.fromExecOperations(logger, execOperations)
-		final def rootDir = repositoryDirectory.get().asFile
+		final def rootDir = rootProjectDirectory.get().asFile
 
 		// Get main branch and check if branch match expected one
 		final def mainBranch = GitUtil.executeGitCommandException(executor, rootDir, "rev-parse", "--abbrev-ref", "HEAD")
