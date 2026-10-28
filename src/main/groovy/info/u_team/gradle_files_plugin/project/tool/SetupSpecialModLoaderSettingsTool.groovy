@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.artifacts.ConfigurablePublishArtifact
+import org.gradle.api.component.AdhocComponentWithVariants
+import org.gradle.api.component.ConfigurationVariantDetails
 import org.gradle.api.plugins.JavaPlugin
 
 import groovy.transform.CompileDynamic
@@ -17,10 +19,15 @@ class SetupSpecialModLoaderSettingsTool {
 	private static final String RENAMER_PLUGIN = "net.minecraftforge.renamer"
 	private static final String RENAME_JAR_CLASS = "net.minecraftforge.renamer.gradle.RenameJar"
 	
+	private static final String NEOGRADLE_COMMON_PLUGIN = "net.neoforged.gradle.common"
+	private static final String ACCESS_TRANSFORMER_ELEMENTS_CONFIGURATION = "accessTransformerElements"
+	private static final String JAVA_COMPONENT = "java"
+	
 	private static final Closure RENAME_JAR_ARCHIVE_MAPPING = renameJarArchiveMapping()
 	
 	static void setup(final Project project) {
 		setupForge(project)
+		setupNeoForge(project)
 	}
 	
 	private static void setupForge(final Project project) {
@@ -52,6 +59,27 @@ class SetupSpecialModLoaderSettingsTool {
 						}
 					}
 				}
+			}
+		}
+	}
+	
+	private static void setupNeoForge(final Project project) {
+		setupNeoForgeAccessTransformerPublishing(project)
+	}
+	
+	private static void setupNeoForgeAccessTransformerPublishing(final Project project) {
+		// NeoGradle publishes the access transformer as an extra variant, which is not needed by consumers
+		project.pluginManager.withPlugin(NEOGRADLE_COMMON_PLUGIN) {
+			project.configurations.named(ACCESS_TRANSFORMER_ELEMENTS_CONFIGURATION) { configuration ->
+				// NeoGradle adds the variant to the java component with the first artifact or dependency
+				final def skipVariant = {
+					final def component = project.components.getByName(JAVA_COMPONENT) as AdhocComponentWithVariants
+					component.withVariantsFromConfiguration(configuration) { ConfigurationVariantDetails details ->
+						details.skip()
+					}
+				}
+				configuration.artifacts.configureEach { skipVariant() }
+				configuration.allDependencies.configureEach { skipVariant() }
 			}
 		}
 	}
