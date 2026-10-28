@@ -3,8 +3,11 @@ package info.u_team.sign_jar_plugin.extension
 import org.apache.commons.lang3.StringUtils
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.artifacts.ConfigurablePublishArtifact
+import org.gradle.api.artifacts.PublishArtifact
 import org.gradle.api.file.RegularFile
 import org.gradle.api.plugins.BasePlugin
+import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.bundling.AbstractArchiveTask
@@ -47,23 +50,36 @@ class CreateSignJarTaskExtensionImpl {
 			task.description = "Sign the jar ${taskProvider.name}"
 			task.group = BasePlugin.BUILD_GROUP
 
+			task.inputFile.set(taskProvider.flatMap { Task archiveTask -> fileFunction.call(archiveTask) })
+			task.outputFile.convention(project.layout.buildDirectory.dir(Constants.SIGNED_JARS_DIRECTORY).zip(task.inputFile) { directory, file ->
+				directory.file(file.asFile.name)
+			})
+
+			task.signing.convention(canSign && project.hasProperty(Constants.BUILD_PROPERTY))
 			task.keyStore.convention(extension.keyStore)
 			task.alias.convention(extension.alias)
 			task.storePass.convention(extension.storePass)
 			task.keyPass.convention(extension.keyPass)
 
-			task.enabled = canSign && project.hasProperty(Constants.BUILD_PROPERTY)
-
 			task.dependsOn(taskProvider)
-			task.mustRunAfter(taskProvider)
 		})
 
+		// Publish the signed jar instead of the original jar
 		project.afterEvaluate {
-			signJarTask.configure { task ->
-				final Provider<RegularFile> archiveFile = fileFunction.call(taskProvider.get());
-
-				task.inputFile.set(archiveFile)
-				task.outputFile.set(archiveFile)
+			final def inputFile = signJarTask.get().inputFile.get().asFile
+			[JavaPlugin.API_ELEMENTS_CONFIGURATION_NAME, JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME].each { name ->
+				project.configurations.named(name) { configuration ->
+					final def artifacts = configuration.outgoing.artifacts.findAll { PublishArtifact artifact -> artifact.file == inputFile }
+					artifacts.each { PublishArtifact original ->
+						configuration.outgoing.artifacts.remove(original)
+						configuration.outgoing.artifact(signJarTask.flatMap { task -> task.outputFile }) { ConfigurablePublishArtifact artifact ->
+							artifact.name = original.name
+							artifact.classifier = original.classifier
+							artifact.extension = original.extension
+							artifact.type = original.type
+						}
+					}
+				}
 			}
 		}
 
