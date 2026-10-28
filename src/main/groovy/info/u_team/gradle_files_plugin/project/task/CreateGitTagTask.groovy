@@ -27,7 +27,8 @@ abstract class CreateGitTagTask extends DefaultTask {
 
 		final def config = GradleFilesUtil.getProjectConfig(project)
 		tagName.convention(project.provider { "${config.minecraft.version}-${project.version}" as String })
-		repositoryDirectory.convention(project.rootProject.layout.projectDirectory)
+		final def rootDir = project.rootDir
+		repositoryDirectory.convention(project.layout.dir(project.provider { rootDir }))
 	}
 
 	@Input

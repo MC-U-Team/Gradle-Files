@@ -29,7 +29,8 @@ abstract class CheckGitTask extends DefaultTask {
 		final def config = GradleFilesUtil.getProjectConfig(project)
 		expectedBranch.convention(project.provider { config.github.branch as String })
 		headless.convention(project.hasProperty(Constants.HEADLESS_BUILD_PROPERTY))
-		repositoryDirectory.convention(project.rootProject.layout.projectDirectory)
+		final def rootDir = project.rootDir
+		repositoryDirectory.convention(project.layout.dir(project.provider { rootDir }))
 	}
 
 	@Input
