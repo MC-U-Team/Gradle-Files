@@ -47,16 +47,18 @@ abstract class CheckGitTask extends DefaultTask {
 	void create() {
 		final def executor = ExecuteUtil.fromExecOperations(logger, execOperations)
 		final def rootDir = rootProjectDirectory.get()
+		final def expectedBranch = getExpectedBranch().get()
+		final def headless = getHeadless().get()
 
 		// Get main branch and check if branch match expected one
 		final def mainBranch = GitUtil.executeGitCommandException(executor, rootDir, "rev-parse", "--abbrev-ref", "HEAD")
 
-		if(expectedBranch.get() != mainBranch) {
-			throw new GradleException("Expected git branch to be ${expectedBranch.get()} but its ${mainBranch}")
+		if(expectedBranch != mainBranch) {
+			throw new GradleException("Expected git branch to be ${expectedBranch} but its ${mainBranch}")
 		}
 
 		// Commit changes if there are some
-		if(GitUtil.commit(executor, rootDir, ".", mainBranch, headless.get())) {
+		if(GitUtil.commit(executor, rootDir, ".", mainBranch, headless)) {
 			logger.quiet("Committed to branch ${mainBranch}")
 		}
 
