@@ -3,7 +3,6 @@ package info.u_team.gradle_files_plugin.project.task
 import javax.inject.Inject
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
@@ -23,13 +22,15 @@ import info.u_team.gradle_files_plugin.project.util.GradleFilesUtil
 @DisableCachingByDefault(because = "Interacts with git")
 abstract class UpdateGitBuildNumberTask extends DefaultTask {
 
+	@CompileDynamic
 	UpdateGitBuildNumberTask() {
 		final def createBuild = project.hasProperty(Constants.BUILD_PROPERTY)
 		onlyIf {
 			createBuild
 		}
 
-		buildNumber.convention(project.provider { readBuildNumber(project) })
+		final def config = GradleFilesUtil.getProjectConfig(project)
+		buildNumber.convention(project.provider { config.mod.buildnumber as String })
 		gitRepository.convention(project.layout.buildDirectory.dir(Constants.GIT_REPOSITORY_NAME))
 	}
 
@@ -61,11 +62,5 @@ abstract class UpdateGitBuildNumberTask extends DefaultTask {
 		GitUtil.push(executor, gitRepo, versioningBranch)
 
 		logger.quiet("Updated build number to ${(buildNumber as Integer)+1}")
-	}
-
-	@CompileDynamic
-	private static String readBuildNumber(final Project project) {
-		final def config = GradleFilesUtil.getProjectConfig(project)
-		return config.mod.buildnumber
 	}
 }
