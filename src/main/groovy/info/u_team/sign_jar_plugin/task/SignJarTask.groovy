@@ -1,8 +1,5 @@
 package info.u_team.sign_jar_plugin.task
 
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
-
 import org.gradle.api.DefaultTask
 import org.gradle.api.Task
 import org.gradle.api.artifacts.PublishArtifact
@@ -26,16 +23,10 @@ abstract class SignJarTask extends DefaultTask implements PublishArtifact {
 	void sign() {
 		final def inputFile = getInputFile().get().asFile
 		final def outputFile = getOutputFile().get().asFile
-		final def signing = getSigning().get()
 		final def keyStore = getKeyStore().getOrNull()
-		final def alias = getAlias().getOrNull()
-		final def storePass = getStorePass().getOrNull()
+		final def alias = getAlias().get()
+		final def storePass = getStorePass().get()
 		final def keyPass = getKeyPass().getOrNull()
-
-		if(!signing) {
-			Files.copy(inputFile.toPath(), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
-			return
-		}
 
 		final def properties = [
 			keyStore: keyStore,
@@ -57,14 +48,10 @@ abstract class SignJarTask extends DefaultTask implements PublishArtifact {
 	abstract RegularFileProperty getOutputFile();
 
 	@Input
-	abstract Property<Boolean> getSigning()
-
-	@Input
 	@Optional
 	abstract Property<String> getKeyStore()
 
 	@Input
-	@Optional
 	abstract Property<String> getAlias()
 
 	@Internal

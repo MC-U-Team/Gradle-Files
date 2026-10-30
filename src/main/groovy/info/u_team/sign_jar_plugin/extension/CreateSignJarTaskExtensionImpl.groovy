@@ -50,9 +50,16 @@ class CreateSignJarTaskExtensionImpl {
 			task.description = "Sign the jar ${taskProvider.name}"
 			task.group = BasePlugin.BUILD_GROUP
 
+			task.enabled = canSign && project.hasProperty(Constants.BUILD_PROPERTY)
+
 			task.inputFile.set(taskProvider.flatMap { Task archiveTask -> fileFunction.call(archiveTask) })
-			task.outputFile.convention(project.layout.buildDirectory.dir(Constants.SIGNED_JARS_DIRECTORY).zip(task.inputFile) { directory, file ->
+
+			// Use the input file as output if the task is disabled, so consumers of the signed jar get the unsigned jar instead
+			final def signedFile = project.layout.buildDirectory.dir(Constants.SIGNED_JARS_DIRECTORY).zip(task.inputFile) { directory, file ->
 				directory.file(file.asFile.name)
+			}
+			task.outputFile.convention(project.provider { task.enabled }.flatMap { boolean enabled ->
+				enabled ? signedFile : task.inputFile
 			})
 
 			task.archiveClassifier.convention(taskProvider.map { Task archiveTask ->
@@ -66,7 +73,6 @@ class CreateSignJarTaskExtensionImpl {
 			})
 			task.archiveExtension.convention(task.inputFile.map { file -> StringUtils.substringAfterLast(file.asFile.name, ".") })
 
-			task.signing.convention(canSign && project.hasProperty(Constants.BUILD_PROPERTY))
 			task.keyStore.convention(extension.keyStore)
 			task.alias.convention(extension.alias)
 			task.storePass.convention(extension.storePass)
