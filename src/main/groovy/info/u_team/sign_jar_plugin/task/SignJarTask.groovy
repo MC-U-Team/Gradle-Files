@@ -23,7 +23,7 @@ abstract class SignJarTask extends DefaultTask implements PublishArtifact {
 	void sign() {
 		final def inputFile = getInputFile().get().asFile
 		final def outputFile = getOutputFile().get().asFile
-		final def keyStore = getKeyStore().getOrNull()
+		final def keyStore = getKeyStore().getOrNull()?.asFile
 		final def alias = getAlias().get()
 		final def storePass = getStorePass().get()
 		final def keyPass = getKeyPass().getOrNull()
@@ -47,9 +47,10 @@ abstract class SignJarTask extends DefaultTask implements PublishArtifact {
 	@OutputFile
 	abstract RegularFileProperty getOutputFile();
 
-	@Input
+	@InputFile
 	@Optional
-	abstract Property<String> getKeyStore()
+	@PathSensitive(PathSensitivity.NONE)
+	abstract RegularFileProperty getKeyStore()
 
 	@Input
 	abstract Property<String> getAlias()

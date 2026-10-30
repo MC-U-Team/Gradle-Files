@@ -73,7 +73,7 @@ class CreateSignJarTaskExtensionImpl {
 			})
 			task.archiveExtension.convention(task.inputFile.map { file -> StringUtils.substringAfterLast(file.asFile.name, ".") })
 
-			task.keyStore.convention(extension.keyStore)
+			task.keyStore.convention(project.layout.file(extension.keyStore.map { path -> project.file(path) }))
 			task.alias.convention(extension.alias)
 			task.storePass.convention(extension.storePass)
 			task.keyPass.convention(extension.keyPass)
