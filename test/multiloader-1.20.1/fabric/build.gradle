@@ -73,7 +73,7 @@ dependencies {
 }
 
 publishMods {
-	file = tasks.named("remapJar").flatMap { jar -> jar.archiveFile }
+	file = tasks.named("signRemapJar").flatMap { task -> task.outputFile }
 	displayName = "${config.publish.display}-Fabric-${config.minecraft.version}-${project.version}"
 	changelog = "[Changelog of ${project.version}](${gradlefiles.changelogUrl()})"
 	type = me.modmuss50.mpp.ReleaseType.of(config.publish.type)

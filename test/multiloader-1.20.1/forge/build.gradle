@@ -74,7 +74,7 @@ tasks.withType(Javadoc).configureEach { task ->
 signjar.sign(tasks.named("renameJar"))
 
 publishMods {
-	file = tasks.named("renameJar").flatMap { task -> task.output }
+	file = tasks.named("signRenameJar").flatMap { task -> task.outputFile }
 	displayName = "${config.publish.display}-Forge-${config.minecraft.version}-${project.version}"
 	changelog = "[Changelog of ${project.version}](${gradlefiles.changelogUrl()})"
 	type = me.modmuss50.mpp.ReleaseType.of(config.publish.type)
