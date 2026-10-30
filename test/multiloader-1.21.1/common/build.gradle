@@ -1,0 +1,77 @@
+plugins {
+	id "net.fabricmc.fabric-loom-remap"
+	id "info.u_team.gradle_files"
+	id "maven-publish"
+}
+
+gradlefiles.loaderSuffix = "common"
+
+group = rootProject.group
+base.archivesName = gradlefiles.archivesName()
+version = gradlefiles.version()
+
+sourceSets {
+	common
+	main {
+		java {
+			srcDirs += sourceSets.common.java.srcDirs
+		}
+		resources {
+			srcDirs += sourceSets.common.resources.srcDirs
+		}
+	}
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+	withSourcesJar()
+	withJavadocJar()
+}
+
+loom {
+	accessWidenerPath = gradlefiles.project("fabric").file("src/main/resources/test.accesswidener")
+}
+
+tasks.withType(Jar).configureEach { task ->
+	gradlefiles.defaultJar(task)
+}
+
+tasks.withType(Javadoc).configureEach { task ->
+	task.options.addStringOption("Xdoclint:none", "-quiet")
+}
+
+signjar.sign(tasks.named("remapJar"))
+
+repositories {
+	maven {
+		url = "https://maven.parchmentmc.org"
+	}
+}
+
+dependencies {
+	minecraft gradlefiles.fabricMinecraftDependency()
+	mappings loom.layered() {
+		officialMojangMappings()
+		parchment("org.parchmentmc.data:parchment-${config.minecraft.version}:${config.fabric.parchment}@zip")
+	}
+
+	modImplementation gradlefiles.fabricLoaderDependency()
+	modRuntimeOnly gradlefiles.fabricApiDependency()
+}
+
+publishing {
+	repositories {
+		maven {
+			url = rootProject.layout.buildDirectory.dir("mavenRepo")
+		}
+	}
+	publications {
+		mavenJava(MavenPublication) {
+			artifactId = project.base.archivesName.get()
+
+			from gradlefiles.filteredJavaComponent()
+		}
+	}
+}

@@ -1,0 +1,108 @@
+plugins {
+	id "net.minecraftforge.gradle"
+	id "info.u_team.gradle_files"
+	id "me.modmuss50.mod-publish-plugin"
+	id "maven-publish"
+}
+
+gradlefiles.loaderSuffix = "forge"
+
+group = rootProject.group
+base.archivesName = gradlefiles.archivesName()
+version = gradlefiles.version()
+
+sourceSets {
+	main {
+		java {
+			srcDirs += gradlefiles.project("common").sourceSets.common.java.srcDirs
+		}
+		resources {
+			srcDirs += gradlefiles.project("common").sourceSets.common.resources.srcDirs
+		}
+	}
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(25)
+	}
+	withSourcesJar()
+	withJavadocJar()
+}
+
+minecraft {
+	accessTransformer = true
+
+	runs {
+		configureEach {
+			workingDir.convention(layout.projectDirectory.dir("run"))
+		}
+		register("client")
+		register("server")
+	}
+}
+
+repositories {
+	minecraft.mavenizer(it)
+	maven fg.forgeMaven
+	maven fg.minecraftLibsMaven
+	mavenCentral()
+}
+
+dependencies {
+	implementation minecraft.dependency(gradlefiles.forgeDependency())
+}
+
+tasks.withType(Jar).configureEach { task ->
+	gradlefiles.defaultJar(task)
+}
+
+tasks.withType(Javadoc).configureEach { task ->
+	task.options.addStringOption("Xdoclint:none", "-quiet")
+}
+
+signjar.sign(tasks.named("jar"))
+
+publishMods {
+	file = tasks.named("jar").flatMap { jar -> jar.archiveFile }
+	displayName = "${config.publish.display}-Forge-${config.minecraft.version}-${project.version}"
+	changelog = "[Changelog of ${project.version}](${gradlefiles.changelogUrl()})"
+	type = me.modmuss50.mpp.ReleaseType.of(config.publish.type)
+	modLoaders.add("forge")
+
+	dryRun = true
+
+	curseforge {
+		accessToken = defaultPropertyValue("curseforge.token")
+
+		projectId = config.curse.id
+		projectSlug = config.curse.slug
+		minecraftVersions.add(config.minecraft.version)
+		clientRequired = true
+		serverRequired = true
+
+		requires("u-team-core")
+	}
+
+	modrinth {
+		accessToken = defaultPropertyValue("modrinth.token")
+
+		projectId = config.modrinth.id
+		minecraftVersions.add(config.minecraft.version)
+	}
+}
+
+publishing {
+	repositories {
+		maven {
+			url = rootProject.layout.buildDirectory.dir("mavenRepo")
+		}
+	}
+	publications {
+		mavenJava(MavenPublication) {
+			artifactId = project.base.archivesName.get()
+
+			from gradlefiles.filteredJavaComponent()
+		}
+	}
+}

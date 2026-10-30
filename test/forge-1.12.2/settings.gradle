@@ -1,0 +1,30 @@
+pluginManagement {
+	repositories {
+		maven {
+			url = "https://repo.u-team.info"
+		}
+		maven {
+			url = "https://maven.minecraftforge.net"
+		}
+		mavenLocal()
+		mavenCentral()
+		gradlePluginPortal()
+	}
+	plugins {
+		id "org.gradle.toolchains.foojay-resolver-convention" version "1.0.0"
+
+		id "net.minecraftforge.gradle" version "7.0.40"
+		id "net.minecraftforge.renamer" version "1.1.8"
+
+		id "info.u_team.gradle_files" version "5.+"
+
+		id "me.modmuss50.mod-publish-plugin" version "2.2.1"
+	}
+}
+
+plugins {
+	id "org.gradle.toolchains.foojay-resolver-convention"
+	id "info.u_team.gradle_files"
+}
+
+gradlefiles.setupProject("Gradle-Files-Plugin-Forge-Test")

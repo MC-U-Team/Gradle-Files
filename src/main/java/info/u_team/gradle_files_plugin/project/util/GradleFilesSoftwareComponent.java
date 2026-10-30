@@ -27,10 +27,10 @@ public class GradleFilesSoftwareComponent implements SoftwareComponentInternal {
 	
 	public GradleFilesSoftwareComponent(SoftwareComponentInternal javaComponent) {
 		this.javaComponent = javaComponent;
-		// TODO Remove forged mapped dependencies. maybe move somewhere else
-		filterDependency(dependency -> {
-			final String version = dependency.getDependency().getVersion();
-			return (version != null && version.contains("_mapped_"));
+		// Forge is provided by the mod loader at runtime and cannot be resolved from maven central
+		filterDependency(holder -> {
+			final ModuleDependency dependency = holder.getDependency();
+			return "net.minecraftforge".equals(dependency.getGroup()) && "forge".equals(dependency.getName());
 		});
 	}
 	

@@ -1,0 +1,119 @@
+plugins {
+	id "net.minecraftforge.gradle"
+	id "net.minecraftforge.renamer"
+	id "info.u_team.gradle_files"
+	id "me.modmuss50.mod-publish-plugin"
+	id "maven-publish"
+}
+
+group = "info.u-team"
+base.archivesName = gradlefiles.archivesName()
+version = gradlefiles.version()
+
+gradlefiles {
+	vendor = "Team UTeam"
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(8)
+	}
+	withSourcesJar()
+	withJavadocJar()
+}
+
+minecraft {
+	mappings channel: "stable", version: "39-1.12"
+
+	accessTransformer = "META-INF/testmod_at.cfg"
+
+	runs {
+		configureEach {
+			workingDir.convention(layout.projectDirectory.dir("run"))
+		}
+		register("client")
+		register("server")
+	}
+}
+
+repositories {
+	minecraft.mavenizer(it)
+	maven fg.forgeMaven
+	maven fg.minecraftLibsMaven
+	mavenCentral()
+}
+
+dependencies {
+	implementation minecraft.dependency(gradlefiles.forgeDependency())
+}
+
+renamer.mappings.from minecraft.dependency.toSrgFile
+
+renamer.classes(tasks.named("jar", Jar)) {
+	map.from minecraft.dependency.toSrgFile
+	archiveClassifier = "srg"
+}
+
+processResources {
+	final def properties = [modid: config.mod.modid, name: config.mod.name, version: project.version, mcversion: config.minecraft.version]
+	inputs.properties(properties)
+	filesMatching("mcmod.info") {
+		expand(properties)
+	}
+}
+
+tasks.withType(Jar).configureEach { task ->
+	gradlefiles.defaultJar(task)
+}
+
+jar {
+	manifest.attributes("FMLAT": "testmod_at.cfg")
+}
+
+tasks.withType(Javadoc).configureEach { task ->
+	task.options.addStringOption("Xdoclint:none", "-quiet")
+}
+
+signjar.sign(tasks.named("renameJar"))
+
+publishMods {
+	file = tasks.named("renameJar").flatMap { task -> task.output }
+	displayName = "${config.publish.display}-Forge-${config.minecraft.version}-${project.version}"
+	changelog = "[Changelog of ${project.version}](${gradlefiles.changelogUrl()})"
+	type = me.modmuss50.mpp.ReleaseType.of(config.publish.type)
+	modLoaders.add("forge")
+
+	dryRun = true
+
+	curseforge {
+		accessToken = defaultPropertyValue("curseforge.token")
+
+		projectId = config.curse.id
+		projectSlug = config.curse.slug
+		minecraftVersions.add(config.minecraft.version)
+		clientRequired = true
+		serverRequired = true
+	}
+
+	modrinth {
+		accessToken = defaultPropertyValue("modrinth.token")
+
+		projectId = config.modrinth.id
+		minecraftVersions.add(config.minecraft.version)
+	}
+}
+
+publishing {
+	repositories {
+		maven {
+			url = layout.buildDirectory.dir("mavenRepo")
+		}
+	}
+	publications {
+		mavenJava(MavenPublication) {
+			artifactId = project.base.archivesName.get()
+
+			from gradlefiles.filteredJavaComponent()
+		}
+	}
+}

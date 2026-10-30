@@ -1,28 +1,52 @@
 package info.u_team.gradle_files_plugin.project.task
 
+import javax.inject.Inject
+
 import org.gradle.api.DefaultTask
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
+import org.gradle.process.ExecOperations
+import org.gradle.work.DisableCachingByDefault
 
 import info.u_team.gradle_files_plugin.Constants
+import info.u_team.gradle_files_plugin.project.util.ExecuteUtil
 import info.u_team.gradle_files_plugin.project.util.GitUtil
 import info.u_team.gradle_files_plugin.project.util.GradleFilesUtil
 
+@DisableCachingByDefault(because = "Interacts with git")
 abstract class CreateGitTagTask extends DefaultTask {
 
 	CreateGitTagTask() {
+		final def createBuild = project.hasProperty(Constants.BUILD_PROPERTY)
 		onlyIf {
-			project.hasProperty(Constants.BUILD_PROPERTY)
+			createBuild
 		}
+
+		final def config = GradleFilesUtil.getProjectConfig(project)
+		tagName.convention(project.provider { "${config.minecraft.version}-${project.version}" as String })
+		rootDir.convention(project.rootDir)
 	}
+
+	@Input
+	abstract Property<String> getTagName()
+
+	@Internal
+	abstract Property<File> getRootDir()
+
+	@Inject
+	abstract ExecOperations getExecOperations()
 
 	@TaskAction
 	void create() {
-		final def config = GradleFilesUtil.getProjectConfig(project)
-		final def tagName = "${config.minecraft.version}-${project.version}"
+		final def executor = ExecuteUtil.fromExecOperations(logger, execOperations)
+		final def rootDir = getRootDir().get()
+		final def tagName = getTagName().get()
 
-		GitUtil.executeGitCommandException(project, project.rootDir, "tag", "-a", tagName, "-m", tagName)
-		GitUtil.executeGitCommandException(project, project.rootDir, "push", "origin", tagName)
+		GitUtil.executeGitCommandException(executor, rootDir, "tag", "-a", tagName, "-m", tagName)
+		GitUtil.executeGitCommandException(executor, rootDir, "push", "origin", tagName)
 
-		project.logger.quiet("Created release tag ${tagName}")
+		logger.quiet("Created release tag ${tagName}")
 	}
 }

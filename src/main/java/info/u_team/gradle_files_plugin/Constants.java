@@ -28,6 +28,7 @@ public class Constants {
 	public static final String KEYSTORE_PASSWORD = KEYSTORE + ".password";
 	public static final String KEYSTORE_KEY_PASSWORD = KEYSTORE + ".password_key";
 	public static final String KEYSTORE_FINGERPRINT = KEYSTORE + ".fingerprint";
+	public static final String SIGNED_JARS_DIRECTORY = "signedJars";
 	
 	public static final String CURSEFORGE_EXTERNAL_TASK = "curseforge";
 	public static final String PUBLISH_MODS_EXTERNAL_TASK = "publishMods";

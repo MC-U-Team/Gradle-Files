@@ -1,74 +1,96 @@
 package info.u_team.gradle_files_plugin.project.tool
 
+import org.apache.commons.lang3.StringUtils
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.artifacts.ConfigurablePublishArtifact
+import org.gradle.api.component.AdhocComponentWithVariants
+import org.gradle.api.component.ConfigurationVariantDetails
 import org.gradle.api.plugins.JavaPlugin
-import org.gradle.api.publish.PublishingExtension
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
-import info.u_team.gradle_files_plugin.project.util.DependencyUtil
 import info.u_team.gradle_files_plugin.util.ClassUtil
 import info.u_team.sign_jar_plugin.extension.CreateSignJarTaskExtensionImpl
 
 @CompileStatic
 class SetupSpecialModLoaderSettingsTool {
 	
+	private static final String RENAMER_PLUGIN = "net.minecraftforge.renamer"
+	private static final String RENAME_JAR_CLASS = "net.minecraftforge.renamer.gradle.RenameJar"
+	
+	private static final String NEOGRADLE_COMMON_PLUGIN = "net.neoforged.gradle.common"
+	private static final String ACCESS_TRANSFORMER_ELEMENTS_CONFIGURATION = "accessTransformerElements"
+	private static final String JAVA_COMPONENT = "java"
+	
+	private static final Closure RENAME_JAR_ARCHIVE_MAPPING = renameJarArchiveMapping()
+	
 	static void setup(final Project project) {
 		setupForge(project)
+		setupNeoForge(project)
 	}
 	
 	private static void setupForge(final Project project) {
-		setupForgeReobf(project)
-		setupForgeReobfDependencies(project)
-		setupForgeRenameRuns(project)
 		setupForgeJarSigning(project)
+		setupForgeRenamedJarPublishing(project)
 	}
 	
-	@CompileDynamic
-	private static void setupForgeReobf(final Project project) {
-		// Eagerly create reobfJar task
-		final def reobfExtension = project.extensions.findByName("reobf")
-		if(reobfExtension) {
-			reobfExtension.create(JavaPlugin.JAR_TASK_NAME);
-		}
-	}
-	
-	private static void setupForgeReobfDependencies(final Project project) {
-		// Set all publish tasks depend on reobfJar. This is necessary for correct metadata generation
-		project.afterEvaluate {
-			final def reobfClass = ClassUtil.findClass(project, "net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace")
-			if(reobfClass) {
-				project.tasks.withType(reobfClass).each { task ->
-					DependencyUtil.allBuildingDependOn(project, task)
-				}
-			}
-		}
-	}
-	
-	@CompileDynamic
-	private static void setupForgeRenameRuns(final Project project) {
-		// Rename run configurations to include project name
-		project.afterEvaluate {
-			final def minecraftExtensionClass = ClassUtil.findClass(project, "net.minecraftforge.gradle.common.util.MinecraftExtension")
-			if(minecraftExtensionClass) {
-				final def minecraftExtension = project.extensions.findByType(minecraftExtensionClass)
-				
-				minecraftExtension?.runs?.each { run ->
-					run.taskName = "${project.name}_${run.taskName}"
-				}
-			}
-		}
-	}
-	
-	@CompileDynamic
 	private static void setupForgeJarSigning(final Project project) {
-		// Add reobf as input option to jar signing
-		CreateSignJarTaskExtensionImpl.CUSTOM_ARCHIVE_MAPPING.add({ Task task ->
-			final def reobfClass = ClassUtil.findClass(project, "net.minecraftforge.gradle.userdev.tasks.RenameJarInPlace")
-			if(reobfClass && reobfClass.isInstance(task)) {
-				return task.input
+		// Add renamed jar (renamer plugin) as input option to jar signing
+		if(!CreateSignJarTaskExtensionImpl.CUSTOM_ARCHIVE_MAPPING.contains(RENAME_JAR_ARCHIVE_MAPPING)) {
+			CreateSignJarTaskExtensionImpl.CUSTOM_ARCHIVE_MAPPING.add(RENAME_JAR_ARCHIVE_MAPPING)
+		}
+	}
+	
+	private static void setupForgeRenamedJarPublishing(final Project project) {
+		// Use the jar renamed by the renamer plugin as the main jar, as the original jar only works in the development environment
+		project.pluginManager.withPlugin(RENAMER_PLUGIN) {
+			project.afterEvaluate {
+				final def renameJarName = "rename" + StringUtils.capitalize(JavaPlugin.JAR_TASK_NAME)
+				if(!project.tasks.names.contains(renameJarName)) {
+					return
+				}
+				final def renameJar = project.tasks.named(renameJarName)
+				[JavaPlugin.API_ELEMENTS_CONFIGURATION_NAME, JavaPlugin.RUNTIME_ELEMENTS_CONFIGURATION_NAME].each { name ->
+					project.configurations.named(name) { configuration ->
+						configuration.outgoing.artifacts.clear()
+						configuration.outgoing.artifact(renameJar) { ConfigurablePublishArtifact artifact ->
+							artifact.classifier = null
+						}
+					}
+				}
 			}
-		});
+		}
+	}
+	
+	private static void setupNeoForge(final Project project) {
+		setupNeoForgeAccessTransformerPublishing(project)
+	}
+	
+	private static void setupNeoForgeAccessTransformerPublishing(final Project project) {
+		// NeoGradle publishes the access transformer as an extra variant, which is not needed by consumers
+		project.pluginManager.withPlugin(NEOGRADLE_COMMON_PLUGIN) {
+			project.configurations.named(ACCESS_TRANSFORMER_ELEMENTS_CONFIGURATION) { configuration ->
+				// NeoGradle adds the variant to the java component with the first artifact or dependency
+				final def skipVariant = {
+					final def component = project.components.getByName(JAVA_COMPONENT) as AdhocComponentWithVariants
+					component.withVariantsFromConfiguration(configuration) { ConfigurationVariantDetails details ->
+						details.skip()
+					}
+				}
+				configuration.artifacts.configureEach { skipVariant() }
+				configuration.allDependencies.configureEach { skipVariant() }
+			}
+		}
+	}
+	
+	@CompileDynamic
+	private static Closure renameJarArchiveMapping() {
+		return { Task task ->
+			final def renameJarClass = ClassUtil.findClass(task.project, RENAME_JAR_CLASS)
+			if(renameJarClass && renameJarClass.isInstance(task)) {
+				return task.output
+			}
+		}
 	}
 }
