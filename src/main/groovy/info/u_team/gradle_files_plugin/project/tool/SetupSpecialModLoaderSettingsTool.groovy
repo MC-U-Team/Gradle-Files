@@ -16,6 +16,9 @@ import info.u_team.sign_jar_plugin.extension.CreateSignJarTaskExtensionImpl
 @CompileStatic
 class SetupSpecialModLoaderSettingsTool {
 	
+	private static final String FORGEGRADLE_PLUGIN = "net.minecraftforge.gradle"
+	private static final String ECLIPSE_RUN_CLASS = "net.minecraftforge.gradle.internal.SlimeLauncherEclipseConfiguration"
+	
 	private static final String RENAMER_PLUGIN = "net.minecraftforge.renamer"
 	private static final String RENAME_JAR_CLASS = "net.minecraftforge.renamer.gradle.RenameJar"
 	
@@ -31,8 +34,25 @@ class SetupSpecialModLoaderSettingsTool {
 	}
 	
 	private static void setupForge(final Project project) {
+		setupForgeRenameEclipseRuns(project)
 		setupForgeJarSigning(project)
 		setupForgeRenamedJarPublishing(project)
+	}
+	
+	@CompileDynamic
+	private static void setupForgeRenameEclipseRuns(final Project project) {
+		// Rename eclipse run configurations to include project name
+		project.pluginManager.withPlugin(FORGEGRADLE_PLUGIN) {
+			project.afterEvaluate {
+				final def eclipseRunClass = ClassUtil.findClass(project, ECLIPSE_RUN_CLASS)
+				if(eclipseRunClass) {
+					project.tasks.withType(eclipseRunClass).configureEach { task ->
+						final def file = task.outputFile.get().asFile
+						task.outputFile.set(new File(file.parentFile, "${project.name}_${file.name}"))
+					}
+				}
+			}
+		}
 	}
 	
 	private static void setupForgeJarSigning(final Project project) {
