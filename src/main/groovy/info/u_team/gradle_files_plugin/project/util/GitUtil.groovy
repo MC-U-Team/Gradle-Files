@@ -1,76 +1,84 @@
 package info.u_team.gradle_files_plugin.project.util
 
 import org.gradle.api.GradleException
-import org.gradle.api.Project
 
 import info.u_team.gradle_files_plugin.Constants
 
 class GitUtil {
 
-	static String repositoryPath(final Project project, final def workingDir) {
-		return project.file(executeGitCommandException(project, workingDir, "rev-parse", "--show-toplevel")).canonicalPath
+	static String repositoryPath(final ExecuteUtil executor, final def workingDir) {
+		return new File(executeGitCommandException(executor, workingDir, "rev-parse", "--show-toplevel")).canonicalPath
 	}
 
-	static def branchExists(final Project project, final def workingDir, final def branch) {
-		if(!localBranchExists(project, workingDir, branch)) {
-			return remoteBranchExists(project, workingDir, branch)
+	static def branchExists(final ExecuteUtil executor, final def workingDir, final def branch) {
+		if(!localBranchExists(executor, workingDir, branch)) {
+			return remoteBranchExists(executor, workingDir, branch)
 		}
 		return true
 	}
 
-	static def localBranchExists(final Project project, final def workingDir, final def branch) {
-		final def (success, output) = executeGitCommand(project, workingDir, "show-ref", "--verify", "refs/heads/${branch}")
+	static def localBranchExists(final ExecuteUtil executor, final def workingDir, final def branch) {
+		final def (success, output) = executeGitCommand(executor, workingDir, "show-ref", "--verify", "refs/heads/${branch}")
 		return success
 	}
 
-	static def remoteBranchExists(final Project project, final def workingDir, final def branch) {
-		final def (success, output) = executeGitCommand(project, workingDir, "show-ref", "--verify", "refs/remotes/origin/${branch}")
+	static def remoteBranchExists(final ExecuteUtil executor, final def workingDir, final def branch) {
+		final def (success, output) = executeGitCommand(executor, workingDir, "show-ref", "--verify", "refs/remotes/origin/${branch}")
 		return success
 	}
 
-	static def commit(final Project project, final def workingDir, final String files, final def branch) {
-		return commit(project, workingDir, files) {
-			if(project.hasProperty(Constants.HEADLESS_BUILD_PROPERTY)) {
+	static def commit(final ExecuteUtil executor, final def workingDir, final String files, final def branch, final boolean headless) {
+		return commit(executor, workingDir, files) {
+			if(headless) {
 				return Constants.COMMIT_FORCE_MESSAGE
 			} else {
-				project.logger.quiet("> Enter commit message for branch {}", branch)
+				executor.logger.quiet("> Enter commit message for branch {}", branch)
 				return System.in.newReader().readLine()
 			}
 		}
 	}
 
-	static def commit(final Project project, final def workingDir, final String files, Closure closure) {
-		if(!executeGitCommandException(project, workingDir, "status", "--porcelain").empty) {
-			alwaysCommit(project, workingDir, files, closure)
+	static def commit(final ExecuteUtil executor, final def workingDir, final String files, Closure closure) {
+		if(!executeGitCommandException(executor, workingDir, "status", "--porcelain").empty) {
+			alwaysCommit(executor, workingDir, files, closure)
 			return true
 		}
 		return false
 	}
 
-	static def alwaysCommit(final Project project, final def workingDir, final String files, Closure closure) {
-		executeGitCommandException(project, workingDir, "add", files)
-		executeGitCommandException(project, workingDir, "commit", "-m", closure.call())
+	static def alwaysCommit(final ExecuteUtil executor, final def workingDir, final String files, Closure closure) {
+		executeGitCommandException(executor, workingDir, "add", files)
+		executeGitCommandException(executor, workingDir, "commit", "-m", closure.call())
 	}
 
-	static void fetch(final Project project, final def workingDir) {
-		executeGitCommandException(project, workingDir, "fetch")
+	static void setOrigin(final ExecuteUtil executor, final def workingDir, final String url) {
+		final def (success, output) = executeGitCommand(executor, workingDir, "remote", "get-url", "origin")
+		if(!success) {
+			executeGitCommandException(executor, workingDir, "remote", "add", "origin", url)
+		} else if(output != url) {
+			executeGitCommandException(executor, workingDir, "remote", "set-url", "origin", url)
+		}
 	}
 
-	static void pullAndPush(final Project project, final def workingDir, final def branch) {
-		pull(project, workingDir)
-		push(project, workingDir, branch)
+	static void fetch(final ExecuteUtil executor, final def workingDir) {
+		executeGitCommandException(executor, workingDir, "fetch")
 	}
 
-	static void pull(final Project project, final def workingDir) {
-		executeGitCommandException(project, workingDir, "pull")
+	static void pullAndPush(final ExecuteUtil executor, final def workingDir, final def branch) {
+		pull(executor, workingDir)
+		push(executor, workingDir, branch)
 	}
 
-	static void push(final Project project, final def workingDir, final def branch) {
-		executeGitCommandException(project, workingDir, "push", "-u", "origin", branch)
+	static void pull(final ExecuteUtil executor, final def workingDir) {
+		executeGitCommandException(executor, workingDir, "pull")
 	}
 
-	static String executeGitCommandException(final Project project, final def workingDir, final String... args) {
-		final def (success, output) = executeGitCommand(project, workingDir, args)
+	static void push(final ExecuteUtil executor, final def workingDir, final def branch) {
+		executeGitCommandException(executor, workingDir, "push", "-u", "origin", branch)
+	}
+
+	static String executeGitCommandException(final ExecuteUtil executor, final def workingDir, final String... args) {
+		final def (success, output) = executeGitCommand(executor, workingDir, args)
 
 		if(!success) {
 			throw new GradleException("Cannot execute git because: ${output}")
@@ -79,8 +87,8 @@ class GitUtil {
 		return output
 	}
 
-	static def executeGitCommand(final Project project, final def workingDir, final String... args) {
-		final def (success, output) = ExecuteUtil.executeCommand(project, workingDir, "git", args)
+	static def executeGitCommand(final ExecuteUtil executor, final def workingDir, final String... args) {
+		final def (success, output) = executor.executeCommand(workingDir, "git", args)
 		return [success, output.trim()]
 	}
 }

@@ -12,10 +12,12 @@ class DefaultManifestExtensionImpl {
 	static Closure<Manifest> defaultManifest(final Project project, final GradleFilesProjectExtension extension) {
 		final def config = GradleFilesUtil.getProjectConfig(project)
 
-		final def timestamp = new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		// Only add timestamps for builds, so the jars do not change in every development build
+		final def createBuild = project.hasProperty(Constants.BUILD_PROPERTY)
+		final def timestamp = createBuild ? new Date().format("yyyy-MM-dd'T'HH:mm:ssZ") : null
 
 		return {
-			attributes(
+			attributes([
 					"Specification-Title": config.mod.name,
 					"Specification-Vendor": extension.vendor.get(),
 					"Specification-Version": config.mod.version,
@@ -31,7 +33,7 @@ class DefaultManifestExtensionImpl {
 					"Fingerprint": project.findProperty(Constants.KEYSTORE_FINGERPRINT) ?: "NONE",
 
 					"Automatic-Module-Name": "${project.group}.${config.mod.modid}".replace("-", "_")
-					)
+					].findAll { key, value -> value != null })
 		}
 	}
 }
